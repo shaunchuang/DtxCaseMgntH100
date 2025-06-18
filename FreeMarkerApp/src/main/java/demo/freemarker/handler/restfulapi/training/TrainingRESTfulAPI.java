@@ -42,6 +42,7 @@ import demo.freemarker.model.training.TrainingRecord;
 import demo.freemarker.model.training.TrainingStatistics;
 import itri.sstc.framework.core.api.RESTfulAPI;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -177,7 +178,22 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
     public String listTrainingPlan(HttpExchange exchange) throws IOException {
         JSONObject responseJson = new JSONObject();
         String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-        Long patientId = new JSONObject(requestBody).getLong("patientId");
+        System.out.println(requestBody);
+        
+        Long patientId = new JSONObject(requestBody).optLong("patientId");
+        if(patientId == 0) {
+            Long userId = new JSONObject(requestBody).optLong("userId");
+            if(userId == 0){
+                responseJson.put("success", Boolean.FALSE);
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                return responseJson.toString();
+            } else {
+                Patient patient = PatientAPI.getInstance().getPatientByUserId(userId);
+                System.out.println("patient getId: " + patient.getId());
+                patientId = patient.getId();
+            }
+        }
+        System.out.println("patientId: " + patientId);
         List<TrainingPlan> trainingPlans = TrainingPlanAPI.getInstance().listByPatient(patientId);
         List<TrainingPlanDTO> trainingPlanDTOs = trainingPlans.stream()
                 .map(trainingPlan -> {
@@ -186,9 +202,6 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
                 .collect(Collectors.toList());
         responseJson.put("trainingPlans", trainingPlanDTOs);
         responseJson.put("success", Boolean.TRUE);
-
-        responseJson.put("success", Boolean.TRUE);
-        responseJson.put("trainingPlans", trainingPlans);
         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
         return responseJson.toString();
     }
@@ -326,8 +339,11 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
         TrainingPlanDTO planDTO = new TrainingPlanDTO();
         List<PlanLessonMapping> mappings = PlanLessonMappingAPI.getInstance().listByPlanId(trainingPlan.getId());
         List<LessonDTO> lessonDTOs = new ArrayList<>();
+        System.out.println("mappings size: " + mappings.size());
         for (PlanLessonMapping mapping : mappings) {
             LessonDTO lessonDTO = new LessonDTO();
+            System.out.println("lessonId:" + mapping.getLessonId());
+            lessonDTO.setLessonId(mapping.getLessonId());
             List<AchievementGoal> achievementGoals = AchievementGoalAPI.getInstance().listByMappingId(mapping.getId());
             List<AchievementDTO> achievements = achievementGoals.stream()
                     .map(achievementGoal -> {
@@ -355,6 +371,7 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
         planDTO.setPlanId(trainingPlan.getId());
         planDTO.setTherapistId(trainingPlan.getTherapist());
         String therapistName = UserAPI.getInstance().getUser(trainingPlan.getTherapist()).getUsername();
+        System.out.println("therapistName: "+therapistName);
         planDTO.setTherapistName(therapistName != null ? therapistName : null);
         planDTO.setPatientId(String.valueOf(trainingPlan.getPatientId()));
         Patient patient = PatientAPI.getInstance().getPatient(trainingPlan.getPatientId());

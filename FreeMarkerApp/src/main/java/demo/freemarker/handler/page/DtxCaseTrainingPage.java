@@ -7,6 +7,7 @@ package demo.freemarker.handler.page;
 import java.time.Year;
 import java.util.List;
 
+import demo.freemarker.api.ConfigPropertyAPI;
 import demo.freemarker.api.DiseaseCategoryAPI;
 import demo.freemarker.api.DrugUseStatusCategoryAPI;
 import demo.freemarker.api.MedicationCategoryAPI;
@@ -69,6 +70,7 @@ public class DtxCaseTrainingPage extends RequestHandler {
             return "redirect:/ftl/imas/login";
         }
         String blogname = Config.get("blogname", "測試平台");
+        model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         model.addAttribute("__field", "field");
         model.addAttribute("menuNum", 1);
         model.addAttribute("currentUser", currentUser);

@@ -34,7 +34,7 @@ public class TrainingPlan implements IntIdDataEntity, Serializable {
     @Column(name = "\"patient_id\"", nullable = false)
     private Long patientId;
 
-    @Column(name = "\"title\"", nullable = false, length = 200)
+    @Column(name = "\"title\"", nullable = true, length = 200)
     private String title;
 
     @Column(name = "\"start_date\"", nullable = false)

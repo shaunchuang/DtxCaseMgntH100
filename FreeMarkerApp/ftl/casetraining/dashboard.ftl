@@ -194,77 +194,16 @@ $(".doctor-card").click(function(e){
 	var doctorId = $(this).attr("data-doctor");
 	wg.template.updateNewPageContent('appointment-container', 'doctor-booking-content', {"doctorId": doctorId}, '/ftl/imas/admin/taskMgnt/appointment?clinician=doctor&doctorId=${currentUser.id!""}');
 });
-/*
-function fetchTrainingPlan(){
-	console.log('userKeyNo: ', userKeyNo);
-	var response = wg.evalForm.getJson({"data":userKeyNo}, baseCaseMgntUrl + '/division/api/TrainingPlan/list');
-	if (response.success){
-		var planName = '';
-		var lessonCardHtml = '';
-		
-		var trainingPlanList = response.trainingPlan;
 
-		if(trainingPlanList.length > 0){
-			trainingPlanList.forEach(trainingPlan => {
-		
-				console.log(trainingPlan);
-	
-	        	var lessonMain = '';
-	        	var lessonId = trainingPlan.trainingLessons[0].lessonStoreKeyNo;
-	        	var result = wg.evalForm.getJson({"lessonId": lessonId}, lessonStoreUrl + '/division/api/Lesson/GetLessonBasic');
-	        	if(result.success){
-	        		lessonMain = JSON.parse(result.lessonMain);
-	        	
-				
-	        		var imageUrl = lessonMain.evalItemAnses['4'];
-					var lessonName = lessonMain.evalItemAnses['1'];
-	        		var startDateStr = formatDate(trainingPlan.startTime);
-	        		var endDateStr = formatDate(trainingPlan.endTime);
-	        	
-	        		lessonCardHtml += `
-	        			<div class="default-blk lesson-card">
-							<img src="` + imageUrl + `" alt="` + lessonName + `">
-							<div class="card-content">
-								<div class="card-header">
-									<h3>` + lessonName + ` 訓練計畫</h3>
-									<!--<span class="status-red">今日訓練未完成</span>-->
-								</div>
-								<div class="card-details">
-									<p>`+ startDateStr + `~` + endDateStr + ` | `+ trainingPlan.creatorName +` 治療師 開立</p>
-								</div>
-								<div class="card-buttons">
-									<button class="func-btn-custom func-link" data-url="` + '${base}/${__lang}/division/web/dtxCaseQuestion/'+ trainingPlan.trainingPlanKeyNo + `">提問與回覆</button>
-									<button class="func-btn-custom func-link" data-url="` + '${base}/${__lang}/division/web/dtxCaseRecord/'+ trainingPlan.trainingPlanKeyNo + `">檢視紀錄</button>
-									<button class="func-btn-custom func-link btn-primary" data-url="` + '${base}/${__lang}/division/web/dtxCaseTraining/'+ trainingPlan.trainingPlanKeyNo + `">教案使用</button>
-								</div>
-							</div>
-						</div>
-	        		`;
-			        // 動態綁定按鈕點擊事件
-					$(document).off('click', '.func-link').on('click', '.func-link', function () {
-					    var url = $(this).data('url');
-					    window.location.href = url;
-					});
-	        	}
-	        });
-	        $('.lesson-blk').append(lessonCardHtml);
-        }else{
-        	$('.lesson-blk').append('<div class="cnt-empty">尚無訓練計畫</div>');
-        }
-	} else {
-		$('.lesson-blk').append('<div class="cnt-empty">尚無訓練計畫</div>');
-	}
-}*/
-/*
 function fetchTrainingPlanNew(){
-	console.log('patientId: ', userKeyNo);
-	var response = wg.evalForm.getJson({"patientId":userKeyNo}, baseCaseMgntUrl + '/division/api/TrainingPlan/listNew');
+	console.log('userId: ', ${currentUser.id!""});
+	var response = wg.evalForm.getJson(JSON.stringify({"userId":${currentUser.id!""}}), '/Training/api/listPlan');
 	console.log(response);
 	
 	if(response.success){
-		if(response.trainingPlan){
+		if(response.trainingPlans){
 			var lessonCardHtml = '';
-        	var trainingPlanList = response.trainingPlan;
+        	var trainingPlanList = response.trainingPlans;
 		
 			if(trainingPlanList.length > 0) {
 				trainingPlanList.forEach(trainingPlan => {
@@ -276,36 +215,26 @@ function fetchTrainingPlanNew(){
 	                var therapistName = trainingPlan.therapistName || "治療師";
 	
 	                // 每個計畫中的課程
-	                
 	                if (trainingPlan.lessons && trainingPlan.lessons.length > 0) {
 						var lesson = trainingPlan.lessons[0];
 	                    var lessonId = lesson.lessonId;
 	                    var lessonName = "課程名稱未提供"; // 預設課程名稱
 	                    var imageUrl = ""; // 預設圖片
 	
-	                    // 查詢課程詳細資訊
-	                    //var result = wg.evalForm.getJson({"lessonId": lessonId}, lessonStoreUrl + '/division/api/Lesson/GetLessonBasic');
 						var lessonName;
 						var imageUrl;
 						$.ajax({
-						  url: lessonStoreUrl + '/LessonMainInfo/api/get/lessonId/' + lessonId,
-						  method: 'GET',
-						  dataType: 'json'
+							url: lessonStoreUrl + '/LessonMainInfo/api/get/lessonId/' + lessonId,
+							method: 'GET',
+							dataType: "text",
+							success: function(data) {
+								console.log("Lesson data: ", data);
+							},
+							error: function(xhr, status, error) {
+								console.error("AJAX error:", status, error);
+								console.log("Response:", xhr.responseText);
+								}
 						})
-						.done(function(result) {
-							console.log(result);
-						    // 取 evalItemAnses 物件裡的欄位
-						    lessonName = lessonMain.evalItemAnses['1'] || '預設課程名稱';
-						    imageUrl  = lessonMain.evalItemAnses['4'] || '預設圖片 URL';
-						
-						    // 例如把它們顯示到頁面上
-						    $('#lessonName').text(lessonName);
-						    $('#lessonImage').attr('src', imageUrl);
-						})
-						.fail(function(jqXHR, textStatus, errorThrown) {
-						  console.error('jQuery GET Error:', textStatus, errorThrown);
-						  $('#jqResult').text('Error: ' + textStatus);
-						});
 
 	                    // 生成卡片 HTML
 	                    lessonCardHtml += `
@@ -345,7 +274,7 @@ function fetchTrainingPlanNew(){
 	        $('.lesson-blk').append('<div class="cnt-empty">尚無訓練計畫</div>');
 	    }
 	}
-}*/
+}
 
 function formatDate(dateStr){
 	var dateObj = new Date(dateStr);

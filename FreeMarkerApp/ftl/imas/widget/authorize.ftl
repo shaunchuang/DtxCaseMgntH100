@@ -165,7 +165,6 @@
     <script src="${base}/AdminLTE/dist/js/demo.js" type="text/javascript"></script>
     
     <!--mlog-->
-	<script type="text/javascript" src="${base}/script/script_variable.js"></script>
 	<script type="text/javascript" src="${base}/script/mlog.form.js"></script>
 	<script type="text/javascript" src="${base}/script/mlog.dialog.js"></script>
 	<script type="text/javascript" src="${base}/script/mlog.calendar.js?${.now}"></script>
@@ -232,7 +231,6 @@
 		
 		
 		<script type="text/javascript" src="${base}/script/employee.js?${.now}"></script>
-		<script type="text/javascript" src="${base}/script_variable.js"></script>
 		
 		<script type="text/javascript" src="${base}/script/wg.template.js?${.now}"></script>
 		<script type="text/javascript" src="${base}/script/wg.evalForm.js?${.now}"></script>

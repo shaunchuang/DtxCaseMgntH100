@@ -18,6 +18,7 @@ public class TrainingPlanDTO {
     private String notes;
     private Date createTime;
     private List<LessonDTO> lessons;
+    
     public Long getPlanId() {
         return planId;
     }
@@ -102,6 +103,5 @@ public class TrainingPlanDTO {
     public void setLessons(List<LessonDTO> lessons) {
         this.lessons = lessons;
     }
-
     
 }

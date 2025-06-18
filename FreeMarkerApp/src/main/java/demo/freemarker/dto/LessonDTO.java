@@ -3,14 +3,14 @@ package demo.freemarker.dto;
 import java.util.List;
 
 public class LessonDTO {
-    private String lessonId;
+    private Long lessonId;
     private List<AchievementDTO> achievements;
     private List<StatisticsDTO> statistics;
     
-    public String getLessonId() {
+    public Long getLessonId() {
         return lessonId;
     }
-    public void setLessonId(String lessonId) {
+    public void setLessonId(Long lessonId) {
         this.lessonId = lessonId;
     }
     public List<AchievementDTO> getAchievements() {
@@ -25,4 +25,5 @@ public class LessonDTO {
     public void setStatistics(List<StatisticsDTO> statistics) {
         this.statistics = statistics;
     }
+    
 }

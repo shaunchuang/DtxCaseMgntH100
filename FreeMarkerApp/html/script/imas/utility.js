@@ -2222,6 +2222,28 @@ function startDatePicker(className) {
 
 }
 
+//設置inline datePicker日期選擇器套件
+function setInlineDatePicker(className, appoDates){
+	var dateObjects = appoDates.map(dateStr => new Date(dateStr + "T00:00:00"));
+	
+	$(className).datepicker('destroy');
+	$(className).datepicker({
+        language: "zh-TW",       
+        todayHighlight: true,
+        multidate: true,
+	    beforeShowDay: function (date) {
+            // Check if the current date is in the appoDates array
+            var isDateActive = dateObjects.some(d =>
+                d.getFullYear() === date.getFullYear() &&
+                d.getMonth() === date.getMonth() &&
+                d.getDate() === date.getDate()
+            );
+            
+            if(isDateActive) return { classes: 'active' };
+        }
+    })
+}
+
 function getMaxTimeStamp() {
 	return Math.floor(Date.now());
 }
