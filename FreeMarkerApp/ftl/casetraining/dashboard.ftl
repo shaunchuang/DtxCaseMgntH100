@@ -43,34 +43,7 @@
 			  			</div>
 			  		</div>
 				    <div class="col-7">
-				    	<div class="default-blk history-list-blk mg-b-10">
-				    		<div class="title">就診歷程(僅列近期五筆紀錄)</div>
-				    		<#if todayReviewInfo?? && todayReviewInfo.hcRecords?? && (todayReviewInfo.hcRecords?size>0)>
-			  				<table class="table table-fixed">
-								<thead>
-							      	<tr>
-							      		<th class="col-xs-2">看診日期</th>
-					                    <th class="col-xs-4-5">科別-醫師/治療師</th>
-					                    <th class="col-xs-3-5">適應症</th>
-					                    <th class="col-xs-2">功能項</th>
-							      	</tr>
-							    </thead>
-							    <tbody class="history-events">
-							    	<#assign hcRecords = todayReviewInfo.hcRecords>
-							    	<#list hcRecords as hcRecord>
-							    	<tr>
-					                    <td class="col-xs-2">${hcRecord.diagDate}</td>
-					                    <td class="col-xs-4-5">${hcRecord.doctorName} ${hcRecord.doctorAlias}</td>
-					                    <td class="col-xs-3-5"><span class="badge badge-tag">${hcRecord.indication}</span></td>
-					                    <td class="col-xs-2"><button class="func-btn-custom f-14">檢視紀錄</button></td>
-					                </tr>
-							    	</#list>
-							    </tbody>
-							</table>		  				
-			  				<#else>
-				    		<div class="cnt-empty">尚無就診歷程</div>
-							</#if>
-				    	</div>
+				    	
 				    	<div class="default-blk lesson-blk">
 					      	<div class="title mg-b-5">訓練計畫</div>
 					      	<!--<div class="default-blk lesson-card">
@@ -108,6 +81,34 @@
 							    </div>
 					      	</div>-->
 						</div>
+						<div class="default-blk history-list-blk mg-b-10">
+				    		<div class="title">就診歷程(僅列近期五筆紀錄)</div>
+				    		<#if todayReviewInfo?? && todayReviewInfo.hcRecords?? && (todayReviewInfo.hcRecords?size>0)>
+			  				<table class="table table-fixed">
+								<thead>
+							      	<tr>
+							      		<th class="col-xs-2">看診日期</th>
+					                    <th class="col-xs-4-5">科別-醫師/治療師</th>
+					                    <th class="col-xs-3-5">適應症</th>
+					                    <th class="col-xs-2">功能項</th>
+							      	</tr>
+							    </thead>
+							    <tbody class="history-events">
+							    	<#assign hcRecords = todayReviewInfo.hcRecords>
+							    	<#list hcRecords as hcRecord>
+							    	<tr>
+					                    <td class="col-xs-2">${hcRecord.diagDate}</td>
+					                    <td class="col-xs-4-5">${hcRecord.doctorName} ${hcRecord.doctorAlias}</td>
+					                    <td class="col-xs-3-5"><span class="badge badge-tag">${hcRecord.indication}</span></td>
+					                    <td class="col-xs-2"><button class="func-btn-custom f-14">檢視紀錄</button></td>
+					                </tr>
+							    	</#list>
+							    </tbody>
+							</table>		  				
+			  				<#else>
+				    		<div class="cnt-empty">尚無就診歷程</div>
+							</#if>
+				    	</div>
 				    </div>
 			  	</div>			  	
 			</div>
@@ -153,7 +154,6 @@
 </div>
 
 <script>
-var baseCaseMgntUrl = '${caseMgntUrl!""}';
 var lessonStoreUrl = '${lessonStoreUrl!""}';
 
 <#if todayReviewInfo?? >
@@ -174,13 +174,13 @@ $(document).ready(function(){
 });
 
 $(".appointment-events tr button").click(function(){
-	wg.template.updateNewPageContent('appointment-container', 'doctor-booking-content', {}, '${dtxCaseMgntUrl}/${__lang}/division/web/admin/taskMgnt/appointment/therapist');
+	wg.template.updateNewPageContent('appointment-container', 'doctor-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment?clinician=doctor');
 	$("#myModal").modal('show');
 });
 
 $(".appointment-card .title button").click(function(){
 	$('#myModal').on('shown.bs.modal', function () {
-		wg.template.updateNewPageContent('appointment-container', 'doctor-booking-content', {}, '${dtxCaseMgntUrl}/${__lang}/division/web/admin/taskMgnt/appointment/doctor/msg/chooseMessage');
+		wg.template.updateNewPageContent('appointment-container', 'doctor-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment/msg/chooseMessage?clinician=doctor');
 	});
 	$('#myModal').modal('show');
 });
@@ -192,7 +192,7 @@ $(".doctor-card").click(function(e){
 	$(this).toggleClass("selected");
 	
 	var doctorId = $(this).attr("data-doctor");
-	wg.template.updateNewPageContent('appointment-container', 'doctor-booking-content', {"doctorId": doctorId}, '${dtxCaseMgntUrl}/${__lang}/division/web/admin/taskMgnt/appointment/doctor');
+	wg.template.updateNewPageContent('appointment-container', 'doctor-booking-content', {"doctorId": doctorId}, '/ftl/imas/admin/taskMgnt/appointment?clinician=doctor&doctorId=${currentUser.id!""}');
 });
 /*
 function fetchTrainingPlan(){
@@ -255,7 +255,7 @@ function fetchTrainingPlan(){
 		$('.lesson-blk').append('<div class="cnt-empty">尚無訓練計畫</div>');
 	}
 }*/
-
+/*
 function fetchTrainingPlanNew(){
 	console.log('patientId: ', userKeyNo);
 	var response = wg.evalForm.getJson({"patientId":userKeyNo}, baseCaseMgntUrl + '/division/api/TrainingPlan/listNew');
@@ -319,9 +319,9 @@ function fetchTrainingPlanNew(){
 	                                    <p>` + startDateStr + ` ~ ` + endDateStr + ` | ` + therapistName + ` 開立</p>
 	                               </div>
 	                               <div class="card-buttons">
-	                                    <button class="func-btn-custom func-link" data-url="${base}/${__lang}/division/web/dtxCaseQuestion/` + trainingPlan.planId + `">提問與回覆</button>
-	                                    <button class="func-btn-custom func-link" data-url="${base}/${__lang}/division/web/dtxCaseRecord/` + trainingPlan.planId + `">檢視紀錄</button>
-	                                    <button class="func-btn-custom func-link btn-primary" data-url="${base}/${__lang}/division/web/dtxCaseTraining/` + trainingPlan.planId + `">教案使用</button>
+	                                    <button class="func-btn-custom func-link" data-url="/ftl/casetraining/trainingQuestion?planId=` + trainingPlan.planId + `">提問與回覆</button>
+	                                    <button class="func-btn-custom func-link" data-url="/ftl/casetraining/trainingRecord?planId=` + trainingPlan.planId + `">檢視紀錄</button>
+	                                    <button class="func-btn-custom func-link btn-primary" data-url="/ftl/casetraining/trainingPlan?planId=` + trainingPlan.planId + `">教案使用</button>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -345,7 +345,7 @@ function fetchTrainingPlanNew(){
 	        $('.lesson-blk').append('<div class="cnt-empty">尚無訓練計畫</div>');
 	    }
 	}
-}
+}*/
 
 function formatDate(dateStr){
 	var dateObj = new Date(dateStr);
@@ -433,6 +433,10 @@ function formatDate(dateStr){
 
 .history-list-blk, .lesson-blk{
 	min-height: 200px;
+}
+
+.history-list-blk {
+	margin-top: 1.5rem;
 }
 
 .lesson-card {
@@ -572,5 +576,4 @@ function formatDate(dateStr){
 
 </style>	
 
-<#include "/skins/imas/casemgnt/socket.ftl" />
-<#include "/skins/imas/widget/widget.ftl" />
+<#include "/imas/widget/widget.ftl" />

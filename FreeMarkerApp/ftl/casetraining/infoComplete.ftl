@@ -1,5 +1,4 @@
-<#import "/META-INF/spring.ftl" as spring />
-<#import "/META-INF/mspring.ftl" as mspring />
+<#import "/util/spring.ftl" as spring />
 <meta content="text/html; charset=UTF-8" http-equiv="content-type">
 <#if !__lang?exists || !__lang?has_content >
 <#assign __lang = "zh_TW" >
@@ -1431,7 +1430,7 @@ label.form-label{
 					
 		</div>
 		<div class="navbar-multi-entry">
-			<div class="user-info">${currentUserName!""}</div>	
+			<div class="user-info">${currentUser.username!""}</div>	
 			<div class="dropdown">
 			  	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 			  	<div class="menu-item dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -1457,7 +1456,7 @@ label.form-label{
 						<div class="card-hint">請填寫個人真實且完整資訊，以利後續聯繫與資料建檔。<span class="text-danger">* 為必填欄位</span></div>
 						<div class="form-group form-req">
 							<label class="form-label"><@spring.message "view.label.name"/></label>
-							<input type="text" class="dataForm form-control" data-item="3" value="${currentUser.name!""}" readonly="">
+							<input type="text" class="dataForm form-control" data-item="3" value="${currentUser.username!""}" readonly="">
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label"><@spring.message "view.label.gender"/></label>
@@ -1477,7 +1476,7 @@ label.form-label{
 						</div>						
 						<div class="form-group form-req">
 							<label class="form-label">聯絡電話</label>
-							<input type="text" class="dataForm form-control" data-item="7" value="${currentUser.userData.telCell!""}" readonly="">
+							<input type="text" class="dataForm form-control" data-item="7" value="${currentUser.telCell!""}" readonly="">
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label">緊急聯絡人</label>
@@ -1537,7 +1536,7 @@ label.form-label{
 							<div class="symdrome-options single-option">
 								<input type="hidden" class="basicForm form-control" data-item="37" />
 								<#list indications as indication>
-								<div class="option" data-id="${indication.id}" >${indication.tagName}</div>
+								<div class="option" data-id="${indication.id}" >${indication.name}</div>
 								</#list>
 							</div>							
 						</div>
@@ -1652,9 +1651,9 @@ label.form-label{
 	    });	  
 	    </#if>
 	    
-	    wg.template.updateNewPageContent('wg-Container', 'doctor-booking-content', {}, '${dtxCaseMgntUrl}/${__lang}/division/web/admin/taskMgnt/appointment/doctor/msg/chooseMessage');
+		wg.template.updateNewPageContent('wg-Container', 'therapist-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment/msg/chooseMessage?clinician=doctor');
 	    
-	    wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {}, '${dtxCaseMgntUrl}/${__lang}/division/web/patient/evaluation/msg/emptyMessage');
+		wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {}, '/ftl/imas/admin/taskMgnt/evaluation/message?msg=emptyMessage');
 
 	});
 	
@@ -1700,7 +1699,7 @@ label.form-label{
 		$("#wg-Container").empty();
 		
 		var doctorId = $(this).attr("data-doctor");
-		wg.template.updateNewPageContent('wg-Container', 'doctor-booking-content', {"doctorId": doctorId}, '${dtxCaseMgntUrl}/${__lang}/division/web/admin/taskMgnt/appointment/doctor');
+		wg.template.updateNewPageContent('wg-Container', 'therapist-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment/msg/chooseMessage?clinician=therapist&doctorId=' + doctorId);
 
 	});
 
@@ -1852,16 +1851,18 @@ label.form-label{
 			var patientId = $("form").attr("data-form-id");
 			var formId = data[0].id;
 	
-			wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {"isFromPatient": true}, '${dtxCaseMgntUrl}/${__lang}/division/web/patient/' + patientId + '/evaluation/' + formId + '/edit');
+			wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {"isFromPatient": true}, '/division/web/patient/' + patientId + '/evaluation/' + formId + '/edit');
+
 		}else{
-			wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {}, '${dtxCaseMgntUrl}/${__lang}/division/web/patient/evaluation/msg/nextStepMessage');
+			wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {}, '/ftl/imas/admin/taskMgnt/evaluation/message?msg=nextStepMessage');
+
 		}
 	}
 	
 	//顯示特定評估量表結果
 	function showAssessmentResult(redirectId){
 		var patientId = $("form").attr("data-form-id");
-		wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {"isFromPatient": true}, '${dtxCaseMgntUrl}/${__lang}/division/web/patient/' + patientId + '/evaluation/' + redirectId + '/view');
+		wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {"isFromPatient": true}, '/division/web/patient/' + patientId + '/evaluation/' + redirectId + '/view');
 	}
 	
 	//預約看診並更改使用者(個案)狀態為APPROVED
@@ -1875,7 +1876,7 @@ label.form-label{
 		if(doctorId == undefined || slotId == undefined){
 			swal("送出失敗", "請再次確認是否有安排下次看診時間!", "error");
 		}else{
-			var api = "${dtxCaseMgntUrl}/division/api/createNewAppo";
+			var api = "/WgTask/api/createNewAppo";
 			var postData = {"userId": doctorId, "slotId": slotId, "cat": 1, "caseno": formId};
 			var result = wg.evalForm.getJson({"data":JSON.stringify(postData)}, api);
 			
