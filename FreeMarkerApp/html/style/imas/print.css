@@ -1,0 +1,631 @@
+@charset "utf-8";
+
+body {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 0mm;
+    margin: 10mm auto;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+html{
+	background: #F7F7F7;
+}
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    html, body {
+        width: 210mm;
+        height: 297mm;
+       
+        border: 0px !important;
+        box-shadow: 0px !important;
+        -webkit-print-color-adjust:exact;
+        -moz-print-color-adjust:exact;
+        -ms-print-color-adjust:exact;
+        print-color-adjust:exact;        
+    }
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+	.certi-table tr:first-child td{
+		background-color: rgba(0, 0, 0, 0.02) !important;
+	}
+    .card-deck .card .card-header{
+        padding: 0.25rem 1rem !important;
+		margin-bottom: 0 !important;
+		background-color: rgba(0, 0, 0, 0.03) !important;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.4) !important;				
+	}
+	/*.report-info tbody tr td:nth-child(even){
+		color: #1b54b1 !important;
+	}*/
+	.report-info tbody tr td:nth-child(odd){
+		color: #666666 !important;
+	}
+	.report-info tbody tr td:nth-child(even){
+		color: #000 !important; 
+	}
+	.tablesorter-headerRow{
+		color: #000 !important;
+		background: #ffd480 !important;
+	}
+	.print-btn, .addImgHint, .del-btn{
+		display: none !important;
+	}
+	.page-break{
+		padding-top: 1.5em;
+		page-break-before: always !important;
+	}
+	.mt-5{
+		margin-top: 1.5em;
+	}
+	.analy-table td.analy-title{
+		background: #eeefef !important;
+	}
+	.analy-table tbody tr td.loc{
+		background: #ffd480 !important; 
+	}
+	.report-info{
+		width: 100% !important;
+		table-layout: fixed !important;
+	}
+	.report-info tbody tr td{
+		padding: 0.25rem;
+	}
+	.div.image_block{
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+	img.rotate{
+		-moz-transform:rotate(90deg) scale(1, 0.7);
+		-webkit-transform:rotate(90deg) scale(1, 0.7);
+		-o-transform:rotate(90deg) scale(1, 0.7);
+		-ms-transform:rotate(90deg) scale(1, 0.7);
+		transform:rotate(90deg) scale(1, 0.7);
+		margin-top: -30% !important;
+		margin-bottom: -20% !important;
+	}
+	.inner_content_info_agileits{
+		padding: 0px !important;
+	}
+	.modal-body{
+		padding-top: 0px !important;
+		padding-bottom: 0px !important;
+	}
+}
+
+input[type=text], input[type=checkbox], textarea{
+	pointer-events: none;
+	color: #000 !important;
+}
+
+input[type=checkbox]{
+	zoom: 1.4;
+	vertical-align: bottom;
+}
+
+.pd-h-0{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+img.rotate{
+	-moz-transform:rotate(90deg) scale(1, 0.7);
+	-webkit-transform:rotate(90deg) scale(1, 0.7);
+	-o-transform:rotate(90deg) scale(1, 0.7);
+	-ms-transform:rotate(90deg) scale(1, 0.7);
+	transform:rotate(90deg) scale(1, 0.7);
+	margin-top: -20%;
+	margin-bottom: -20% !important;
+}
+
+.navbar {
+  	overflow: hidden;
+  	background-color: #4d4d4d;
+  	position: fixed;
+  	left: 0;
+  	top: 0;
+  	width: 100%;
+  	border-radius: 0;
+  	z-index: 1000;
+}
+
+.navbar a {
+  	float: right;
+  	display: block;
+  	color: #f2f2f2;
+  	text-align: center;
+ 	padding: 10px 15px;
+  	text-decoration: none;
+  	font-size: 16px;
+  	height: inherit;
+}
+
+.navbar-title{
+	float: left !important;
+	font-size: 20px !important;
+}
+
+.navbar-title:hover{
+	cursor: default !important;
+	color: #fff !important;
+	background: #4d4d4d !important;
+}
+
+.navbar a:hover {
+  	background: #ddd;
+  	color: black;
+}
+
+.pdf-upload:before,
+.png-upload:before{
+	font-family: 'FontAwesome';
+	margin-right: 5px;
+}
+
+.pdf-upload:before{
+	content:"\f1c1";
+}
+
+.png-upload:before{
+	content:"\f1c5";
+}
+
+/*報告表頭*/
+.logo{
+	text-align: left;
+}
+.title-header{
+	width: 100%;
+	margin-bottom: 20px;
+	border-bottom:  1.5px solid #999999;
+}
+.main-title{
+	font-size: 24px;
+	text-align: center;
+	white-space: nowrap;
+}
+.main-title span{
+	display: block;
+	margin-bottom: 5px;
+}
+.load-time{
+	font-size: 14px;
+	text-align: right;
+	color: #a6a6a6;	
+}
+.hospital-logo{
+	width: 150px;
+	height: 30px;
+	margin-bottom: 0px;
+}
+.modal-body img{
+	margin-bottom: 0px;
+}
+
+.item-title{
+	padding: 5px 0 ;
+	color: #3482cb;
+	font-weight: 600;
+}
+
+.img-template > .card-deck .card .card-header{
+  padding: 0.25rem 1rem;
+  margin-bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.img-template{
+	width: 100%;
+	text-align: center;
+}
+
+.card-deck{
+	flex-direction: initial;
+}
+
+.card-deck .card{
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  flex: 100%;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 0; /*0.25rem*/
+  padding: 0rem !important;
+  margin-bottom: 0.5rem;
+}
+
+.card-deck .card:not(:first-child){
+	margin-top: 0rem;
+} 
+
+.card-deck .card .card-header{
+  padding: 0.25rem 1rem;
+  margin-bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.card-deck .card .card-header .fa{
+	color: #212529;
+}
+
+.card-deck .card .card-body{
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 1rem 0.5rem;
+}
+
+.card-deck .card .card-body{
+	padding: 0.5rem 0rem!important;
+}
+
+.card-deck .card .card-footer {
+  padding: 0.5rem 1.25rem;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.certi-table tr:first-child td{
+	background-color: rgba(0, 0, 0, 0.02);
+}
+/*報告表頭*/
+
+/*病患資訊與傷口資訊內容*/
+.report-info{
+	width: 100%;
+	max-width: 100%;
+	/*table-layout: fixed;*/
+}
+.report-info tbody tr td{
+	padding: 0.25rem;
+    /*white-space: nowrap;*/
+}
+
+.report-info tbody tr td input[type=text]{
+	width: 70px;
+	height: 25px;
+	text-align: center;
+	outline: 0;
+  	border-width: 0 0 0.5px;
+  	display: inline;
+}
+.report-info tbody tr td:nth-child(odd){
+	color: #666666;
+	/*font-weight: 600;*/
+	vertical-align: baseline;
+	max-width: 110px;
+}
+.report-info tbody tr td:nth-child(even){
+	color: #000; /*#1b54b1*/
+	vertical-align: baseline;
+}
+
+/*病患資訊與傷口資訊內容*/
+
+/*衛教內容*/
+.eduList, .solvingInfo{
+	text-align: left;
+	color: #000;
+}
+.eduList label, .solvingInfo label{
+	display: block;
+	margin-left: 0px !important;
+}
+.eduList label:before{
+	font-family: 'FontAwesome';
+	content:"\f0c8";
+	margin-right: 10px;
+}
+/*衛教內容*/
+
+/*傷口處置資訊*/
+.method-table{
+	width: 100%;
+}
+.tablesorter-headerRow{
+	color: #000;
+	background: #ffd480;
+}
+.method-table thead tr th,
+.method-table tbody tr td{
+	padding: 0.25em ;
+	color: #000!important;
+}
+/*傷口處置資訊*/
+
+/*傷口趨勢圖*/
+.pd-h-0{
+	padding-left: 0px!important;
+	padding-right: 0px!important;
+}
+.chart-container{	
+	display: inline-block;
+	/*width:200px !important;
+	width: 50%;*/
+	padding: 0px!important;
+	/*margin: 0px 5px; 20200114更新*/
+	text-align: center;
+}
+.chart-container span{
+	font-size: 12px;
+	font-weight: 550;
+}
+.woundChart{
+	width: 100% !important;
+}
+/*傷口趨勢圖*/
+
+/*眼底檢測數據*/
+.analy-table{
+	width: 100%;
+	max-width: 100%;
+	/*table-layout: fixed;*/
+}
+
+.analy-table tbody tr td input[type=text]{
+	width: 80px;
+	height: 25px;
+	text-align: center;
+	outline: 0;
+  	border-width: 0 0 0.5px;
+  	display: inline;
+}
+.analy-table tbody tr td{
+	color: #555;
+    /*white-space: nowrap;*/
+}
+.analy-table tbody tr.title td{
+	padding: 0.25rem !important;
+	font-size: 16px  !important;
+	text-align: left  !important;
+}
+.analy-table tbody tr td.title{
+	background: #ffd480 !important;
+	color: #000 !important;
+	font-weight: 600 !important;
+}
+.analy-table tbody tr.title:nth-child(n+2) td{
+	padding-top: 0.75rem !important;
+}
+
+.analy-table tbody tr td.loc,
+.analy-table tbody tr td.analy-title,
+.exam-table tbody tr td.title{
+	text-align: center;
+	color: #000000;
+	font-size: 14px;
+}
+.analy-table td.analy-title,
+.exam-table td.title{
+	background: #eeefef;
+	font-weight: 600;
+}
+.analy-table tbody tr td.loc{
+	width: 80px;
+	background: #ffd480; /*#fff5cc、#ffffb3*/
+	font-size: 16px!important;
+	border-right: 2px solid #fff;
+	font-weight: 600;
+}
+.analy-table tbody tr td:not(.loc),
+.exam-table tbody tr td:not(.loc){
+	padding: 7px;
+	max-width: 150px;
+}
+
+.analy-table tbody tr td label input[type=checkbox] + span{
+	margin-left: 5px;
+}
+.analy-table tbody tr.title td label:not(:first-child){
+	margin-left: 10px;
+}
+
+/*眼底檢測數據*/
+
+/*肺量計檢測數據*/
+.pd-5{
+	padding: 0px 5px;
+}
+.detail{
+	width: 100%;
+	font-size: 10px;
+	table-layout: fixed;
+}
+.detail tbody tr td.title{
+	font-size: 10px;
+}
+.detail tbody tr td.analy-title{
+	font-size: 10px;
+}
+.detail tbody tr:nth-child(2){
+	border-bottom-style: double;
+}
+.detail tbody tr:nth-child(n+3):nth-child(-n+11) td:nth-child(2){
+	border-right-style: double;
+}
+.detail tbody tr td:not(.loc){
+	padding: 6px 3px;
+}
+.detail tbody tr:not(:first-child) td:not(.loc):nth-child(n+4){
+	border-left: 0.5px solid #b0b5b5;
+}
+.detail tbody tr td input[type=text]{
+	width: 48px;
+	font-size: 10px;
+	border-width: 0 0 0px;
+}
+.btm-line, .btm-line:focus, .btm-line:active, .btm-line:visited{
+	outline: 0;
+	border-width: 0px;
+	display: inline;
+  	pointer-events: none;
+  	text-align: right;
+}
+/*肺量計檢測數據*/
+
+/*聽力檢查儀檢測數據*/
+.direction{
+	background: #fff0b3;
+	font-size: 16px!important;
+	font-weight: 600;
+	text-align: center;
+}
+
+.audio-meters-detail{
+	width: 100%;
+	font-size: 14px;
+	text-align: center;
+	table-layout: fixed;
+}
+
+.audio-meters-detail tbody tr td.space{
+	width: 0.5%;
+}
+
+.audio-meters-detail tbody tr td input[type=text]{
+	width: 60px !important;
+	text-align: center;
+}
+
+.audio-meters-detail tbody tr td input[type=text],
+.audio-meters-detail tbody tr td input[type=text]:focus, 
+.audio-meters-detail tbody tr td input[type=text]:active, 
+.audio-meters-detail tbody tr td input[type=text]:visited{
+	outline: 0;
+  	display: inline;
+  	border-width: 0 0 0;
+  	pointer-events: none; 	
+}
+
+.audio-meters-detail tbody tr td:nth-child(even) input[type=text],
+.audio-meters-detail tbody tr td:nth-child(even) input[type=text]:focus, 
+.audio-meters-detail tbody tr td:nth-child(even) input[type=text]:active, 
+.audio-meters-detail tbody tr td:nth-child(even) input[type=text]:visited{
+  	border-width: 0 0 0.5px;
+  	font-weight: 600;	
+}
+
+/*聽力檢查儀檢測數據*/
+
+/*檢測狀況*/
+.exam-table{
+	width: 100%;
+	margin-bottom: 5px;
+}
+.exam-table tbody tr td label input[type=checkbox]:checked + span{
+  	color: red;
+  	font-weight: 600;
+}
+.exam-table tbody tr td{	
+	color: #555;
+}
+.exam-table td.title{
+	width: 150px;
+}
+
+/*列印報告*/
+.print-btn{
+	position: fixed;
+	font-size: 18px;
+	width: 130px;
+	right: 20mm;
+}
+.print-btn:nth-child(1){
+	bottom: 20mm;
+}
+.print-btn:nth-child(2){
+	bottom: 10mm;
+}
+
+/*列印報告*/
+
+
+.addImgHint{
+	color: currentColor;
+	text-align: center;
+	height: 100px;
+	display:table;
+}
+
+.addImgHint  a{
+	text-decoration: none;
+}
+
+ul.thumbnails.image_picker_selector li.group_title{
+	text-align: left;
+	margin-bottom: 10px;
+	font-weight: 600;
+}
+
+.image_block{
+	background-color: white;
+    border: 0.5px solid #EEEEDE;
+    border-radius: 0.5vw;
+    padding: 5px;
+    /*margin-right: 5px;*/
+    text-align: center;
+    vertical-align: text-top;
+    display: inline-table;
+}
+
+.image_container {
+    border: 0.5vw solid transparent;
+    width: 100%;
+    /*height: 150px;*/
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+.image_desc {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    vertical-align: middle;
+    text-align: center;
+    display: block;
+    color: #808080;
+}
+
+.image_block{
+	position: relative;
+}
+
+.image_block span {
+	font-size: 0.85rem;
+	display: inline-block;
+	cursor: pointer;
+	position: absolute;
+	top: -5px;
+	left: -5px;
+	color: #ff6666;
+	z-index: 99;
+}
+
+.image_block span:hover{
+	color: #ff4d4d;
+}

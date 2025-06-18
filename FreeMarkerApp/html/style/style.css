@@ -1,0 +1,951 @@
+@Charset "UTF-8";
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html,
+button,
+input,
+select,
+textarea {
+    /*color: #222;*/
+    color: #222;
+}
+
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection declarations have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+/*
+ * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
+ */
+
+img {
+    vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+
+blockquote {
+  border:none;
+}
+
+/* ==========================================================================
+   Chrome Frame prompt
+   ========================================================================== */
+
+.chromeframe {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+/* ==========================================================================
+    Custom styles
+   ========================================================================== */
+/*body { font-size:75% }  16px*75%=12px */
+/*h1 {font-size:2em}  2*12px=24px */
+/*p{font-size:1.25em}  1.25*12px=15px */
+/*li, span{font-size:1.25em}  1.25*12px=15px */
+
+
+html {
+  font-size: 63%;
+
+}
+body{
+    font-family:"微軟正黑體", "Microsoft JhengHei", "新細明體", "PMingLiU", "細明體", "MingLiU", "Times New Roman",Georgia, "標楷體", "DFKai-sb",Serif;
+    font-color:#333;
+    line-height: 1.4em;
+    /*letter-spacing: 0.1em;*/
+    letter-spacing: 0.05em;
+    /*padding-bottom:50px;*/
+}
+
+h1, h2, h3, h4, h5, h6, nav{
+  margin:0;
+  font-family:"微軟正黑體", "Microsoft JhengHei", "新細明體", "PMingLiU", "細明體", "MingLiU", "Times New Roman",Georgia, "標楷體", "DFKai-sb",Serif;
+}
+
+ul, ol, ul li, ol li{
+  margin:0;
+  padding:0;
+  list-style: none;
+}
+
+p{
+  font-size: 1em;
+}
+
+a, a:link, a:visited, a:hover{
+  font-color:#333;
+  text-decoration: none;
+}
+
+.row div{
+  /*border:1px solid red;*/
+}
+
+.container{
+  /*width:1280px;*/
+  /*width:100%;*/
+}
+.clear{
+  clear:both;
+}
+.height20{
+  height:20px;
+}
+
+/* ==========================================================================
+    Header
+   ========================================================================== */
+.header{
+  height:88px;
+  /*border:1px solid red;*/
+}
+.header h1{
+  position: absolute;
+  text-indent: -9999px;
+}
+.header a.logo{
+  display:inline-block;
+  margin:19px 0 0 21px;
+}
+
+.header #loginfo{
+  text-align: right;
+  margin:10px 0 10px 0;
+  font-size: 1em;
+}
+.header #loginfo a{
+  text-decoration: underline;
+}
+
+.header .searchBox{
+  float:right;
+}
+
+
+
+/* ==========================================================================
+    Sub Header
+   ========================================================================== */
+.subHeader{
+  border:1px;
+  height:40px;
+  background-color: #008852;
+  /*margin-bottom:3px;*/
+  margin-top:3px;
+}
+
+.subHeader span.copyright{
+  float:left;
+  font-size: 0.8em;
+  /*border:1px solid red;*/
+  margin:10px 0 0 15px;
+  color:#b7ead3;
+}
+
+
+ul.socialLinks{
+  float:right;
+  margin:0 20px 0 0;
+}
+ul.socialLinks li{
+  float:left;
+  margin-left: 18px;
+}
+ul.socialLinks li a{
+  display: block;
+  width:25px;
+  height:40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-indent: -9999px;
+  background:url(../images/subHeader_02.png);
+}
+ul.socialLinks li a:hover{
+  background:url(../images/subHeader_over.png);
+}
+
+
+
+
+ul.socialLinks li a.privacy{
+  width:74px;
+  background-position: -10px 0;
+}
+ul.socialLinks li a.googleplus{
+  background-position: -106px 0;
+}
+ul.socialLinks li a.facebook{
+  background-position: -146px 0;
+}
+ul.socialLinks li a.plurk{
+  background-position: -188px 0;
+}
+ul.socialLinks li a.rss{
+  background-position: -230px 0;
+}
+
+/* ==========================================================================
+    Main Slider
+   ========================================================================== */
+.mainSlider{
+  padding-top:20px;
+  width:700px;
+  height:326px;
+  background-color: #6bba9b;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+    Main Info
+   ========================================================================== */
+ul.nav-tabs{
+  margin-top:10px;
+  margin-bottom:10px;
+}
+.mainInfo{
+  /*border:1px solid red;*/
+  /*padding:20px 20px 50px 30px;*/
+  /*margin-top:20px;*/
+  /*height:600px;*/
+}
+
+.mainInfo h2{
+  font-size: 1.5em;
+  color:#333333;
+  border-bottom:1px solid #4dac86;
+  padding-bottom:5px;
+}
+.mainInfo ul li{
+  /*border-bottom: 1px solid #4dac86;*/
+  padding:4px 0;
+  clear:both;
+}
+
+.mainInfo ul li img{
+  /*float:left;*/
+  /*margin-right:20px;*/
+  /*width:100%;*/
+}
+
+.mainInfo ul li h3{
+  /*float:left;*/
+  font-size: 1.3em;
+  color:#008751;
+}
+.mainInfo ul li span.date{
+  /*float:left;*/
+  display: block;
+  width:160px;
+  color:#333;
+  /*display:block;*/
+}
+.mainInfo ul li p{
+  /*float:left;*/
+  /*display: inline-block;*/
+  /*width:435px;*/
+  color:#333;
+}
+
+/* ==========================================================================
+   Main Menu
+   ========================================================================== */
+.mainMenu{
+  margin-left:5px;
+  background-color: #b2dbcb;
+  padding:30px 0 10px 15px;
+  /*border:1px solid red;*/
+}
+
+/*所有大小區塊*/
+.mainMenu ul li{
+  /*border:1px solid blue;*/
+  /*background-color: white;*/
+  width:209px;
+  height:128px;
+  float:left;
+  margin-top:5px;
+  margin-left:5px;
+}
+
+
+/*所有選單區塊 a ，設定通用背景、圓角*/
+.mainMenu ul li a{
+  /*border:1px solid red;*/
+  color:black;
+  display: block;
+  width:100%;
+  height:100%;
+  white-space: nowrap;
+  overflow: hidden;
+  /*text-indent: -9999px;*/
+  /*background-image:url(../images/mainMenu2.png);*/
+  /*background-repeat: no-repeat;*/
+  text-transform:uppercase;
+  text-align: center;
+
+  -moz-border-radius: 12px; /* Firefox */
+  -webkit-border-radius: 12px; /* Safari, Chrome */
+  -khtml-border-radius: 12px; /* Konqueror */
+  border-radius: 12px; /* Opera 10.50 and later (CSS3 standard) */
+  behavior: url(border-radius.htc); /* IE6, IE7, IE8 */
+}
+
+/*所有選單區塊 a:hover; ，設定通用背景*/
+/*.mainMenu ul li a:hover{
+  background-image:url(../images/mainMenu2_hover.png);
+  background-repeat: no-repeat;
+}*/
+
+/*所有選單區塊背景*/
+.mainMenu ul li a{background-position: -1px -1px;}
+.mainMenu ul li a.member{background-image:url(../images/mainmenu/mainMenu_member.png);}
+.mainMenu ul li a.news{background-image:url(../images/mainmenu/mainMenu_news.png);}
+.mainMenu ul li a.nutritious{background-image:url(../images/mainmenu/mainMenu_nutritious.png);}
+.mainMenu ul li a.check{background-image:url(../images/mainmenu/mainMenu_check.png);}
+.mainMenu ul li a.health{background-image:url(../images/mainmenu/mainMenu_health.png);}
+.mainMenu ul li a.medicine{background-image:url(../images/mainmenu/mainMenu_medicine.png);}
+.mainMenu ul li a.serve{background-image:url(../images/mainmenu/mainMenu_serve.png);}
+.mainMenu ul li a.products{background-image:url(../images/mainmenu/mainMenu_products.png);}
+.mainMenu ul li a.healthService{background-image:url(../images/mainmenu/mainMenu_healthService.png);}
+.mainMenu ul li a.healthDiary{background-image:url(../images/mainmenu/mainMenu_healthDiary.png);}
+
+
+/*所有選單區塊背景*/
+.mainMenu ul li a.member:hover{background-image:url(../images/mainmenu//mainMenu_member_hover.png);}
+.mainMenu ul li a.news:hover{background-image:url(../images/mainmenu//mainMenu_news_hover.png);}
+.mainMenu ul li a.nutritious:hover{background-image:url(../images/mainmenu//mainMenu_nutritious_hover.png);}
+.mainMenu ul li a.check:hover{background-image:url(../images/mainmenu//mainMenu_check_hover.png);}
+.mainMenu ul li a.health:hover{background-image:url(../images/mainmenu//mainMenu_health_hover.png);}
+.mainMenu ul li a.medicine:hover{background-image:url(../images/mainmenu//mainMenu_medicine_hover.png);}
+.mainMenu ul li a.serve:hover{background-image:url(../images/mainmenu//mainMenu_serve_hover.png);}
+.mainMenu ul li a.products:hover{background-image:url(../images/mainmenu//mainMenu_products_hover.png);}
+.mainMenu ul li a.healthService:hover{background-image:url(../images/mainmenu//mainMenu_healthService_hover.png);}
+.mainMenu ul li a.healthDiary:hover{background-image:url(../images/mainmenu//mainMenu_healthDiary_hover.png);}
+
+
+.mainMenu ul li a span{
+  letter-spacing: 0;
+  display: inline-block;
+  float:right;
+  width:50%;
+  white-space: normal;
+  line-height: 1.2em;
+  margin-right:10px;
+  /*border:1px solid red;*/
+
+  /*margin:auto;*/
+  /*border:1px solid red;*/
+  /*padding:0 30px;*/
+  /*position: relative;*/
+}
+
+.mainMenu ul li a div.line{
+  float:left;
+  margin:25px  0 0 90px;
+  height:80px;
+  border-left:1px solid gray;
+}
+
+.mainMenu ul li a span.ch{
+  margin-top:45px;
+}
+
+
+
+
+/* ==========================================================================
+   Main Menu Inner
+   ========================================================================== */
+.breadcrumb{
+  float:left;
+  background-color:transparent;
+}
+.mainMenuInner{
+  float:right;
+  margin: 5px 0 14px 0;
+}
+.mainMenuInner li{
+  width:67px;
+  height:65px;
+  float:left;
+  /*margin-top:6px;*/
+  /*margin-left:6px;*/
+}
+
+/*所有選單區塊 a ，設定通用背景、圓角*/
+.mainMenuInner ul li a{
+  font-size:0.8em;
+  letter-spacing: 0;
+  /*border:1px solid red;*/
+  display: block;
+  width:100%;
+  height:100%;
+  text-align: center;
+  padding-top:45px;
+  vertical-align: text-bottom;
+  white-space: nowrap;
+  overflow: hidden;
+  background-image:url(../images/mainmenu_inner/mainMenuInner.png);
+  background-repeat: no-repeat;
+  color:#c6c6c6;
+}
+.mainMenuInner ul li a:hover{
+  color:#008751;
+}
+
+/*所有選單區塊 a:hover; ，設定通用背景*/
+.mainMenuInner ul li a:hover, .mainMenuInner ul li a.active{
+  color:#008751;
+  background-image:url(../images/mainmenu_inner/mainMenuInner_hover.png);
+  background-repeat: no-repeat;
+}
+
+/*所有選單區塊背景對位*/
+.mainMenuInner ul li a.serve{background-position: -30px 0px;}
+.mainMenuInner ul li a.products{background-position: -108px 0px;}
+.mainMenuInner ul li a.medicine{background-position: -540px 2px;}
+.mainMenuInner ul li a.health{background-position: -180px 2px;}
+.mainMenuInner ul li a.check{background-position: -394px 0px;}
+.mainMenuInner ul li a.nutrition{background-position: -319px 2px;}
+.mainMenuInner ul li a.news{background-position: -247px 0px;}
+.mainMenuInner ul li a.member{background-position: -617px 2px;}
+.mainMenuInner ul li a.healthService{background-position: -764px 0px;}
+.mainMenuInner ul li a.healthDiary{background-position: -832px 0px;}
+/*.mainMenuInner ul li a.contact{background-position: -429px 3px;}*/
+
+
+/* ==========================================================================
+   Article List
+   ========================================================================== */
+.list{
+  /*border:1px solid red;*/
+  /*padding:0;*/
+  /*height:600px;*/
+  padding:0 15px;
+}
+.list ul li{
+  border-bottom: 1px solid #4dac86;
+  margin-top: 5px;
+}
+.list ul li h3{
+  /*margin-top: 7px;*/
+}
+
+/* ==========================================================================
+   Article
+   ========================================================================== */
+
+.article{
+  border:1px solid #008751;
+  padding:10px 15px;
+}
+.article ul li, #dialog-modal ul li{
+  margin-left:26px;
+  list-style-type: disc;
+}
+.article ol li, #dialog-modal ol li{
+  margin-left:30px;
+  list-style-type: decimal;
+}
+
+.article ol ul li,.article ul ul li, #dialog-modal ol ul li, #dialog-modal ul ul li{
+  margin-left:50px;
+  list-style-type: circle;
+}
+
+.article ol ul ul li,.article ul ul ul li, #dialog-modal ol ul ul li, #dialog-modal ul ul ul li{
+  margin-left:70px;
+  list-style-type: disc;
+}
+
+.article .date{
+  color: #008751;
+}
+.article h1{
+  font-size: 1.7em;
+  /*font-weight: bold;*/
+  margin-top:10px;
+}
+.article h2{
+  /*border: 1px solid red;*/
+  float:left;
+  font-size: 1.2em;
+  margin:5px 0;
+  color: #008751;
+}
+
+.article .socialLinks{
+  /*border: 1px solid red;*/
+  float:right;
+  margin:5px 3px 0 0;
+}
+
+.article .socialLinks ul li{
+  float:left;
+  margin-left: 10px;
+  list-style: none;
+}
+.article .socialLinks ul li a{
+  /*border:1px solid red;*/
+  display: block;
+  width:20px;
+  height:18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-indent: -9999px;
+  background:url(../images/article_social_links.png);
+  background-repeat: no-repeat;
+}
+.article .socialLinks ul li a:hover{
+  /*background:url(../images/article_social_links.png);*/
+}
+
+.article .socialLinks ul li a.googleplus{
+  background-position: 0 0;
+}
+.article .socialLinks ul li a.facebook{
+  background-position: -37px 0;
+}
+.article .socialLinks ul li a.plurk{
+  background-position: -76px 0;
+}
+
+.article .socialLinks ul li a.rss{
+  background-position: -118px 0;
+}
+
+.article hr {
+  clear:both;
+  border: none;
+  height: 2px;
+  color: #008751; /*//old IE*/
+  background-color: #008751; /*//Modern Browsers*/
+
+  margin:3px 0 12px 0;
+}
+
+
+/* ==========================================================================
+   Sub Menu
+   ========================================================================== */
+
+.subMenu{
+  width:100%;
+  /*border:1px solid red;*/
+}
+
+.subMenu ul{
+  /*border:1px solid red;*/
+}
+.subMenu li{
+  width:261px;
+  height:40px;
+  margin-bottom: 2px;
+  overflow: hidden;
+
+  /*border:1px solid red;*/
+}
+
+.subMenu li a{
+  display: block;
+  width:100%;
+  height:100%;
+  /*text-indent: 76px;*/
+  /*padding-top:18px;*/
+  color:black;
+  text-transform:uppercase;
+  letter-spacing: 0;
+}
+
+.subMenu li a span{
+  display: block;
+  margin-left:55px;
+}
+.subMenu li a span.ch{
+  padding-top:2px;
+}
+.subMenu li a span.en{
+  margin-top:-2px;
+}
+
+
+.subMenu li a.active, .subMenu li a:hover{
+  color:white;
+  /*background:none;
+  background-color: #008751;*/
+}
+
+.subMenu li a{
+  background-repeat: no-repeat;
+}
+
+.subMenu li a.medicine_identification{background-image:url(../images/submenu/subMenu_listStyle_medicine_identification.png);}
+.subMenu li a.medicine_identification:hover, .subMenu li a.medicine_identification.active{background-image:url(../images/submenu/subMenu_listStyle_medicine_identification_hover.png);}
+
+.subMenu li a.medicine_article{background-image:url(../images/submenu/subMenu_listStyle_medicine_article.png);}
+.subMenu li a.medicine_article:hover, .subMenu li a.medicine_article.active{background-image:url(../images/submenu/subMenu_listStyle_medicine_article_hover.png);}
+
+
+
+
+
+.subMenu li a.nutritious_information{background-image:url(../images/submenu/subMenu_listStyle_nutritious_information.png);}
+.subMenu li a.nutritious_information:hover, .subMenu li a.nutritious_information.active{background-image:url(../images/submenu/subMenu_listStyle_nutritious_information_hover.png);}
+
+.subMenu li a.body_structure{background-image:url(../images/submenu/subMenu_listStyle_body_structure.png);}
+.subMenu li a.body_structure:hover, .subMenu li a.body_structure.active{background-image:url(../images/submenu/subMenu_listStyle_body_structure_hover.png);}
+
+.subMenu li a.medicine_information{background-image:url(../images/submenu/subMenu_listStyle_medicine_information.png);}
+.subMenu li a.medicine_information:hover, .subMenu li a.medicine_information.active{background-image:url(../images/submenu/subMenu_listStyle_medicine_information_hover.png);}
+
+.subMenu li a.health_information{background-image:url(../images/submenu/subMenu_listStyle_health_information.png);}
+.subMenu li a.health_information:hover, .subMenu li a.health_information.active{background-image:url(../images/submenu/subMenu_listStyle_health_information_hover.png);}
+
+.subMenu li a.maternity_child{background-image:url(../images/submenu/subMenu_listStyle_maternity_child.png);}
+.subMenu li a.maternity_child:hover, .subMenu li a.maternity_child.active{background-image:url(../images/submenu/subMenu_listStyle_maternity_child_hover.png);}
+
+.subMenu li a.health_news{background-image:url(../images/submenu/subMenu_listStyle_health_news.png);}
+.subMenu li a.health_news:hover, .subMenu li a.health_news.active{background-image:url(../images/submenu/subMenu_listStyle_health_news_hover.png);}
+
+
+
+
+
+.subMenu li a.weight_check{background-image:url(../images/submenu/subMenu_listStyle_weight_check.png);}
+.subMenu li a.weight_check:hover, .subMenu li a.weight_check.active{background-image:url(../images/submenu/subMenu_listStyle_weight_check_hover.png);}
+
+.subMenu li a.metabolci_check{background-image:url(../images/submenu/subMenu_listStyle_metabolci_check.png);}
+.subMenu li a.metabolci_check:hover, .subMenu li a.metabolci_check.active{background-image:url(../images/submenu/subMenu_listStyle_metabolci_check_hover.png);}
+
+.subMenu li a.evaluation_questionnaire{background-image:url(../images/submenu/subMenu_listStyle_evaluation_questionnaire.png);}
+.subMenu li a.evaluation_questionnaire:hover, .subMenu li a.evaluation_questionnaire.active{background-image:url(../images/submenu/subMenu_listStyle_evaluation_questionnaire_hover.png);}
+
+.subMenu li a.record_search{background-image:url(../images/submenu/subMenu_listStyle_record_search.png);}
+.subMenu li a.record_search:hover, .subMenu li a.record_search.active{background-image:url(../images/submenu/subMenu_listStyle_record_search_hover.png);}
+
+.subMenu li a.exercise_check{background-image:url(../images/submenu/subMenu_listStyle_exercise_check.png);}
+.subMenu li a.exercise_check:hover, .subMenu li a.exercise_check.active{background-image:url(../images/submenu/subMenu_listStyle_exercise_check_hover.png);}
+
+.subMenu li a.sleep_check{background-image:url(../images/submenu/subMenu_listStyle_sleep_check.png);}
+.subMenu li a.sleep_check:hover, .subMenu li a.sleep_check.active{background-image:url(../images/submenu/subMenu_listStyle_sleep_check_hover.png);}
+
+.subMenu li a.depressive_check{background-image:url(../images/submenu/subMenu_listStyle_depressive_check.png);}
+.subMenu li a.depressive_check:hover, .subMenu li a.depressive_check.active{background-image:url(../images/submenu/subMenu_listStyle_depressive_check_hover.png);}
+
+.subMenu li a.osteoporosis_check{background-image:url(../images/submenu/subMenu_listStyle_osteoporosis_check.png);}
+.subMenu li a.osteoporosis_check:hover, .subMenu li a.osteoporosis_check.active{background-image:url(../images/submenu/subMenu_listStyle_osteoporosis_check_hover.png);}
+
+.subMenu li a.bph_check{background-image:url(../images/submenu/subMenu_listStyle_bph_check.png);}
+.subMenu li a.bph_check:hover, .subMenu li a.bph_check.active{background-image:url(../images/submenu/subMenu_listStyle_bph_check_hover.png);}
+
+
+
+/*服務項目*/
+.subMenu li a.personal_health{background-image:url(../images/submenu/subMenu_listStyle_service_personal.png);}
+.subMenu li a.personal_health:hover, .subMenu li a.personal_health.active{background-image:url(../images/submenu/subMenu_listStyle_service_personal_hover.png);}
+
+.subMenu li a.nutrition_counseling{background-image:url(../images/submenu/subMenu_listStyle_service_nutrition.png);}
+.subMenu li a.nutrition_counseling:hover, .subMenu li a.nutrition_counseling.active{background-image:url(../images/submenu/subMenu_listStyle_service_nutrition_hover.png);}
+
+.subMenu li a.postpartum_care{background-image:url(../images/submenu/subMenu_listStyle_service_postpartum.png);}
+.subMenu li a.postpartum_care:hover, .subMenu li a.postpartum_care.active{background-image:url(../images/submenu/subMenu_listStyle_service_postpartum_hover.png);}
+
+.subMenu li a.corporate_health{background-image:url(../images/submenu/subMenu_listStyle_service_corporate.png);}
+.subMenu li a.corporate_health:hover, .subMenu li a.corporate_health.active{background-image:url(../images/submenu/subMenu_listStyle_service_corporate_hover.png);}
+
+.subMenu li a.health_concept{background-image:url(../images/submenu/subMenu_listStyle_service_concept.png);}
+.subMenu li a.health_concept:hover, .subMenu li a.health_concept.active{background-image:url(../images/submenu/subMenu_listStyle_service_concept_hover.png);}
+
+/*健康服務*/
+.subMenu li a.check_reserve{background-image:url(../images/submenu/subMenu_listStyle_check_reserve.png);}
+.subMenu li a.check_reserve:hover, .subMenu li a.check_reserve.active{background-image:url(../images/submenu/subMenu_listStyle_check_reserve_hover.png);}
+
+
+/*健康日記*/
+.subMenu li a.diary_data{background-image:url(../images/submenu/subMenu_listStyle_diary_data.png);}
+.subMenu li a.diary_data:hover, .subMenu li a.diary_data.active{background-image:url(../images/submenu/subMenu_listStyle_diary_data_hover.png);}
+
+.subMenu li a.diary_diet{background-image:url(../images/submenu/subMenu_listStyle_diary_diet.png);}
+.subMenu li a.diary_diet:hover, .subMenu li a.diary_diet.active{background-image:url(../images/submenu/subMenu_listStyle_diary_diet_hover.png);}
+
+.subMenu li a.diary_exercise{background-image:url(../images/submenu/subMenu_listStyle_diary_exercise.png);}
+.subMenu li a.diary_exercise:hover, .subMenu li a.diary_exercise.active{background-image:url(../images/submenu/subMenu_listStyle_diary_exercise_hover.png);}
+
+.subMenu li a.diary_period{background-image:url(../images/submenu/subMenu_listStyle_diary_period.png);}
+.subMenu li a.diary_period:hover, .subMenu li a.diary_period.active{background-image:url(../images/submenu/subMenu_listStyle_diary_period_hover.png);}
+
+.subMenu li a.diary_pregnancy{background-image:url(../images/submenu/subMenu_listStyle_diary_pregnancy.png);}
+.subMenu li a.diary_pregnancy:hover, .subMenu li a.diary_pregnancy.active{background-image:url(../images/submenu/subMenu_listStyle_diary_pregnancy_hover.png);}
+
+.subMenu li a.diary_infant{background-image:url(../images/submenu/subMenu_listStyle_diary_infant.png);}
+.subMenu li a.diary_infant:hover, .subMenu li a.diary_infant.active{background-image:url(../images/submenu/subMenu_listStyle_diary_infant_hover.png);}
+
+
+/* ==========================================================================
+   Article List
+   ========================================================================== */
+.article_list{
+  /**/
+  width:261px;
+  /*margin-top:20px;*/
+  letter-spacing: 0;
+  overflow: hidden;
+}
+.article_list div.line{
+  height:5px;
+  background-color: #008751;
+}
+.article_list ul li{
+  height:30px;
+  border-bottom:1px solid #008751;
+  overflow: hidden;
+}
+
+.article_list > ul > li a{
+  display: block;
+  width:100%;
+  height: 40px;
+  color:#595959;
+  margin-top:-10px;
+  /*padding-right: 5px;*/
+  line-height: 50px;
+}
+
+.article_list ul li a:hover, .article_list ul li a.active{
+  color:#008751;
+  font-weight: bold;
+  /*background-color: #eee;*/
+}
+
+.pagination{
+  /*border:1px solid red;*/
+  margin-top:10px;
+}
+
+/* ==========================================================================
+  Login Container
+  ========================================================================== */
+#login_container{
+  /*border:1px solid red;*/
+}
+#login_container .alert{
+  /*border:1px solid red;*/
+  margin:0;
+  /*padding:10px;*/
+}
+
+#login_container li{
+  list-style-type: disc;
+  list-style-position: 20px;
+  margin-left:18px;
+}
+
+#login_container .authcode{
+  margin-top:2px;
+  margin-left:-20px;
+  /*border:1px solid red;*/
+}
+#login_container .authcode img{
+  margin-right:5px;
+}
+
+
+.form-signin {
+  max-width: 400px; 
+  display:block;
+  background-color: #f7f7f7;
+  border:1px solid #ccc;
+  border-radius:2px;
+  margin:40px auto 0 auto;
+}
+/*
+.main{
+  padding:20px 38px;
+}
+*/
+.heading-desc{
+  font-size:1.6em;
+  padding:25px 38px 0px 38px;
+  
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  font-size: 1.1em;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="text"] {
+  margin-bottom: 10px;
+  border-radius: 5px;
+  
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+.login-footer{
+  background:#f0f0f0;
+  margin: 0 auto;
+  border-top: 1px solid #dadada;
+  padding:20px;
+}
+.login-footer .left-section a{
+  display: block;
+  font-weight:bold;
+  color:#8a8a8a;
+  line-height:19px;
+}
+.mg-btm{
+  margin-bottom:20px;
+}
+
+
+/* ==========================================================================
+  DIY Table
+  ========================================================================== */
+table.diy{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+table.diy th, table.diy td {
+  border:1px solid #aaa;
+  padding:3px;
+}
+table.diy th{
+  font-size:1.1em;
+  font-weight: bold;
+  background-color:#eee;
+}
+table.diy th.date{
+  width:100px;
+}
+table.diy th.value{
+  /*width:80%;*/
+}
+table.diy th.function{
+  width:60px;
+}
+
+
+
+span.validate_msg{
+  color:red;
+}
+form#diyMetaForm input[type='text']{
+  width:100px;
+}
+
+div.body_top_list ul li a{
+  color:#595959;
+}
+div.body_top_list ul li a:hover{
+  color:#008751;
+}
+
+div.body_top_list ul li a span{
+  width:120px;
+  display: inline-block;
+  font-size:1.1em;
+}
+div.body_top_list ul li a h3{
+  display: inline-block;
+  font-size:1.1em;
+}
+
+#leftView{
+	/*
+	padding: 0px;
+	border-top: 3px solid #3C8DBC;
+	background-color: white;
+	*/
+}
+
+#rightView{
+	/*
+	background-color: white;
+	padding: 30px;
+	border-top: 3px solid #3C8DBC;
+	*/
+}
+
+
+
+/* ==========================================================================
+  Responsive
+  ========================================================================== */
+/*
+@media (max-width: 767px) {
+}
+@media (min-width: 768px) and (max-width: 991px) {
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  div.article, div.mainInfo, div#body, div.body_top_list{
+    margin-left:50px;
+  }
+  div.homeList{
+    margin-left:0;
+  }
+}
+@media (min-width: 1200px) {
+}
+*/

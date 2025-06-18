@@ -1,0 +1,46 @@
+div#abgne_marquee {
+		position: relative;
+		overflow: hidden;
+		height: 13px;
+		margin-top: 10px; 
+		border-radius: 0.25rem;
+		background-color: #fff;
+	}
+	div#abgne_marquee ul, div#abgne_marquee li {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	div#abgne_marquee ul {
+		position: absolute;
+		left: 30px;			/* 往後推個 30px */
+	}
+	div#abgne_marquee ul li a {
+		display: block;
+		overflow: hidden;	/* 超出範圍的部份要隱藏 */
+		font-size: 23px;
+		height: 25px;
+		line-height: 19px;
+		padding-left: 40px;
+		text-decoration: none;
+		background: #fff url(back.gif) no-repeat;
+	}
+	div#abgne_marquee ul li.b1 a {
+		background-position: 5px 5px;
+	}
+	div#abgne_marquee ul li.b2 a {
+		background-position: 5px -15px;
+	}
+	div#abgne_marquee ul li.b3 a {
+		background-position: 5px -35px;
+	}
+	div#abgne_marquee div.marquee_btn {
+		position: absolute;
+		cursor: pointer;
+	}
+	div#abgne_marquee div#marquee_next_btn {
+		left: 5px;
+	}
+	div#abgne_marquee div#marquee_prev_btn {
+		right: 5px;
+	}

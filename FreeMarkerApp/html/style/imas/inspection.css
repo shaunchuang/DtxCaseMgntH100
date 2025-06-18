@@ -1,0 +1,2187 @@
+@charset "utf-8";
+
+/* inspection.ftl CSS */
+
+body.modal-open {
+	padding-right: 0px !important;
+}
+
+input[type='text']:not(.form-control), select {
+    height: 25px;
+}
+
+optgroup[label] {
+    background-color: #fff0b3;
+}
+
+option {
+	background-color: #fff;
+}
+
+#search{
+	text-transform: uppercase;
+}
+
+/* 左上區塊-個案基本資料 CSS */
+.case-table{
+	width: 100%;	
+}
+
+.case-table tbody td{
+	padding: 10px;
+}
+
+.case-table tbody tr:last-child td{
+	padding-left: 0px; 
+	padding-right: 0px;
+}
+
+.main-intro, .sub-intro{
+	padding-left: 30px!important ;
+	font-weight: 600;
+}
+
+.main-intro {
+	color: #5b9bd5;
+	font-size: 18px;
+}
+
+.case-img{
+	width: 80px;
+	background-size: 100% 100% !important;
+}
+
+.case-img img{
+	width: 80px;
+	height: 80px;
+}
+
+.gender-{
+	background: url('../../images/imas/unknown.png') no-repeat center center;
+}
+
+.gender-m{
+	background: url('../../images/woundInfo/male.png') no-repeat center center;
+}
+
+.gender-f{
+	background: url('../../images/woundInfo/female.png') no-repeat center center;
+}
+
+.gender-m, .gender-f, .command-area span, .final-command-area{
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+    -o-background-size: cover;
+	background-size: cover !important;
+}
+
+.case-info-btn{
+	/*width: calc(60% / 2);*/
+	width: fit-content;
+	background:    linear-gradient(#7f7f7f,#666666);
+	border-radius: 5px;	
+	padding:       6px;  /*6px 4px*/
+	display:       inline-block;
+	font-size:     16px;
+	text-align:    center;
+	letter-spacing:0px;
+	line-height:   1.1;	
+	margin-bottom: 5px;
+}
+
+.case-info-btn, .case-info-btn:hover, .case-info-btn:active,
+.case-info-btn:visited, .case-info-btn:focus {
+	cursor: pointer;
+    text-decoration:none;
+    color: #FFF;
+}
+
+.chart-tabs{
+	padding: 5px 0px;
+	width: 100%;
+}
+
+.temp-list, .bpm-list, .pressure-list{
+	margin-top: 10px;
+}
+
+.item_qry{
+	display: inline;
+}
+
+.item_qry .tab-func{
+	color: 	       #fff;
+	background:    linear-gradient(#2fd39e,#15ba85);
+	line-height:   1.1;
+	border-radius: 5px;
+	padding:       6px;
+	display:       inline-block;
+	font-size:     14px;
+	letter-spacing:0px;
+	text-align:    center;
+	cursor:        pointer;
+}
+
+.item_qry .tab-func:hover, .item_qry .tab-func:focus, .item_qry .tab-func:visited, .item_qry .tab-func:active{
+	/*color: #fff;
+	background: linear-gradient(#51a9ee,#147bcd) !important;*/
+	color: #fff;
+	text-decoration: none;
+}
+
+/* 左下區塊-檢驗項 CSS */
+
+.item-list-card{
+	border: 0.5px solid grey; 
+	border-radius: 5px!important;
+	box-shadow: 0 4px 2px -2px gray;
+	margin-bottom: 10px;
+	padding: 5px 10px;
+	background-color: #fff;
+	font-size: 16px !important;
+}
+
+.item-list-card .hint{
+	padding: 0 5px 5px 5px;
+	font-weight: 600;
+	font-size: 16px;
+}
+
+.criteria{
+	padding-bottom: 5px;
+	border-bottom: 0.2px solid #d9d9d9;
+}
+
+.criteria .btn{
+	width: fit-content;
+	color: #fff;
+	background:    #3482cb;
+	border-radius: 15px;	
+	padding:       6px 10px;
+	display:       inline-block;
+	font-size:     inherit;
+	text-align:    center;
+	letter-spacing:0px;
+	line-height:   1.1;
+	margin-bottom: 5px;
+	font-weight: 600;	
+}
+
+.criteria .btn:hover, .criteria .btn:active,
+.criteria .btn:visited, .criteria .btn:focus{
+	cursor: pointer;
+	background: #5b9bd5;
+}
+
+.criteria .unselect{
+	background: #fff;
+	color: #999999;
+	border: 0.2px solid #999999;
+}
+
+.criteria .unselect:hover, .criteria .unselect:active,
+.criteria .unselect:visited, .criteria .unselect:focus{
+	background: #f2f2f2;
+	color: #666666;
+}
+
+.item-funclist{
+	margin-top: 10px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.item-funclist .btn{
+	color: #000000;
+	background:    #e6e6e6;
+	border-radius: 5px;	
+	border: 0.1px solid #737373;
+	padding:       6px 3px;
+	display:       inline-block;
+	font-size:     inherit;
+	text-align:    center;
+	letter-spacing:0px;
+	line-height:   1.1;
+	margin-left:  5px; /*3px*/
+	margin-bottom: 5px;
+}
+
+.item-funclist .btn:hover{
+	background: #cccccc;
+	/*border: 1.5px solid #737373;*/
+}
+
+.item-list-blk > .title > span{
+	color: #a6a6a6;
+}
+
+.item-list-blk .title{
+	padding: 10px 0 5px 0;
+	text-align: center;
+	font-weight: 600;
+	border-bottom: 1.5px solid #808080;
+}
+
+.item-list-blk .item-list{
+	height: auto; /*200px*/
+	max-height: 250px;
+	overflow-y: scroll;
+	padding: 10px 0px;
+}
+
+.item-list .item{
+	color: #000000;
+	border-radius: 3px;	
+	border: 0.1px solid #737373;
+	padding:       6px;
+	display:       inline-block;
+	font-size:     inherit;
+	text-align:    center;
+	letter-spacing:0px;
+	line-height:   1.1;
+	margin-right:  5px;
+	margin-bottom: 10px;
+	text-decoration: none;
+}
+
+.item-list .item:hover{
+	cursor: pointer;
+	background: #f2f2f2;
+}
+
+.item-list .item.active{
+	background: linear-gradient(#ffeecc,#ffcc66);
+}
+
+.no-item{
+	color: #4d4d4d;
+	height: 200px;
+	text-align: center;
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+}
+
+.no-item b{
+	display: contents;
+	font-size: 18px;
+}
+
+/* 右側區塊-上方功能列 CSS */
+.no-cnt{
+	color: #737373;
+	width: 100%;
+	height: calc(100% - 160px);
+	line-height: calc(100% - 160px);
+	font-size: 20px;
+	text-align: center;
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+}
+
+.top-content{
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 0.5px solid #4472c4;
+}
+
+.top-content .item-name{
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.top-content .right-func .btn{
+	color: #fff;
+	background:    #4472c4;
+	border-radius: 5px;	
+	padding:       6px 10px;
+	display:       inline-block;
+	font-size:     14px;
+	text-align:    center;
+	letter-spacing:0px;
+	line-height:   1.1;
+}
+
+.uploadFile{
+	display: none !important;
+}
+
+.date-list{
+	width: 100%;
+	padding: 10px 0;
+	overflow: auto;
+  	white-space: nowrap;
+}
+
+.info-btn.customed{
+	color: #666666;
+	background: linear-gradient(#d9d9d9,#bfbfbf);
+	margin-right: 5px;
+	font-size: 16px;
+	padding: 5px 10px;
+}
+
+.customed.active{
+	color: #fff;
+	background: linear-gradient(#7f7f7f,#666666);
+}
+
+.img-list{
+	display:none;
+}
+
+/* 右側區塊-中間檢測趨勢演化圖 CSS */
+.chart-container{	
+	display: inline-block;
+	width: 100%;
+	padding: 0px;
+	text-align: center;
+}
+
+.chart-container span{
+	font-size: 12px;
+	font-weight: 550;
+}
+
+/* 右側區塊-下方各tab功能頁籤 CSS */
+.btm-content-header{
+	border-bottom: 0.5px solid #4472c4;
+}
+
+.btm-content-header .panel-heading{
+	background: #fff;
+	padding-top: 10px;
+}
+
+.switchy-tab{
+	border-bottom: 0.5px solid #4472c4;
+}
+
+.update-text{
+	color: #808080;
+	text-align: right;
+	font-size: 16px;
+	padding-top: 10px;
+	display: flex;
+  	justify-content: flex-end;
+  	align-items: center;
+}
+
+.update-text:hover,
+.item-list-blk > .title > span{
+	cursor: pointer;
+}
+
+.update-text i{
+	margin-right: 5px;
+}
+
+.equal {
+   display: flex;
+   flex-wrap: wrap;
+}
+
+.btm-content-header .panel-heading .nav-tabs > li{
+	margin-bottom: -1.5px;
+}
+
+.btm-content-header .panel-heading .nav-tabs > li > a[aria-expanded="true"],
+.btm-content-header .panel-heading .nav-tabs > li > a[aria-expanded="true"]:hover,
+.btm-content-header .panel-heading .nav-tabs > li > a[aria-expanded="true"]:focus {
+	border: 0.5px solid #4472c4;
+	border-bottom-color: transparent;
+	/*background: #fff;*/
+	background: #4472c4 !important;
+	color: #fff !important;
+}
+
+.btm-content-header .panel-heading .nav-tabs > li > a[aria-expanded="false"]:hover{
+	border-bottom: 0.5px solid #4472c4;
+	
+}
+
+.btm-content-header .panel-heading .nav-tabs > li > a[aria-expanded="false"]:focus{
+	background: #f2f2f2;
+}
+
+.btm-content-header .panel-heading .nav-tabs > li > a,
+.btm-content-header .panel-heading .nav-tabs > li > a:hover,
+.btm-content-header .panel-heading .nav-tabs > li > a:focus {
+	color: #4472c4;		
+}
+
+.collapse-content{
+	padding: 15px;
+	border: 0.5px solid #4472c4;
+	border-top: 0;
+	display: none;
+}
+
+.collapse-content.active{
+	display: block;
+}
+
+.tablesorter-headerRow{
+	background: #f2f2f2;	
+}
+
+.tablesorter-headerRow th{
+	border-bottom: 1.5px solid #808080 !important;
+}
+
+/*****傷口表單專用*****/
+.eval-table, .hole-table{
+	font-size : 15px;
+	width: 100%;
+}
+.eval-table.font-sm{
+	font-size: 15px;
+}
+.eval-table > tbody > tr > td{
+	padding: 0px 5px 5px 5px;
+	/*width: 1%;
+    white-space: nowrap;*/
+}
+.eval-table > tbody > tr > td[rowspan]{
+	font-weight: 600;
+	border-right: 0.2px solid #b3b3b3;
+}
+.eval-table > tbody > tr > td[rowspan] + td,
+.eval-table > tbody > tr > td:first-child:not([rowspan]){
+	padding-left: 15px;
+}
+.eval-table.font-sm > tbody > tr > td:first-child{
+	vertical-align: top;
+}
+.eval-table.font-sm > tbody > tr > td.times label{
+	margin-right: 10px;
+}
+.eval-table > tbody > tr > td label{
+	display: flex;
+}
+.eval-table > tbody > tr > td label span{
+	margin-left: 5px;
+}
+.eval-table > tbody > tr > td label input[type=checkbox]:checked + span ,
+.eval-table > tbody > tr > td label input[type=checkbox]:checked + span + input[type=text]{
+  	color: red;
+  	font-weight: 600;
+}
+
+.eval-table > tbody > tr > td > input[type=text] {
+	width: 70px;
+	height: 25px;
+}
+.eval-table > tbody > tr > td > label > .other-txt {
+	width: 100px !important;
+	height: 25px;
+}
+.eval-table input[type=checkbox]{
+	zoom: 1.3;
+	/*vertical-align: bottom;*/
+	margin: 0;
+}
+
+/* table底下分頁置中 */
+div.dataTables_paginate{
+	text-align: center;
+}
+
+/* 潛行深洞表單 css */
+.hole-table{
+	margin-top: 10px;
+	letter-spacing: 0px;
+}
+.hole-table input[type="text"],
+.hole-table select{
+	width: 120px !important;
+}
+
+/* 衛教指導表單  css */
+.ed-tab{
+	font-size: 15px;
+	background: #e6e6e6;
+	color: #000000;
+	display: inline-block;
+	margin-bottom: 5px;	
+}
+.ed-tab:hover{
+	background: #bfbfbf;
+}
+.ed-tab[aria-expanded="true"]{
+	background: #bfbfbf;
+	color: #000000;
+}
+.ed-info{
+	padding: 5px;
+}
+.ed-info label, .hm-info label{
+	display: flex;
+	font-weight: 500;
+	font-size: 15px;
+	color: black;
+	margin-bottom: 2px;
+	padding: 2px 0;
+}
+.ed-info label:hover,
+.hm-info label:hover{
+	cursor: pointer;
+	background: #e6e6e6;
+}
+.ed-info label input[type=checkbox],
+.hm-info label input[type=checkbox]{
+	zoom: 1.3;
+	margin: 0;
+	/*vertical-align: middle;*/
+}
+.ed-info label input[type=checkbox]:checked + span,
+.hm-info label input[type=checkbox]:checked + span,
+.exam-table tbody tr td label input[type=checkbox]:checked + span{
+  	color: red;
+  	font-weight: 600;
+}
+.ed-info label input[type=text],
+.hm-info label input[type=text] {
+	width: 300px;
+	height: 25px;
+}
+.ed-info span, .hm-info span{
+	/*vertical-align: text-bottom;*/
+	margin-left: 5px;
+}
+
+
+/* 處置相關表單  css */
+.handle-table{
+	font-size : 15px;
+	width: 100%;
+	letter-spacing: 0px;
+}
+.handle-table input[type=checkbox]{
+	zoom: 1.3;
+}
+.handle-table table thead tr th select,
+.handle-table table thead tr th input[type=text],
+.handle-table table tbody tr td select,
+.handle-table table tbody tr td input[type=text]{
+	width: 100%;
+	font-weight: normal;
+}
+
+.handle-table > tbody > tr > td{
+	/*padding: 5px;*/
+}
+.handle-table > tbody > tr > td:first-child{
+	/*font-weight: 600;
+	vertical-align: top;*/
+}
+.handle-table > tbody > tr > td label input[type=checkbox]:checked + span ,
+.handle-table > tbody > tr > td label input[type=checkbox]:checked + span + input[type=text]{
+  	color: red;
+  	font-weight: 600;
+}
+
+.other-content{
+	margin-top: 3px;
+}
+
+/*****眼底圖表單專用*****/
+.boxes{
+	display: table;
+  	width: 100%;
+}
+
+.analy-infos{
+	display: table-row;
+}
+
+.eye-info, .audio-meters-info{
+	display: table-cell;
+  	width: 50%;
+  	box-sizing: border-box;
+}
+
+.eye-info label{
+	display: block;
+	font-weight: 500;
+	color: black;
+}
+
+.eye-info label input[type=text],
+.analy-table tbody tr td input[type=text],
+.exam-table tbody tr td input[type=text]{
+	width: 100px;
+	height: 25px;
+}
+
+.detail tbody tr td input[type=text]{
+	width: 50px;
+	font-size: 14px;
+}
+
+.eye-info span{
+	vertical-align: middle;
+}
+
+.detail tbody tr td input[type=text]{
+	width: 100%;
+	font-size: 14px;
+	margin: 0px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.analy-table tbody tr td,
+.exam-table tbody tr td{	
+	/*color: #555;*/
+}
+.analy-table tbody tr td.loc,
+.analy-table tbody tr td.title,
+.exam-table tbody tr td.title{
+	text-align: center;
+	color: #000000;
+}
+
+.analy-table{
+	font-size: 15px;
+	table-layout: fixed;	
+	/*margin: 0 auto;*/
+}
+
+.audio-meters{
+	width: 100%;
+}
+
+.detail{
+	width: 100%;
+	font-size: 12px;
+	table-layout: fixed;
+}
+
+.exam-table{
+	width: 100%;
+}
+
+.analy-table td.title,
+.exam-table td.title{
+	background: #eeefef;
+	font-weight: 600;
+}
+
+.exam-table td.title{
+	width: 150px;
+}
+
+.analy-table tbody tr td.loc{
+	width: 80px;
+	background: #d8dada; /*#fff0b3*/
+	/*font-size: 18px!important;*/
+	border-right: 2px solid #fff;
+	font-weight: 600;
+	/*border-right: 2px solid #7c8383;*/
+}
+
+.analy-table tbody tr td:not(.loc),
+.exam-table tbody tr td:not(.loc){
+	padding: 7px 15px;
+	white-space: nowrap;
+	width: 1%;
+}
+
+.detail tbody tr:first-child{
+	border-bottom-style: double;
+}
+
+.detail tbody tr:not(:first-child) td:nth-child(2){
+	border-right-style: double;
+}
+
+.detail tbody tr td:not(.loc){
+	padding: 7px 9px;
+}
+
+.detail tbody tr:not(:first-child) td:not(.loc):nth-child(n+4){
+	border-left: 0.5px solid #b0b5b5;
+}
+
+/*****聽力檢測圖表單專用*****/
+.direction{
+	background: #d8dada; /*#fff0b3*/
+	/*font-size: 18px!important;*/
+	font-weight: 600;
+	text-align: center;
+	/*border-bottom: 2px solid #7c8383;*/
+}
+
+.audio-meters-info:first-child > .audio-meters{
+	/*border-right: 2px solid #7a7a7a;*/
+}
+
+.audio-meters tbody tr td input[type=text]{
+	width: 80px !important;
+	text-align: center;
+}
+
+.audio-meters tbody tr td input[type=text],
+.audio-meters tbody tr td input[type=text]:focus, 
+.audio-meters tbody tr td input[type=text]:active, 
+.audio-meters tbody tr td input[type=text]:visited{
+	outline: 0;
+  	display: inline;
+  	border-width: 0 0 0;
+  	pointer-events: none; 	
+}
+
+.audio-meters tbody tr td:nth-child(even) input[type=text],
+.audio-meters tbody tr td:nth-child(even) input[type=text]:focus, 
+.audio-meters tbody tr td:nth-child(even) input[type=text]:active, 
+.audio-meters tbody tr td:nth-child(even) input[type=text]:visited{
+  	border-width: 0 0 0.5px;
+  	font-weight: 600;	
+}
+
+/*****趨勢圖呈現專用*****/
+.chart-container{
+	position: relative; 
+	
+}
+
+.chart-container input[type="button"]{
+	position: absolute; 
+	color: #000000;
+	right: 15px; 
+	bottom: 5px; 
+	z-index: 100;
+	background : #fff0b3;
+	border: 1.5 solid;
+}
+
+/* 傷口新增部位表單 CSS */
+.form-check{
+	display: inline-block;
+	margin-right: 5px;
+	width: 120px;
+}
+
+.form-check.selected{
+	background: #e6e6e6 !important;
+}
+
+.form-check-input{
+	zoom: 1.4;
+}
+
+.form-check label{
+	vertical-align: bottom;
+}
+
+/* modal編輯 CSS */
+
+
+/* 影像標註歸檔 CSS */
+.lg-sub-html {
+  	position: fixed;
+  	right: 0;
+  	width: 30vw;
+  	color: #000;
+  	background-color: #fff;
+  	bottom: 0;
+  	top: 0;
+  	opacity: 1 !important;
+  	text-align: left;
+  	padding: 10px 20px;
+  	overflow-y: scroll !important;
+}
+
+.lg-outer {
+  	width: 70vw;
+}
+
+.photographer-info, .photo-info{
+	width: 100%;
+}
+
+.photo-info{
+	margin-top: 15px;
+}
+
+.photographer{
+	font-weight: 600;
+}
+
+.photographer-info tbody tr td{
+	padding: 2px 8px;
+}
+
+.photo-info tbody tr td{
+	padding: 5px;
+}
+
+.photo-info tbody tr td .item_qry .part-tab{
+	margin-right: 5px;
+}
+
+.photo-info tbody tr td .func .criteria{
+	margin-top: 10px;
+	border: 0 !important;
+}
+
+.photo-info tbody tr td .func .criteria .btn{
+	font-size: 14px !important;
+	margin-right: 5px;
+}
+
+.photo-info tbody tr:not(:nth-child(4)) td:first-child{
+	font-weight: 600;
+}
+/*
+.photo-info.old tbody tr td:nth-child(odd){
+	font-weight: 600 !important;
+}*/
+
+.photo-info.old tbody tr td{
+	font-weight: 600 !important;
+}
+
+.photo-info.old tbody tr td.txt-r{
+	text-align: right !important;
+}
+
+.photo-info.old tbody tr td b{
+	color: #4472c4;
+}
+
+.photo-info.old tbody tr td:nth-child(2){
+	border-right: 10px solid transparent;
+    -webkit-background-clip: padding;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+}
+
+.photographer-d, .photographer-n {
+	width: 50px;
+	height: 50px;	
+	background-size: cover !important;
+	/*border: 1px solid #a6a6a6;*/
+	border-radius : 50%;	
+}
+
+.photographer-d{
+	background: url('../../images/imas/role/doctor.png') no-repeat center center;
+}
+
+.photographer-n {
+	background: url('../../images/imas/role/nurse.png') no-repeat center center;
+}
+
+/*****影像導覽專用*****/
+ul.lightSlider{
+	background-color: rgb(102, 102, 102, 0.3);
+}
+
+.lightSlider > li img{ 
+	height: 100%; 
+	width: auto;
+}
+
+.lSGallery li a img{
+	height: 100%; 
+}
+
+.lSSlideOuter .lSGallery li{
+	text-align: -webkit-center;
+	background: rgb(102, 102, 102, 0.4);	
+}
+
+.panel-body{
+	padding-left: 0 ;
+	padding-right: 0 ;
+}
+
+.bootstrap-datatable{
+	table-layout: fixed;
+}
+
+.demo.col{
+	height: 475px;
+	border: 0.2px solid #e6e6e6;
+	padding: 0px 5px;
+	position: relative;
+}
+
+.col:nth-child(1){
+	padding-left: 0px;
+	border-right: 0px;
+}
+
+.col:nth-child(2){
+	padding-right: 0px;	
+}
+
+.hintImg{
+	width: 100%;
+	text-align: center;
+	height: 475px;
+	display:table;
+}
+
+.hintImg img, .addImgHint img{
+	width: 100px;
+	height: 100px;
+}
+
+.hintImg a, himtImg span,
+.addImgHint  a, himtImg span{
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.hintImg span, .addImgHint span{
+	line-height: 350px;
+}
+
+.hintImg h4, .addImgHint h4{
+	margin-top: 10px;
+}
+
+.isDisabled {
+	color: currentColor;
+  	cursor: default;
+  	opacity: 0.8;
+  	text-decoration: none;
+}
+
+.isDisabled:hover{
+	color: currentColor;
+	text-decoration: none;
+}
+
+a.dropdown-toggle:not(:first-child) > i{
+	margin-right: 5px;
+}
+
+/*for search css */
+.search input[type='text']{
+	width: 100px;
+}
+
+.loader {
+  display: inline-block;
+  border: 3px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 3px solid #3498db;
+  border-bottom: 3px solid #3498db;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  -webkit-animation: spin 0.8s linear infinite;
+  animation: spin 0.8s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.tooltip{
+	position: absolute;
+	width: 150px;
+	height: auto;
+	line-height: normal;
+	padding: 10px;
+	font-size: 14px;
+	text-align: center;
+	color: #000;
+	background: #fff;
+	border: 4px solid rgb(255,255,255);
+	border-radius: 5px;
+	box-shadow: rgba(0,0,0,0.5) 1px 1px 2px 0px;
+	margin-top: 10px;
+	opacity: 1;
+}
+
+.tooltip:after{
+	content: "";
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-width: 10px;
+	border-style: solid;
+	border-top-color: transparent;
+	border-bottom-color: #fff;
+	border-left-color: transparent;
+	border-right-color: transparent;
+	bottom: 40px;
+	left: 10px;
+}
+
+/*for tablist css */
+.add-tab{
+	height: 100%;
+}
+.tab-col{
+	padding: 0px;
+}
+.tab-col:nth-child(2){
+	display: inline;
+}
+.nav-tabs li a{
+    font-size: 15px;
+}
+.nav-tabs li.active a{
+    font-weight: 600;
+}
+.name-blk{
+	text-align: center;
+	height: 30px;
+}
+.name-blk span{
+	font-size: 12px;
+}
+.btm{
+	/*position: absolute;*/
+	bottom: 0px;
+	width: 100%;
+}
+.input-group{
+	/*margin-top: 5px;*/
+}
+
+.table-striped > tbody > tr{
+	background:    #fff;
+}
+
+.similar-case-list > tbody > tr:hover{
+	background: #f2f2f2;
+	cursor: pointer;
+}
+
+
+.wound-status{
+	display: none;
+	text-align: left;
+	font-size: 14px;
+	padding-left: 0;
+	cursor: pointer;
+}
+.wound-status i{
+	color: #ffcf0f;
+}
+.injured-info textarea{
+	width: 100%;
+	padding: 10px;
+}
+.injured-info:not(:first-child), .injured-img{
+	margin: 10px 0;
+	padding: 0;
+}
+
+.no-user, .no-tab{
+	text-align: center;
+	padding: 30px;
+}
+
+/*for image compare css */
+.demo > ul {
+	list-style: none outside none;
+	padding-left: 0;
+	margin-bottom:0;
+}
+.demo > ul > li {
+	display: block;
+	float: left;
+	cursor:pointer;
+}
+.demo > ul > li > img {
+	display: block;
+	height: auto;
+	max-width: 100%;
+}
+.lightSlider > li {
+   height: 270px;
+}
+
+/* for progressive image CSS */
+.progressive {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  outline: none;
+}
+
+.progressive img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  border: 0 none;
+}
+
+.progressive img.preview {
+  filter: blur(2vw);
+  transform: scale(1.05);
+}
+
+.progressive img.reveal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform, opacity;
+  animation: progressiveReveal 1s ease-out;
+}
+
+@keyframes progressiveReveal {
+	0% { transform: scale(1.05); opacity: 0; }
+	100% { transform: scale(1); opacity: 1; }
+}
+
+select.form-control.source{
+  width: 100px !important;
+}
+
+
+/*for image switch css */
+#leftArr {
+	left:0;
+}
+#rightArr {
+	right:0;
+}
+.arrow {
+	padding:10px 5px;
+	position:absolute;
+	z-index:2
+}
+#tabs {
+	overflow:hidden;
+	white-space: nowrap;
+	z-index:-1;
+	position:static;
+}
+#tabs > li {
+	float:none;
+	display:inline-block;
+}
+.glyphicon{
+   color: #b3b3b3;
+}
+.nav-tabs{
+	border-bottom: none;
+}
+
+
+
+
+
+
+
+
+/*for 功能按鈕群集設定 css */
+.left-btn-group,
+.right-btn-group{
+	padding: 0;
+}
+.left-btn-group a{
+	font-size: 14px;
+	font-weight: 600;	
+}
+.right-btn-group button{
+	font-size: 14px;
+	margin-left: 2px;
+}
+
+.left-btn-group a[aria-expanded="true"],
+.msg-group a[aria-expanded="true"],
+.chart-items a[aria-expanded="true"]{
+	/*background-color: #286090;
+	border-color: #204d74;*/
+	background:    linear-gradient(#2fd39e,#15ba85);
+}
+.left-btn-group a[aria-expanded="false"],
+.msg-group a[aria-expanded="false"],
+.chart-items a[aria-expanded="false"]{
+	/*background-color: #337ab7;
+	border-color: #2e6da4;*/
+	background:    linear-gradient(#2fd39e,#15ba85);
+}
+.left-btn-group a[aria-expanded="false"] .fa:before,
+.msg-group a[aria-expanded="false"] .fa:before,
+.item_qry a[aria-expanded="false"] .fa:before{
+	content: "\f139";
+}
+.left-btn-group a[aria-expanded="true"] .fa:before,
+.msg-group a[aria-expanded="true"] .fa:before,
+.item_qry a[aria-expanded="true"] .fa:before {
+	content: "\f13a";
+}
+
+
+/*for 彈跳視窗設定 css */
+.reg{
+	margin: 10px 0;	
+}
+.modal-dialog{
+	font-weight: normal !important;
+}
+.modal-header{
+	padding: 10px !important;
+}
+.modal-header h4{
+	font-size: 16px;
+}
+.modal-body img{
+	margin-bottom: 10px;
+}
+.status-topic{
+	background: #fff0b3;
+}
+.delItem-table{
+	width: 100%;
+	margin-top: 10px;
+}
+.delItem-table tr td{
+	padding: 10px;
+	padding-left: 0px;
+}
+.delItem-table tr td:nth-child(odd){
+	font-weight: 600;
+}
+
+
+/*for 提醒告知  css */
+.save-img{
+	width: 70px;
+	height: 70px;
+}
+.user-img{
+	width: 200px;
+	height: 150px;
+}
+.load-img{
+	width: 100px;
+	height: 100px;
+}
+.nobg{
+	background-color:transparent; 
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+    border: 0px;
+}
+
+
+
+/*for AI分析設定 css */
+.load-area{
+	width: 100%;
+	height: 550px;
+	text-align: center;
+	display: table;
+}
+.load-area a{
+	display: table-cell;
+	vertical-align: middle;
+}
+.anal-area input[type=checkbox]{
+	zoom: 1.3;
+	background: #fff;
+}
+.anal-info{
+	position: relative;
+	background: gainsboro;
+	text-align: center;
+	margin-bottom: 5px;
+}
+.anal-area span:not(.input-group-addon):not(:last-child){
+	display: block;
+	margin-bottom: 5px;
+}
+.anal-info img{
+	/*width: 100%;*/
+	height: 300px;
+	margin-bottom: 0px !important;
+}
+.bottom-right {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+.slider-bk{
+	height: 30px;
+	margin-bottom: 10px;
+}
+.slider, .slider-value{
+	vertical-align: middle;
+	display: inline !important;
+}
+.slider-value{
+	width: 19%;
+	text-align: center;
+}
+.slider {
+  -webkit-appearance: none;
+  width: 80% !important;
+  height: 10px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+.anal-btn{
+	text-align: right;
+	padding: 10px 0px;
+}
+.anal-btn input[type="button"]{
+	margin-left: 5px;
+}
+
+
+/*for evaldate select css */
+.select-date{
+	margin: 10px 0px;
+}
+.select-date .datepicker{
+	margin-left: auto;
+	margin-right: auto;
+	/*border: 0.5px solid #d9d9d9;*/
+}
+.date-btn input:first-child{
+	margin-right: 15px;
+}
+.disabled-date{
+	color: red !important;
+	text-decoration:line-through;
+}
+
+
+/*for note list css */
+.noteList{
+	margin: 10px 0px;
+}
+
+
+/*for field from css */
+.input-group span.btn{
+	margin-left: -1px;
+	border: 0.5px solid #999999;
+}
+.input-group span.btn:hover{
+	color: #fff;
+	background-color: #999999;
+}
+.archive-table{
+	margin: 15px 0px;
+}
+
+
+@media (max-width: 1024px) {
+	.search button i{
+		display: none;
+	}
+
+	.card-body textarea{
+		font-size: 14px;
+	}
+	.no-item{
+		font-size: 14px;
+	}
+	.left-btn-group a, .right-btn-group a {
+		font-size: 14px !important;
+	}
+}
+
+/*for other css */
+
+.color-img, .heat-img{
+	position: relative;
+	height: 150px;
+}
+
+.color-img img, .heat-img img{
+	position: absolute;
+	height: 100%;
+	width: auto;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0; 
+}
+
+.img-template{
+	width: 100%;
+	text-align: center;
+}
+
+.img-template > .card-deck{
+	flex-direction: initial;
+}
+
+.img-template > .card-deck .card{
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  flex: 100%;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 0.25rem;
+  padding: 0rem !important;
+  margin-bottom: 0.5rem;
+}
+
+.img-template > .card-deck .card:not(:first-child){
+	margin-top: 0rem;
+} 
+
+.img-template > .card-deck .card .card-header{
+  padding: 0.25rem 1rem;
+  margin-bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.img-template > .card-deck .card .card-header .fa{
+	color: #212529;
+}
+
+.img-template > .card-deck .card .card-body{
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 1rem 0.5rem;
+}
+
+.img-template > .card-deck .card .card-body{
+	padding: 0.5rem 0rem!important;
+}
+
+.img-template > .card-deck .card .card-footer {
+  padding: 0.5rem 1.25rem;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.img-patient-info tbody tr td{
+	padding: 0.5rem;
+}
+
+.img-patient-info tbody tr td:first-child{
+	padding-left: 0rem;
+}
+
+.img-patient-info tbody tr td:nth-child(odd){
+	font-weight: 600;
+}
+
+.img-patient-info tbody tr td:nth-child(even){
+	color: #1b54b1;
+}
+
+.img-wound-info{
+	width: 100%;
+}
+
+.img-wound-info tbody tr td{
+	padding: 0.25rem;
+}
+
+.img-wound-info tbody tr td:nth-child(odd){
+	font-weight: 600;
+	width: 105px;
+	vertical-align: baseline;
+}
+
+.img-wound-info tbody tr td:nth-child(even){
+	color: #1b54b1;
+}
+
+.wound-img:nth-child(1){
+	margin-right: 0.25rem!important;
+}
+
+.wound-img:nth-child(2){
+	margin-left: 0.25rem!important;
+}
+
+.wound-info-1, .wound-info-2{
+	padding: 0px!important;
+}
+
+.health-education{
+	text-align: left!important;
+	margin-left: 10px;
+}
+
+.health-education label{
+	display: block;
+}
+
+/*for print pdf css */
+@page {
+  size: A4 portrait;
+  margin-top: 3cm;
+}
+
+@page :first {
+  margin-left: 4cm;
+}
+
+.searchbox .form-control{
+	padding: 6px 35px 6px 10px;
+}
+
+.form-control + .search-icons {
+    position: absolute;
+    right: 0;
+    top: 85;
+    padding: 8px 15px;
+}
+
+.search-icons .glyphicon{
+	margin-right: 5px;
+}
+
+.search-icons span:hover{
+	cursor: pointer;
+}
+
+.form-control + .glyphicon:hover{
+	cursor: pointer;
+}
+
+.final-command-area{   
+    width: 100%;   
+    position: relative;
+   	float: left;
+}
+
+.final-command-area, .final-command-area textarea{
+	height: 100px;
+}
+
+.final-command-area textarea{
+    padding-right: 25px;
+    line-height: 20px;
+    font-size: 14px;  
+    color: #000;
+}
+
+.final-command-area.old textarea{
+	padding: 5px;
+}
+
+.final-command-area span{
+	position: absolute;
+	right: 5px;
+	bottom: 5px;
+	cursor: pointer;
+	width: 20px;
+	height: 20px;
+}
+
+.save-btn{
+	display: none !important;
+}
+
+.info-btn{
+	background:    linear-gradient(#42a1ec,#0070c9); /*linear-gradient(#2fd39e,#15ba85);*/ /*linear-gradient(#42a1ec,#0070c9)*/
+	border-radius: 5px;
+	/*padding:       5px 10px;*/
+	padding:       6px 4px;
+	display:       inline-block;
+	font-size:     14px;
+	text-align:    center;
+	letter-spacing:0px;
+	line-height:   1.1;
+}
+
+.info-btn, .info-btn:hover, .info-btn:active, .info-btn:visited, .info-btn:focus {
+	cursor: pointer;
+    text-decoration:none;
+    color: #FFF;
+}
+
+.card-top{
+	line-height: 2em;
+}
+
+.old-record .card-top:last-child{
+	margin-top: 0;
+}
+
+.card-body{
+	border: 0.2px solid #e6e6e6;
+	line-height: 2em;
+}
+
+.right-btn-group .info-btn{
+	/*line-height: 1.1;*/
+	padding: 6px;
+	/*margin-left: 5px;*/
+}
+
+.right-btn-group .info-btn:last-child{
+	margin-left: 5px;
+}
+
+
+
+
+/*������*/
+.panel-heading{
+	background:    #dedfdf; /*#d6d7d7*/
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+	color: #777777;
+	/*border-color: #8e8f8f;*/
+	border: 2px solid #fff;
+}
+
+.thumbnail p{
+	text-align: center;
+}
+
+ul.thumbnails{
+	overflow-x: hidden !important;
+   	overflow-y: scroll !important;
+   	white-space: nowrap;
+   	height: 250px;
+}
+
+.adjust-box{
+	margin-top: 10px;
+}
+
+/* 醫囑圖匯出設定 CSS */
+.mark-panel{
+	max-width: 100%;
+	margin: 10px;
+}
+
+.img-export-area .mark-funclist{
+	margin-top: 5px;
+	display: inline-block;
+	vertical-align: top;
+	width: 600px;
+	height: 600px;
+	position: relative;
+	background-image: url('../../images/woundInfo/transparent.png');
+}
+
+.number-hint{
+	color: red;
+}
+
+.mark-funclist > .mark{
+	padding: 0;
+	font-weight: 600;
+}
+
+.img-export-area > .content{
+	margin-top: 5px;
+	display: inline-block;
+	vertical-align: top;
+	width: 530px;
+	float: right;
+}
+
+.marksTable{
+	width:100%;
+	font-size: 16px;	
+}
+
+.marksTable thead tr th,
+.marksTable tbody tr td{
+	text-align: center;	
+	/*display: inherit;*/
+}
+
+.marksTable tbody tr td{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.marksTable thead tr{
+	background: #7a7a7a;
+	color: #fff;
+}
+
+.colorSpan{
+	display: block;
+	width: 28px;
+	height: 28px;
+	color:#FFF;
+	line-height: 28px;
+	margin: 0 auto;
+	/*text-shadow: #999999 1px 1px 1px;*/
+	font-weight: 600;
+}
+
+.command-area{
+	position: relative;
+}
+
+.command{
+	width:100%;
+	height:70px;
+	padding-right: 25px;
+}
+
+.command-area span{
+	position: absolute;
+	right: 5px;
+	bottom: 5px;
+	cursor: pointer;
+	width: 20px;
+	height: 20px;
+	background: url('../../images/woundInfo/insert.png') no-repeat center center;
+}
+
+.mark{
+	/*text-shadow: #999999 1px 1px 1px;*/
+	font-weight: 600;
+}
+
+.colorSelect{
+	text-align: left;
+	font-size: 20px;
+}
+
+.colorSelect span{
+	font-weight:600;
+}
+.colorSelect label{
+	margin-left: 10px;
+	text-shadow: #999999 1px 1px 1px;
+}
+.colorSelect input{
+	margin-left:5px;
+}
+
+.m-red{
+	color: red; /*#FF0000*/
+}
+.m-orange{
+	color: orange; /*#FF7F00*/
+}
+.m-yellow{
+	color: #e8e80c;
+}
+.m-green{
+	color: green; /*#00FF00*/
+}
+.m-blue{
+	color: blue; /*#0000FF*/
+}
+.m-purple{
+	color: purple; /*#8B00FF*/
+}
+
+.lipButton{
+	width: 80px;
+	height: 60px;
+	background-color: rgba(9,7,35,0.9);
+	position: absolute;
+	color:#FFF;
+	border-width: 0px;
+	border-radius: 10px;
+	font-size: 10px;
+	z-index: 999;
+	text-align: -webkit-center;
+}
+.reset{
+	top: 10px;
+	right: 20px;
+}
+.reset:before{
+	background-image: url('../../images/woundInfo/reset.png');
+	content: '';
+	width: 36px;
+	height: 36px;
+	display: block;
+}
+.rotate{
+	top: 10px;
+	right: 110px;
+}
+
+.rotate:before{
+	background-image: url('../../images/woundInfo/rotate.png');
+	content: '';
+	width: 36px;
+	height: 36px;
+	display: block;
+}
+
+.form-group label{
+	margin-bottom: 5px;
+	color: inherit;
+	font-weight: 500;
+}
+
+.form-group input,.form-group textarea{
+	width: 100% ;
+}
+
+/* 相似案例設定 CSS */
+.similar-case-list{
+	margin-top: 5px;
+}
+
+.similar-case-list tbody tr td:last-child{
+	text-align: center;
+}
+
+.stage-blk{
+	width: 100%;
+	margin: 5px 0px;
+}
+
+.stage-color-b, .stage-color-y, .stage-color-r, .stage-color-p,
+.medical-instr{
+	width: 100%;
+	padding: 5px;
+	display: flex;
+}
+
+.medical-instr{
+	padding-left: 0px;
+}
+
+.stage-color-b, .stage-color-r{
+	color: #ffffff;
+}
+
+.stage-color-b{
+	background: #000000;
+}
+
+.stage-color-y{
+	background: #ffff66;
+}
+
+.stage-color-r{
+	background: #ff0000;
+}
+
+.stage-color-p{
+	background: #ffc0cb;
+}
+
+.bottom-arrow{
+	width: 100%;
+	height: 20px;
+}
+
+.bottom-arrow:after {
+    content:'';
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    border-top: 20px solid #e6e6e6;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+}
+
+.group_title{
+	list-style: inside;
+	padding: 5px 0px;
+}
+
+.image_block{
+	background-color: white;
+    border: 0.5px solid #EEEEDE;
+    border-radius: 0.5vw;
+    padding: 5px;
+    margin-right: 5px;
+    text-align: center;
+    vertical-align: text-top;
+    display: inline-table;
+}
+
+.image_container {
+    border: 0.5vw solid transparent;
+    height: 100px;
+    margin: 0 !important;
+    padding: 0;
+    display: inline-block;
+}
+
+.image_desc {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    vertical-align: middle;
+    text-align: center;
+    display: block;
+    color: #808080;
+}
+
+.image_block{
+	position: relative;
+}
+
+.image_block span {
+	font-size: 0.85rem;
+	display: inline-block;
+	cursor: pointer;
+	position: absolute;
+	top: -5px;
+	left: -5px;
+	color: #ff6666;
+	z-index: 99;
+}
+
+.image_block span:hover{
+	color: #ff4d4d;
+}
+
+.btm fieldset{
+	border: 0.2px solid #e6e6e6;
+	padding: .35em .625em .75em !important;
+}
+
+.btm fieldset legend{
+	font-size: 14px;
+	border-style: none;
+	line-height: 20px;
+	margin-bottom: 0;
+	width: auto;
+}
+
+.item-blk{
+	display: inline-block;
+	margin-bottom: 5px;
+}
+
+.item-grp{
+	width: max-content;
+	height: max-content;
+	position: relative;
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: stretch;	
+}
+
+.item-grp .form-control{
+	height: auto;
+	font-size: 14px;
+}
+
+.grp-text{
+	/*margin-left: -1px;*/
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	display: flex;
+	align-items: center;
+	padding: 5px;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;	
+	font-size: 14px;
+	border-radius: 0.25rem;
+}
+
+.grp-text:first-child{
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	background-color: #999999;
+	border: 1px solid #999999;
+}
+
+.grp-text:last-child{
+	margin-left: -1px;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	background-color: #e1e6ea;
+	border: 1px solid #b3b3b3;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.exam-item{
+	/*width: max-content;
+	display: inline-block;
+	border: 0.2px solid grey;
+	background: #fff;
+	/*border-radius: 2px;*/
+	padding: 5px;
+	/*margin: 0 10px 5px 0;
+	box-shadow: 1px 1px grey;*/
+}
+
+.img-count {
+    color: #fff; /*#ffe680*/
+    font-weight: 600;
+}
+
+.fa-link, .fa-unlink{
+	font-size:1.2em;
+}
+
+.grp-text .fa-link{
+	color: #0070c9; /*#d9d9d9*/
+}
+
+.grp-text .fa-unlink{
+	color: #7a7a7a;
+}
+
+.empty-archive-info{
+	text-align: center;
+	vertical-align: middle;
+	height: 150px;
+	line-height: 150px;
+}
+
+/* 生理量測圖顯示設定 */
+.mix-list{
+	margin-top: 10px;
+}
+
+.alertCnt{
+	margin-left: 10px;
+}
+
+.fa-check-circle{
+	/*color: #ffff66;*/
+	color: #15ba85
+}
+.blink{
+  animation-duration: 1.2s;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+}
+
+.show-hint{
+	width: 100%;
+	height: 280px;
+	line-height: 280px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+@keyframes blink {
+    0%  { color: #d1a215;}
+    25%  { color: #e8b417;}
+    50% { color: #eabb2e; }
+    75% { color: #ebbd34; }
+    100% { color: #edc345; }
+}
+
+.archive-tabs, .chart-tabs{
+	padding: 5px 0px;
+	width: 100%;
+}
+.archive-tab{
+	display: inline-block;
+	margin-right: 5px;
+}
+.archive-tab a{
+	font-size: 14px;
+	font-weight: 600;
+	background: linear-gradient(#2fd39e,#15ba85);
+}
+
+/*notification application*/
+.item-title, .name, .todate{
+	color: #0066cc;
+}
+
+/*send message application*/
+
+.physic-td, .physic-td:focus, .physic-td:active, .physic-td:visited{
+	outline: 0;
+  	border-width: 0 0 0.5px;
+  	display: inline;
+}
+
+.btm-line, .btm-line:focus, .btm-line:active, .btm-line:visited{
+	outline: 0;
+	border-width: 0px;
+	display: inline;
+  	pointer-events: none;
+  	text-align: right;
+}
+
+.card-bk{
+	background: #f2f2f2;
+}
+
+
+.card-bk span label{
+	font-weight: 500;
+	display: inline;
+}
+
+.card-bk span label span{
+	margin: 0 3px;
+}
+
+input[name=opt]{
+	zoom: 1.3;
+	vertical-align: text-bottom;
+}
+
+input[name=opt]:checked + span{
+	font-weight: 600;
+}
+
+/*copy exam item and bodypart record*/
+.wd-100{
+	width: 100%;
+}
+.item-func{
+	margin-right: 10px;
+}
+.wd-100 .info-btn{
+	padding: 6px;
+}
+.item-chk{
+	zoom: 1.3;
+}
+/*
+.item-list tbody tr:has( > input[type="checkbox"]:checked){
+	background: #ffcccc;
+}*/
