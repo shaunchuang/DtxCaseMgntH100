@@ -300,66 +300,89 @@
 	            
 	        });
 	}
-	
-	// 建立教案需求	
+		// 建立教案需求	
 	function updateLessonRequirement(sysReq) {
-		console.log('sysReq', sysReq);
 	    let sysReqDTO = [];
-	    try {
-	        sysReqDTO = JSON.parse(sysReq.requirementsDTO);
-	    } catch (error) {
-	        console.error('Error parsing sysReqDTO:', error);
-	        return;
+	    
+	    // 處理新的資料格式
+	    if (Array.isArray(sysReq)) {
+	        sysReqDTO = sysReq;
+	    } else {
+	        try {
+	            sysReqDTO = JSON.parse(sysReq.requirementsDTO);
+	        } catch (error) {
+	            console.error('Error parsing sysReqDTO:', error);
+	            return;
+	        }
 	    }
-	
+
 	    if (Array.isArray(sysReqDTO) && sysReqDTO.length > 0) {
-	
+
 	        // 清空現有的需求內容
 	        $('.os-nav').empty();
 	        $('#osTabContent').empty();
-	
+
 	        // 使用 set 儲存已存在的 osType 和 reqType
 	        const osTypes = new Set();
 	        const reqTypes = ["建議配備", "最低配備"];
 	        const contentMap = {};
-	
+
 	        sysReqDTO.forEach(function (sysReqData) {
-	            const sysReqAnses = sysReqData['evalItemAnses'];
-	            const osType = sysReqAnses["401"];
-	            const reqType = sysReqAnses["402"];
-	
-	            // 確認 404 欄位存在才處理
-	            if (osType && sysReqAnses["404"]) {
+	            let osType, reqType, osSystem, processor, memory, graphicsCard, directxVersion, storageSpace;
+	            
+	            // 處理新格式的資料結構
+	            if (sysReqData.platform) {
+	                osType = sysReqData.platform;
+	                reqType = sysReqData.requirementType === 'MINIMUM' ? '最低配備' : '建議配備';
+	                osSystem = sysReqData.operatingSystem;
+	                processor = sysReqData.processor;
+	                memory = sysReqData.memory;
+	                graphicsCard = sysReqData.graphicsCard;
+	                directxVersion = sysReqData.directxVersion;
+	                storageSpace = sysReqData.storageSpace;
+	            } else if (sysReqData.evalItemAnses) {
+	                // 處理舊格式的資料結構 (保持向後相容)
+	                const sysReqAnses = sysReqData['evalItemAnses'];
+	                osType = sysReqAnses["401"];
+	                reqType = sysReqAnses["402"];
+	                osSystem = sysReqAnses["404"];
+	                processor = sysReqAnses["405"];
+	                memory = sysReqAnses["406"];
+	                graphicsCard = sysReqAnses["407"];
+	                directxVersion = sysReqAnses["408"];
+	                storageSpace = sysReqAnses["410"];
+	            }
+
+	            // 確認必要欄位存在才處理
+	            if (osType && osSystem) {
 	                osTypes.add(osType);
-	
+
 	                if (!contentMap[osType]) {
 	                    contentMap[osType] = {};
 	                }
 	                if (!contentMap[osType][reqType]) {
 	                    contentMap[osType][reqType] = {};
 	                }
-	
+
 	                contentMap[osType][reqType] = {
-	                    os: sysReqAnses["404"],
-	                    cpu: sysReqAnses["405"],
-	                    ram: sysReqAnses["406"],
-	                    graphic: sysReqAnses["407"],
-	                    dx: sysReqAnses["408"],
-	                    audio: sysReqAnses["409"],
-	                    storage: sysReqAnses["410"],
-	                    note: sysReqAnses["411"]
+	                    os: osSystem,
+	                    cpu: processor,
+	                    ram: memory,
+	                    graphic: graphicsCard,
+	                    dx: directxVersion,
+	                    storage: storageSpace
 	                };
 	            }
 	        });
-	
+
 	        // 動態生成 Tabs 和 Tab Content
 	        osTypes.forEach(function (osType) {
 	            reqTypes.forEach(function (reqType) {
 	                if (contentMap[osType] && contentMap[osType][reqType]) {
-	
+
 	                    const tabId = osType + '-' + (reqType === '最低配備' ? 'min' : 'rec') + '-tab';
 	                    const containerId = osType + '-' + (reqType === '最低配備' ? 'min' : 'rec') + '-info';
-	
+
 	                    // 建立 OS Tabs
 	                    const osTabHtml =
 	                        '<li class="nav-item" role="presentation">' +
@@ -368,10 +391,10 @@
 	                        '</a>' +
 	                        '</li>';
 	                    $('.os-nav').append(osTabHtml);
-	
+
 	                    // 建立 OS Tab Content
 	                    let osTabContentHtml = `<div class="tab-pane mt-2" id="` + containerId + `" role="tabpanel">`;
-	
+
 	                    if (contentMap[osType][reqType].os) {
 	                        osTabContentHtml += `<div class="os-tag"><span>作業系統：</span><span class="os-text">` + contentMap[osType][reqType].os + `</span></div>`;
 	                    }
@@ -387,35 +410,29 @@
 	                    if (contentMap[osType][reqType].dx) {
 	                        osTabContentHtml += `<div class="dx-tag"><span>DirectX：</span><span class="dx-text">` + contentMap[osType][reqType].dx + `</span></div>`;
 	                    }
-	                    if (contentMap[osType][reqType].audio) {
-	                        osTabContentHtml += `<div class="audio-tag"><span>音效卡：</span><span class="audio-text">` + contentMap[osType][reqType].audio + `</span></div>`;
-	                    }
 	                    if (contentMap[osType][reqType].storage) {
 	                        osTabContentHtml += `<div class="storage-tag"><span>儲存空間：</span><span class="storage-text">` + contentMap[osType][reqType].storage + `</span></div>`;
 	                    }
-	                    if (contentMap[osType][reqType].note) {
-	                        osTabContentHtml += `<div class="note-tag"><span>備註：</span><span class="note-text">` + contentMap[osType][reqType].note + `</span></div>`;
-	                    }
-	
+
 	                    osTabContentHtml += `</div>`;
-	
+
 	                    $('#osTabContent').append(osTabContentHtml);
 	                }
 	            });
 	        });
-	
+
 	        // 啟用第一個 tab
 	        $('.os-nav a:first').addClass('active');
 	        $('#osTabContent .tab-pane:first').addClass('show active');
-	
+
 	        // 手動切換標籤頁
 	        $('.os-nav a').on('click', function (e) {
 	            e.preventDefault();
-	
+
 	            // 移除所有標籤和內容的活動狀態
 	            $('.os-nav a').removeClass('active');
 	            $('#osTabContent .tab-pane').removeClass('show active');
-	
+
 	            // 添加當前選定標籤的活動狀態
 	            $(this).addClass('active');
 	            $($(this).data('target')).addClass('show active');
