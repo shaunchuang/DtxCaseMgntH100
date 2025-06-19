@@ -210,25 +210,25 @@ function fetchTrainingPlanNew(){
 	                console.log(trainingPlan);
 	
 	                // 計畫資訊
-	                var startDateStr = formatDate(trainingPlan.startDate);
-	                var endDateStr = formatDate(trainingPlan.endDate);
-	                var therapistName = trainingPlan.therapistName || "治療師";
+	            	let startDateStr = formatDate(trainingPlan.startDate);
+	                let endDateStr = formatDate(trainingPlan.endDate);
+	                let therapistName = trainingPlan.therapistName || "治療師";
 	
 	                // 每個計畫中的課程
 	                if (trainingPlan.lessons && trainingPlan.lessons.length > 0) {
-						var lesson = trainingPlan.lessons[0];
-	                    var lessonId = lesson.lessonId;
-	                    var lessonName = "課程名稱未提供"; // 預設課程名稱
-	                    var imageUrl = ""; // 預設圖片
-	
-						var lessonName;
-						var imageUrl;
+						let lesson = trainingPlan.lessons[0];
+	                    let lessonId = lesson.lessonId;
+	                    let lessonName = "課程名稱未提供"; // 預設課程名稱
+	                    let imageUrl = ""; // 預設圖片
+
 						$.ajax({
 							url: lessonStoreUrl + '/LessonMainInfo/api/get/lessonId/' + lessonId,
 							method: 'GET',
-							dataType: "text",
+							dataType: "json",
+							async: false, // 同步請求以確保在生成卡片前獲取到數據
 							success: function(data) {
-								console.log("Lesson data: ", data);
+								lessonName = data.lessonName || "課程名稱未提供"; // 如果沒有課程名稱，使用預設值
+								imageUrl = lessonStoreUrl + '/File/api/file/path' + data.headerImageUrl || ""; // 如果沒有圖片，使用空字串
 							},
 							error: function(xhr, status, error) {
 								console.error("AJAX error:", status, error);

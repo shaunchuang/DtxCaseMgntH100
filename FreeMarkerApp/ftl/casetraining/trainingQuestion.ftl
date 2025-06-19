@@ -148,7 +148,7 @@
       
     // 返回總覽
     function prevButton(){
-    	window.location.href = "${base}/${__lang}/division/web/review";
+    	window.location.href = "/ftl/casetraining/dashboard";
     }
     
 	// 建立聊天室 聊天室姓名待更新

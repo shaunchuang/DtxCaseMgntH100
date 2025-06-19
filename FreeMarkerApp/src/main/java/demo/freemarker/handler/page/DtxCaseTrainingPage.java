@@ -11,13 +11,17 @@ import demo.freemarker.api.ConfigPropertyAPI;
 import demo.freemarker.api.DiseaseCategoryAPI;
 import demo.freemarker.api.DrugUseStatusCategoryAPI;
 import demo.freemarker.api.MedicationCategoryAPI;
+import demo.freemarker.api.training.TrainingPlanAPI;
 import demo.freemarker.core.CrossPlatformUtil;
+import demo.freemarker.core.GsonUtil;
 import demo.freemarker.core.SecurityUtils;
 import demo.freemarker.dto.SyndromeDTO;
+import demo.freemarker.dto.TrainingPlanDTO;
 import demo.freemarker.dto.UserRoleDTO;
 import demo.freemarker.model.DiseaseCategory;
 import demo.freemarker.model.DrugUseStatusCategory;
 import demo.freemarker.model.MedicationCategory;
+import demo.freemarker.model.training.TrainingPlan;
 import itri.sstc.framework.core.Config;
 import itri.sstc.freemarker.core.Model;
 import itri.sstc.freemarker.core.RequestData;
@@ -86,7 +90,12 @@ public class DtxCaseTrainingPage extends RequestHandler {
             return "redirect:/ftl/imas/login";
         }
         String planId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "planId");
+        TrainingPlan trainingPlan = TrainingPlanAPI.getInstance().getTrainingPlan(Long.parseLong(planId));
+        TrainingPlanDTO trainingPlanDTO = TrainingPlanAPI.getInstance().convertPlanDTO(trainingPlan);
         String blogname = Config.get("blogname", "測試平台");
+        model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
+        model.addAttribute("planId", planId);
+        model.addAttribute("trainingPlan", GsonUtil.toJson(trainingPlanDTO));
         model.addAttribute("__field", "field");
         model.addAttribute("menuNum", 1);
         model.addAttribute("currentUser", currentUser);
@@ -103,6 +112,7 @@ public class DtxCaseTrainingPage extends RequestHandler {
         }
         String planId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "planId");
         String blogname = Config.get("blogname", "測試平台");
+        model.addAttribute("planId", planId);
         model.addAttribute("__field", "field");
         model.addAttribute("menuNum", 1);
         model.addAttribute("currentUser", currentUser);
@@ -119,6 +129,8 @@ public class DtxCaseTrainingPage extends RequestHandler {
         }
         String planId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "planId");
         String blogname = Config.get("blogname", "測試平台");
+        model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
+        model.addAttribute("planId", planId);
         model.addAttribute("__field", "field");
         model.addAttribute("menuNum", 1);
         model.addAttribute("currentUser", currentUser);

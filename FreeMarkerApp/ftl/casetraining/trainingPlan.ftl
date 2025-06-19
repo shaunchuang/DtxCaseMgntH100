@@ -188,24 +188,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 <script>
-	var currentUserId = ${currentUser.id!""};
-	var currentUserName = '${currentUser.name!""}';
-	var therapistId = ${therapistId!""};
-	var therapistName = '${therapistName!""}';
-	var caseMgntUrl = '${caseMgntUrl!""}';
-	var lessonStoreUrl = '${lessonStoreUrl!""}';
-	
-	var trainingPlan = JSON.parse('${trainingPlan!""}');
-	
+	let currentUserId = ${currentUser.id!""};
+	let currentUserName = '${currentUser.name!""}';
+	let therapistName = '${therapistName!""}';
+	let lessonStoreUrl = '${lessonStoreUrl!""}';
+	let trainingPlan = ${trainingPlan!""};
+
 	console.log(trainingPlan);
-	
-	var planId = '${planId}';
+
+	let planId = '${planId}';
 	console.log('planId', planId);
-	var lessonIdForPlan = ''; // 訓練教案KeyNo
-	var lessonIdForStore = ''; // 教案市集KeyNo
-	var lessonAch; // 教案成就
-	
-	
+	let lessonIdForPlan = ''; // 訓練教案KeyNo
+	let lessonIdForStore = ''; // 教案市集KeyNo
+	let lessonAch; // 教案成就
+
+
 	$(document).ready(function() {
       	getTrainingPlanNew(trainingPlan);
 		requestLessonApi();
@@ -239,14 +236,14 @@
 	// 儲存訓練資料
 	function saveTrainingDataV2(data) {
 	    $.ajax({
-	    	url: caseMgntUrl + "/division/api/v2/TrainingData/save",
+	    	url: "/Training/api/saveData",
 	    	type: 'POST',
 	    	dataType: 'json',
 	    	data: {"data": JSON.stringify(data), "planId": planId, "lessonId": lessonIdForStore},
 	    	success: function(result) {
 	    		if(result.success){
 	    			// 在成功後跳轉到新的頁面
-        			window.location.href = "${base}/${__lang}/division/web/dtxCaseRecord/" + planId;
+        			window.location.href = "/ftl/casetraining/trainingRecord?planId=" + planId;
 	    		} else {
 	    			swal("儲存失敗", "請聯絡管理員", "error");
 	    		}
@@ -254,30 +251,13 @@
 	    });
 	}
 	
-	// 儲存訓練資料
-	function saveTrainingData(data) {
-	    $.ajax({
-	    	url: caseMgntUrl + "/division/api/TrainingData/save",
-	    	type: 'POST',
-	    	dataType: 'json',
-	    	data: {"data": JSON.stringify(data), "lessonKeyNo": lessonKeyNo},
-	    	success: function(result) {
-	    		if(result.success){
-	    			// 在成功後跳轉到新的頁面
-        			window.location.href = "${base}/${__lang}/division/web/dtxCaseRecord/" + trainingPlanKeyNo;
-	    		} else {
-	    			swal("儲存失敗", "請聯絡管理員", "error");
-	    		}
-	    	}
-	    });
-	}
 
     // 抓取教案資料
 	function requestLessonApi(){
 		const apiUrls = [
-			lessonStoreUrl + '/division/api/Lesson/GetLessonBasic',
-			lessonStoreUrl + '/division/api/Lesson/GetLessonRequirement',
-			lessonStoreUrl + '/division/api/Lesson/GetLessonTag'
+			lessonStoreUrl + '/LessonMainInfo/api/get',
+			lessonStoreUrl + '/LessonSystemRequirement/api/lesson',
+			lessonStoreUrl + '/LessonTag/api/lesson'
 		];
 		
 		// 創建一個包含所有 fetch POST 請求的 Promise 陣列
@@ -580,7 +560,7 @@
     
     // 返回總覽
     function prevButton(){
-    	window.location.href = "${base}/${__lang}/division/web/review";
+    	window.location.href = "/ftl/casetraining/dashboard";
     }
     
     
@@ -815,7 +795,7 @@
 	
 	
     function getTrainingPlan(){
-    	var result = wg.evalForm.getJson({"data": trainingPlanKeyNo}, caseMgntUrl + '/division/api/TrainingPlan/get');
+    	var result = wg.evalForm.getJson({"data": trainingPlanKeyNo}, '/Training/api/getPlan');
     	if(result.success){
     		var trainingPlan = result.trainingPlan;
     		

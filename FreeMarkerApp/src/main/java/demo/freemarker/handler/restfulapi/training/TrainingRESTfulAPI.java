@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import com.sun.net.httpserver.HttpExchange;
 
 import demo.freemarker.api.PatientAPI;
-import demo.freemarker.api.UserAPI;
 import demo.freemarker.api.healthinsurance.HealthInsuranceRecordAPI;
 import demo.freemarker.api.training.AchievementGoalAPI;
 import demo.freemarker.api.training.PlanLessonMappingAPI;
@@ -25,9 +24,6 @@ import demo.freemarker.api.training.TrainingPlanAPI;
 import demo.freemarker.api.training.TrainingRecordAPI;
 import demo.freemarker.api.training.TrainingStatisticsAPI;
 import demo.freemarker.dto.Achievement;
-import demo.freemarker.dto.AchievementDTO;
-import demo.freemarker.dto.LessonDTO;
-import demo.freemarker.dto.StatisticsDTO;
 import demo.freemarker.dto.StatsData;
 import demo.freemarker.dto.TrainingData;
 import demo.freemarker.dto.TrainingPlanDTO;
@@ -42,7 +38,6 @@ import demo.freemarker.model.training.TrainingRecord;
 import demo.freemarker.model.training.TrainingStatistics;
 import itri.sstc.framework.core.api.RESTfulAPI;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -166,7 +161,7 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
         String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         Long planId = new JSONObject(requestBody).getLong("planId");
         TrainingPlan trainingPlan = TrainingPlanAPI.getInstance().getTrainingPlan(planId);
-        TrainingPlanDTO dto = convertPlanDTO(trainingPlan);
+        TrainingPlanDTO dto = TrainingPlanAPI.getInstance().convertPlanDTO(trainingPlan);
 
         responseJson.put("success", Boolean.TRUE);
         responseJson.put("trainingPlan", dto);
@@ -197,7 +192,7 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
         List<TrainingPlan> trainingPlans = TrainingPlanAPI.getInstance().listByPatient(patientId);
         List<TrainingPlanDTO> trainingPlanDTOs = trainingPlans.stream()
                 .map(trainingPlan -> {
-                    return convertPlanDTO(trainingPlan);
+                    return TrainingPlanAPI.getInstance().convertPlanDTO(trainingPlan);
                 })
                 .collect(Collectors.toList());
         responseJson.put("trainingPlans", trainingPlanDTOs);
@@ -333,59 +328,6 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
 
         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
         return responseJson.toString();
-    }
-
-    public TrainingPlanDTO convertPlanDTO(TrainingPlan trainingPlan) {
-        TrainingPlanDTO planDTO = new TrainingPlanDTO();
-        List<PlanLessonMapping> mappings = PlanLessonMappingAPI.getInstance().listByPlanId(trainingPlan.getId());
-        List<LessonDTO> lessonDTOs = new ArrayList<>();
-        System.out.println("mappings size: " + mappings.size());
-        for (PlanLessonMapping mapping : mappings) {
-            LessonDTO lessonDTO = new LessonDTO();
-            System.out.println("lessonId:" + mapping.getLessonId());
-            lessonDTO.setLessonId(mapping.getLessonId());
-            List<AchievementGoal> achievementGoals = AchievementGoalAPI.getInstance().listByMappingId(mapping.getId());
-            List<AchievementDTO> achievements = achievementGoals.stream()
-                    .map(achievementGoal -> {
-                        AchievementDTO achievementDTO = new AchievementDTO();
-                        achievementDTO.setAchievementId(achievementGoal.getId());
-                        achievementDTO.setApiName(achievementGoal.getApiName());
-                        return achievementDTO;
-                    })
-                    .collect(Collectors.toList());
-
-            lessonDTO.setAchievements(achievements);
-            List<StatisticsGoal> statisticsGoals = StatisticsGoalAPI.getInstance().listByMappingId(mapping.getId());
-            List<StatisticsDTO> statisticsDTOs = statisticsGoals.stream()
-                    .map(statisticsGoal -> {
-                        StatisticsDTO statisticsDTO = new StatisticsDTO();
-                        statisticsDTO.setStatisticsId(statisticsGoal.getId());
-                        statisticsDTO.setApiName(statisticsGoal.getApiName());
-                        statisticsDTO.setValueGoal(statisticsGoal.getValueGoal());
-                        return statisticsDTO;
-                    })
-                    .collect(Collectors.toList());
-            lessonDTO.setStatistics(statisticsDTOs);
-            lessonDTOs.add(lessonDTO);
-        }
-        planDTO.setPlanId(trainingPlan.getId());
-        planDTO.setTherapistId(trainingPlan.getTherapist());
-        String therapistName = UserAPI.getInstance().getUser(trainingPlan.getTherapist()).getUsername();
-        System.out.println("therapistName: "+therapistName);
-        planDTO.setTherapistName(therapistName != null ? therapistName : null);
-        planDTO.setPatientId(String.valueOf(trainingPlan.getPatientId()));
-        Patient patient = PatientAPI.getInstance().getPatient(trainingPlan.getPatientId());
-        planDTO.setPatientName(patient.getName());
-        planDTO.setTitle(trainingPlan.getTitle());
-        planDTO.setStartDate(trainingPlan.getStartDate());
-        planDTO.setEndDate(trainingPlan.getEndDate());
-        planDTO.setFrequencyPerWeek(trainingPlan.getFrequencyPerWeek());
-        planDTO.setFrequencyPerDay(trainingPlan.getFrequencyPerDay());
-        planDTO.setDurationPerSession(trainingPlan.getDurationPerSession());
-        planDTO.setNotes(trainingPlan.getNotes());
-        planDTO.setCreateTime(trainingPlan.getCreateTime());
-        planDTO.setLessons(lessonDTOs);
-        return planDTO;
     }
 
     /* ---------- 輔助函式 ---------- */
