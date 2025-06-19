@@ -199,7 +199,7 @@
 	let planId = '${planId}';
 	console.log('planId', planId);
 	let lessonIdForPlan = ''; // 訓練教案KeyNo
-	let lessonIdForStore = ''; // 教案市集KeyNo
+	let lessonIdForStore = trainingPlan.lessons[0].lessonId; // 教案市集KeyNo
 	let lessonAch; // 教案成就
 
 
@@ -254,18 +254,35 @@
 
     // 抓取教案資料
 	function requestLessonApi(){
+		$.ajax({
+			url: lessonStoreUrl + '/LessonMainInfo/api/get/lessonId/' + lessonIdForStore,
+			type: 'GET',
+			dataType: 'json',
+			success: function(response) {
+				if(response.success){
+					updateLessonBasic(response.lessonBasic);
+				} else {
+					swal('載入教案失敗','請聯絡管理員','error');
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.error('Error with LessonMainInfo:', textStatus, errorThrown);
+				console.error('Response Text:', jqXHR.responseText);
+				swal('載入教案失敗','請聯絡管理員','error');
+			}
+		});
 		const apiUrls = [
-			lessonStoreUrl + '/LessonMainInfo/api/get',
 			lessonStoreUrl + '/LessonSystemRequirement/api/lesson',
 			lessonStoreUrl + '/LessonTag/api/lesson'
 		];
 		
 		// 創建一個包含所有 fetch POST 請求的 Promise 陣列
+		console.log('lessonIdForStore', lessonIdForStore);
 	    const requests = apiUrls.map(url => 
 	        $.ajax({
 	        	url: url,
 	        	type: 'POST',
-	        	data: { "lessonId": lessonIdForStore },
+	        	data: JSON.stringify({"lessonId": lessonIdForStore}),
 	        	dataType: 'json',
 	        	error: function(jqXHR, textStatus, errorThrown) {
 	            	console.error('Error with', url, ':', textStatus, errorThrown);
@@ -277,10 +294,7 @@
 	    // 使用 Promise.all 並行處理所有請求
 	    Promise.all(requests)
 	        .then(responses => {
-	            
-	            const [lessonBasic,lessonRequirement, lessonTag] = responses;
-	            
-	            updateLessonBasic(lessonBasic);
+	            const [lessonRequirement, lessonTag] = responses;
 	            updateLessonRequirement(lessonRequirement);
 	            updateLessonTag(lessonTag);
 	            
@@ -289,6 +303,7 @@
 	
 	// 建立教案需求	
 	function updateLessonRequirement(sysReq) {
+		console.log('sysReq', sysReq);
 	    let sysReqDTO = [];
 	    try {
 	        sysReqDTO = JSON.parse(sysReq.requirementsDTO);
