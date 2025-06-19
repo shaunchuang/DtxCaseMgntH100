@@ -441,6 +441,7 @@
 	}
 
     function updateLessonBasic(lessonBasic){
+		console.log('lessonBasic', lessonBasic);
     	let basicAns = JSON.parse(lessonBasic.lessonMain);
     	let lessonName = basicAns.evalItemAnses['1'];
     	let shortDesc = basicAns.evalItemAnses['2'];
@@ -483,7 +484,7 @@
     }
     
     function updateLessonTag(tagResponse){
-
+		console.log('tagResponse', tagResponse);
     	let tagData = tagResponse.tags;
     	
     	// 處理類型
