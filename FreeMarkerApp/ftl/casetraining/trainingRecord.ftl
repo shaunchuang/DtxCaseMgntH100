@@ -625,7 +625,7 @@ var lessonIdForStore = trainingPlan.trainingPlan.lessons[0].lessonId;; // 教案
 	
     // 返回總覽
     function prevButton(){
-    	window.location.href = "/ftl/casetraining/dashboard";
+    	window.location.href = "/ftl/casetraining/caseDashboard";
     }
     
     function formatDate(dateStr){

@@ -91,6 +91,7 @@ demo\freemarker\api\assessment\AssessmentResultAPI.class
 demo\freemarker\model\scale\ScaleLevel.class
 demo\freemarker\dao\DiseaseCategoryDAO.class
 demo\freemarker\model\healthinsurance\HealthInsuranceRecord.class
+demo\freemarker\dto\AchievementGoalDTO.class
 demo\freemarker\handler\restfulapi\PatientRESTfulAPI.class
 demo\freemarker\api\scale\ScaleSectionAPI.class
 demo\freemarker\dao\WgIcdCodeDAO.class
@@ -108,6 +109,7 @@ demo\freemarker\api\training\TrainingRecordAPI.class
 demo\freemarker\dao\DrugUseStatusCategoryDAO.class
 demo\freemarker\handler\restfulapi\WgIcdCodeRESTfulAPI.class
 demo\freemarker\api\UserAPI.class
+demo\freemarker\dto\StatisticsGoalDTO.class
 demo\freemarker\dao\training\TrainingStatisticsDAO.class
 demo\freemarker\dao\training\PlanLessonMappingDAO.class
 demo\freemarker\handler\restfulapi\training\TrainingStatisticsRESTfulAPI.class

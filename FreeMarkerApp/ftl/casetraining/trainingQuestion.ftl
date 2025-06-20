@@ -148,7 +148,7 @@
       
     // 返回總覽
     function prevButton(){
-    	window.location.href = "/ftl/casetraining/dashboard";
+    	window.location.href = "/ftl/casetraining/caseDashboard";
     }
     
 	// 建立聊天室 聊天室姓名待更新

@@ -103,5 +103,4 @@ public class TrainingPlanDTO {
     public void setLessons(List<LessonDTO> lessons) {
         this.lessons = lessons;
     }
-    
 }
