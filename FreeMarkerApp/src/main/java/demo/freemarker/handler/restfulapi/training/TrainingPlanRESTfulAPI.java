@@ -42,4 +42,5 @@ public class TrainingPlanRESTfulAPI extends RESTfulAPI {
         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
         return EntityUtility.toJSONArrayString(plans);
     }
+
 }

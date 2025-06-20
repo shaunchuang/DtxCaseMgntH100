@@ -330,6 +330,14 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
         return responseJson.toString();
     }
 
+    @RESTfulAPIDefine(url = "monitor", methods = "post", description = "取得病人資訊")
+    private String getPatientInfo(HttpExchange exchange) throws IOException {
+        JSONObject responseJson = new JSONObject();
+        String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+        String lessonId = new JSONObject(requestBody).getString("lessonId");
+        
+    }
+
     /* ---------- 輔助函式 ---------- */
     private Integer parseNullableInt(String s) {
         if (s == null || s.isBlank()) {
