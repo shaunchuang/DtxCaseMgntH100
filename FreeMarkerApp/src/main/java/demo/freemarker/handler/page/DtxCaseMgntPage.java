@@ -841,6 +841,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         List<DiseaseCategory> diseases = DiseaseCategoryAPI.getInstance().listLocale(locale);
         List<MedicationCategory> medicationCategories = MedicationCategoryAPI.getInstance().listLocale(locale);
         List<DrugUseStatusCategory> drugUseStatus = DrugUseStatusCategoryAPI.getInstance().listAll();
+        model.addAttribute("patientInfo", GsonUtil.toJsonObject(ptInfo));
         model.addAttribute("personalDiseaseHistoryItems", diseases);
         model.addAttribute("drugUseStatus", drugUseStatus);
         model.addAttribute("drugAllergyHistoryItems", medicationCategories);

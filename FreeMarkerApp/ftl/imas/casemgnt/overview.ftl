@@ -101,7 +101,6 @@ $(".control-menu-list .menu").click(function(e){
 }
 
 .patient-info{
-	width: auto !important;
 	margin-bottom: 0px !important;
 }
 
