@@ -1880,6 +1880,8 @@ $(document).ready(function() {
 		<#assign roleName = "職能治療師">
 	<#elseif role.alias == "DTX_PI" && roleName != "醫師">
 		<#assign roleName = "物理治療師">
+	<#elseif role.alias == "CASE" && roleName != "醫師">
+		<#assign roleName = "個案">
     <#elseif role.alias == "ADMIN" && roleName == "">
         <#assign roleName = "系統管理員">
     </#if>
@@ -1895,6 +1897,22 @@ $(document).ready(function() {
 				</div>
 				<i class="fa fa-bars" id="btn"></i>	
 			</div>
+			<#if roleName == "個案">
+			<nav id="sitemaps">
+				<ul class="nav_list">
+					<li>
+						<a href="/ftl/casetraining/caseDashboard" class="active">
+							<i class="fa fa-home" ></i>
+							<span class="links_name"><@spring.message "leftnav.menu.homepage"/></span
+							<i class="fa fa-caret-down arrow-rotate" ></i>
+						</a>
+						<ul class="sub-menu show">
+							<li><a href="/ftl/casetraining/caseDashboard"><@spring.message "leftnav.submenu.review"/></a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<#else>
 			<nav id="sitemaps">
 				<ul class="nav_list">
 					<li>
@@ -1971,6 +1989,7 @@ $(document).ready(function() {
 					</li>
 				</ul>		
 			</nav>
+			</#if>
 			<div class="intro_content">
 				<span><@spring.message "leftnav.label.copyright"/></span>
 			</div>

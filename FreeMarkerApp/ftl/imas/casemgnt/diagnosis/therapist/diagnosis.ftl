@@ -132,7 +132,7 @@
 									<label class="form-label">個人病史</label>
 									<div class="history-options multi-option">
 										<#list personalDiseaseHistoryItems as pdhItems>
-										<div class="option<#if ptInfo.medicalHistory?seq_contains(pdhItems.name)>selected</#if>" data-item="${pdhItems.id}" >${pdhItems.name}</div>
+										<div class="option<#if ptInfo.diseaseNames?seq_contains(pdhItems.id?string)> selected</#if>" data-item="${pdhItems.id}" >${pdhItems.name}</div>
 										</#list>				                 	
 				                    </div>
 				                    <textarea rows="2" class="form-control" placeholder="請填寫其他個人病史"></textarea>
@@ -143,7 +143,7 @@
 									<label class="form-label">藥物過敏史</label>
 									<div class="allergy-history-options multi-option">
 										<#list drugAllergyHistoryItems as dahItems>
-										<div class="option" data-item="${dahItems.id}" >${dahItems.name}</div>
+										<div class="option<#if ptInfo.medicalHistory?seq_contains(dahItems.id?string)> selected</#if>" data-item="${dahItems.id}" >${dahItems.name}</div>
 										</#list>
 									</div>
 									<textarea rows="2" class="form-control" placeholder="請填寫其他藥物過敏史"></textarea>
@@ -154,7 +154,7 @@
 									<label class="form-label">藥物使用狀況</label>
 									<div class="drug-use-status-options multi-option">
 										<#list drugUseStatus as dus>
-											<div class="option<#if ptInfo.drugUsageHistory?seq_contains(dus.name)>selected</#if>" data-item="${dus.id}" >${dus.name}</div>
+											<div class="option<#if ptInfo.drugUsageHistory?seq_contains(dus.id?string)> selected</#if>" data-item="${dus.id}" >${dus.name}</div>
 										</#list>
 									</div>
 									<textarea rows="2" class="form-control" placeholder="請填寫其他藥物使用狀況"></textarea>
@@ -747,17 +747,17 @@ $(document).ready(function(){
 });
 
 
-/*確認個案報到觸發行為*/ /****************************** 暫時關閉 ***************************/
-/*$(".confirm-check").click(function(){
+/*確認個案報到觸發行為*/
+$(".confirm-check").click(function(){
+	editPatientBaseInfo();
 	var postData = {"slotId": ${slotId}, "cat": 1, "caseno": "${formId!""}"};
 	console.log('postData', postData);
 	const jsonData = JSON.stringify(postData);
 	var result = wg.evalForm.getJson(jsonData, "/WgTask/api/checkin");
-	
 	if(!result.success){
 		swal('報到失敗', "無法執行報到作業!", "error");
 	}
-});*/
+});
 
 /* 新增量表 */
 $(".add-ast").click(function(e) {
@@ -1857,17 +1857,17 @@ function collectPatientBasicData() {
 	let diseaseId = $('#diseaseId').val();
 	if (diseaseId && !isNaN(diseaseId)) data.diseaseId = parseInt(diseaseId);
 	
-	// 多對多關聯 - 疾病分類
-	let diseaseCategoryIds = getSelectedCategoryIds('diseaseCategory');
-	if (diseaseCategoryIds.length > 0) data.diseaseCategoryIds = diseaseCategoryIds;
-	
-	// 多對多關聯 - 藥物分類
-	let medicalCategoryIds = getSelectedCategoryIds('medicalCategory');
-	if (medicalCategoryIds.length > 0) data.medicalCategoryIds = medicalCategoryIds;
-	
-	// 多對多關聯 - 藥物使用狀況分類
-	let drugUseStatusCategoryIds = getSelectedCategoryIds('drugUseStatusCategory');
-	if (drugUseStatusCategoryIds.length > 0) data.drugUseStatusCategoryIds = drugUseStatusCategoryIds;
+	// 個人病史（對應 class="history-options"）
+	const diseaseCategoryIds = getSelectedCategoryIds('history-options');
+	if (diseaseCategoryIds.length) data.diseaseCategoryIds = diseaseCategoryIds;
+
+	// 藥物過敏史（class="allergy-history-options"）
+	const medicalCategoryIds = getSelectedCategoryIds('allergy-history-options');
+	if (medicalCategoryIds.length) data.medicalCategoryIds = medicalCategoryIds;
+
+	// 藥物使用狀況（class="drug-use-status-options"）
+	const drugUseStatusCategoryIds = getSelectedCategoryIds('drug-use-status-options');
+	if (drugUseStatusCategoryIds.length) data.drugUseStatusCategoryIds = drugUseStatusCategoryIds;
 	
 	return data;
 }
@@ -1878,6 +1878,7 @@ function collectPatientBasicData() {
  */
 function collectOtherPatientInfo() {
 	let data = {};
+	let speechDevIssues = [];
 	
 	// 主要問題和困難描述
 	let mainIssueDesc = $('#mainIssueDesc').val()?.trim();
@@ -1913,9 +1914,12 @@ function collectOtherPatientInfo() {
 	if (motherOccupation) data.motherOccupation = motherOccupation;
 	
 	// 語言和溝通能力
-	let speechDevIssues = $('#speechDevIssues').val()?.trim();
-	if (speechDevIssues) data.speechDevIssues = speechDevIssues;
-	
+	$('.speech-dev-issue-options .option.selected').each(function () {
+		const id = parseInt($(this).data('item'));
+		if (!isNaN(id)) speechDevIssues.push(id);
+	});
+	if (speechDevIssues.length) data.speechDevIssues = speechDevIssues;
+
 	let communicationMtd = $('#communicationMtd').val()?.trim();
 	if (communicationMtd) data.communicationMtd = communicationMtd;
 	
@@ -1966,39 +1970,18 @@ function collectOtherPatientInfo() {
 }
 
 /**
- * 取得選中的分類 ID 陣列
- * 支援 checkbox 或 select multiple 形式
+ * 從自訂 .option 甚至 checkbox / select all in one 抓取選中 ID
+ * categoryType 例如：history-options、allergy-history-options …
  */
 function getSelectedCategoryIds(categoryType) {
-	let ids = [];
-	
-	// 嘗試從 checkbox 取得選中的值
-	$(`input[name="` + categoryType + `"]:checked`).each(function() {
-		let id = parseInt($(this).val());
-		if (!isNaN(id)) {
-			ids.push(id);
-		}
-	});
-	
-	// 如果沒有 checkbox，嘗試從 select multiple 取得
-	if (ids.length === 0) {
-		let selectValues = $(`#` + categoryType + ``).val();
-		if (Array.isArray(selectValues)) {
-			selectValues.forEach(value => {
-				let id = parseInt(value);
-				if (!isNaN(id)) {
-					ids.push(id);
-				}
-			});
-		} else if (selectValues) {
-			let id = parseInt(selectValues);
-			if (!isNaN(id)) {
-				ids.push(id);
-			}
-		}
-	}
-	
-	return ids;
+    const ids = [];
+
+    $(`.` + categoryType + ` .option.selected`).each(function () {
+        const id = parseInt($(this).data('item'));   // 讀 data-item
+        if (!isNaN(id)) ids.push(id);
+    });
+
+    return ids;
 }
 
 </script>

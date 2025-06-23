@@ -69,7 +69,7 @@ public class PatientRESTfulAPI extends RESTfulAPI {
     @RESTfulAPIDefine(url = "editPatientInfo", methods = "post", description = "編輯病患資料")
     private String editPatientInfo(HttpExchange exchange) throws IOException {
         JSONObject responseJson = new JSONObject();
-        
+        System.out.println("Received request to edit patient info");
         try {
             // 讀取並驗證請求資料
             String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);

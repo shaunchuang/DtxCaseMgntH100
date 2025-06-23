@@ -49,17 +49,17 @@ public class PatientInfo{
         this.indication = patient.getDiseaseName();
         // 1. 疾病類別的多語系名稱列表
         this.diseaseNames = patient.getDiseaseCategories().stream()
-            .map(dc -> dc.getLocaleName(locale))
+            .map(dc -> String.valueOf(dc.getId()))
             .collect(Collectors.toList());
         this.otherDiseaseName = patient.getOtherHistoryDisease();
         // 2. 用藥史
         this.medicalHistory = patient.getMedicalCategories().stream()
-            .map(mc -> mc.getLocaleName(locale))
+            .map(mc -> String.valueOf(mc.getId()))
             .collect(Collectors.toList());
         this.otherMedicalHistory = patient.getOtherMedicalHistory();
         // 3. 用藥狀態
         this.drugUsageHistory = patient.getDrugUseStatusCategory().stream()
-            .map(du -> du.getName())
+            .map(du -> String.valueOf(du.getId()))
             .collect(Collectors.toList());
         this.otherDrugUsageHistory = patient.getOtherDrugUseStatus();
         this.maritalStatus = getmaritalStatusName(maritalStatus, locale);

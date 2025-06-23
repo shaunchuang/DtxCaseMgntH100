@@ -122,15 +122,15 @@
 		</div>
 		<div class="col-md-9">
 			<label class="form-label">語言發展問題(複選)</label>
-			<div>
-				<div class="option">構音異常</div>
-				<div class="option">聲調異常</div>
-				<div class="option">聲音異常</div>
-				<div class="option">語暢異常</div>
-				<div class="option">語調異常</div>
-				<div class="option">語言理解困難</div>
-				<div class="option">口語表達困難</div>
-				<div class="option">無語言</div>
+			<div class="speech-dev-issue-options multi-option">
+				<div class="option" data-item="1">構音異常</div>
+				<div class="option" data-item="2">聲調異常</div>
+				<div class="option" data-item="3">聲音異常</div>
+				<div class="option" data-item="4">語暢異常</div>
+				<div class="option" data-item="5">語調異常</div>
+				<div class="option" data-item="6">語言理解困難</div>
+				<div class="option" data-item="7">口語表達困難</div>
+				<div class="option" data-item="8">無語言</div>
 			</div>
 		</div>
 	</div>

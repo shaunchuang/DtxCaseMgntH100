@@ -725,7 +725,6 @@ $(document).ready(function(){
 $(".confirm-check").click(function(){
 	editPatientBaseInfo();
 });
-/* 暫時關閉
 $(".confirm-check").click(function(){
 	var postData = {"slotId": ${slotId}, "cat": 1, "caseno": "${formId!""}"};
 	const jsonData = JSON.stringify(postData);
@@ -735,7 +734,7 @@ $(".confirm-check").click(function(){
 		swal('報到失敗', "無法執行報到作業!", "error");
 	}
 });
-*/
+
 /*相關病史點選變色*/
 $(".option:not(.editable-option):not(.option--disabled)").click(function() {
     var $parent = $(this).parent("div");

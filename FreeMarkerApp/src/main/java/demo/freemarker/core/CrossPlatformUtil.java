@@ -70,7 +70,7 @@ public class CrossPlatformUtil {
         headers.put("Content-Type", "application/json");
         try {
             String lesson = HttpClientUtil.sendGetRequest(url, headers);
-            JSONObject json = JsonUtil.toJSONObject(lesson);
+            JSONObject json = new JSONObject(lesson);
             // 獲取 "lessonMain" 字串
             return json.getString("lessonName");
         } catch (Exception e ){

@@ -225,18 +225,25 @@
 	        cancelButtonText: "否"
 	        }, function(isConfirm) {
                 if (isConfirm) {
-                    saveTrainingDataV2(trainingData);
+                    saveTrainingData(trainingData);
                 }
 	    });
 	}
 	
 	// 儲存訓練資料
-	function saveTrainingDataV2(data) {
+	function saveTrainingData(data) {
+				// 將 planId、lessonId 合併到同一個 JSON 物件
+		const payload = {
+			...data,                 // data 內含：stats、unlockedAchievements、startTime、endTime
+			planId:  planId,         // 由頁面／變數取得
+			lessonId: lessonIdForStore
+		};
+		console.log('payload', payload);
 	    $.ajax({
 	    	url: "/Training/api/saveData",
 	    	type: 'POST',
 	    	dataType: 'json',
-	    	data: {"data": JSON.stringify(data), "planId": planId, "lessonId": lessonIdForStore},
+	    	data: JSON.stringify(payload),
 	    	success: function(result) {
 	    		if(result.success){
 	    			// 在成功後跳轉到新的頁面
@@ -488,7 +495,8 @@
 		        
 		    } else {
 		        // 預設情況，設定為 steam://run/
-		        $('.lesson-use #useLesson').attr('href', 'steam://run/' + linkBasic);
+				const appId = linkBasic.replace(/^steamApp\//, '');
+		        $('.lesson-use #useLesson').attr('href', 'steam://run/' + appId);
 		    }
 		} else {
 		    console.log('executionId is undefined.');
@@ -496,79 +504,79 @@
 		}
     }
     
-function updateLessonTag(tagResponse) {
-  console.log('tagResponse', tagResponse);
+	function updateLessonTag(tagResponse) {
+	console.log('tagResponse', tagResponse);
 
-  /* ---------- 1. 依 tagType 分組 ---------- */
-  const tagData = {}; // 最終會是 { "2": ["角色扮演", …], "3": ["英文", …], … }
+	/* ---------- 1. 依 tagType 分組 ---------- */
+	const tagData = {}; // 最終會是 { "2": ["角色扮演", …], "3": ["英文", …], … }
 
-  tagResponse.forEach(tag => {
-    const key = String(tag.tagType);         // 保證 key 是字串
-    if (!tagData[key]) tagData[key] = [];
-    tagData[key].push(tag.tagName);
-  });
+	tagResponse.forEach(tag => {
+		const key = String(tag.tagType);         // 保證 key 是字串
+		if (!tagData[key]) tagData[key] = [];
+		tagData[key].push(tag.tagName);
+	});
 
-  /* ---------- 2. 通用標籤處理 ---------- */
-  const typeMap = {
-    '2': '.lesson-type',      // 類型
-    '4': '.lesson-developer', // 開發者
-    '5': '.lesson-support',   // 支援功能
-    '6': '.lesson-platform',  // 平台
-    '8': '.lesson-coop',      // 合作模式
-    '9': '.lesson-other'      // 其他功能
-  };
+	/* ---------- 2. 通用標籤處理 ---------- */
+	const typeMap = {
+		'2': '.lesson-type',      // 類型
+		'4': '.lesson-developer', // 開發者
+		'5': '.lesson-support',   // 支援功能
+		'6': '.lesson-platform',  // 平台
+		'8': '.lesson-coop',      // 合作模式
+		'9': '.lesson-other'      // 其他功能
+	};
 
-  Object.entries(typeMap).forEach(([type, selector]) => {
-    if (Array.isArray(tagData[type]) && tagData[type].length > 0) {
-      $(selector).text(tagData[type].join('、'));
-    }
-  });
+	Object.entries(typeMap).forEach(([type, selector]) => {
+		if (Array.isArray(tagData[type]) && tagData[type].length > 0) {
+		$(selector).text(tagData[type].join('、'));
+		}
+	});
 
-  /* ---------- 3. 語言標籤專屬處理 ---------- */
-	if (Array.isArray(tagData['3']) && tagData['3'].length > 0) {
-	const languageTags = tagData['3'];
+	/* ---------- 3. 語言標籤專屬處理 ---------- */
+		if (Array.isArray(tagData['3']) && tagData['3'].length > 0) {
+		const languageTags = tagData['3'];
 
-	// 常用語言優先
-	const preferred = ['繁體中文', '繁體中文(語音)', '英文', '英文(語音)'];
-	const sorted = [
-		...preferred.filter(t => languageTags.includes(t)),
-		...languageTags.filter(t => !preferred.includes(t))
-	];
+		// 常用語言優先
+		const preferred = ['繁體中文', '繁體中文(語音)', '英文', '英文(語音)'];
+		const sorted = [
+			...preferred.filter(t => languageTags.includes(t)),
+			...languageTags.filter(t => !preferred.includes(t))
+		];
 
-	const languageContent = sorted.join('、');
-	const $langEl = $('.lesson-language');   // ❶ 直接抓元素，不先 .text()
+		const languageContent = sorted.join('、');
+		const $langEl = $('.lesson-language');   // ❶ 直接抓元素，不先 .text()
 
-	/* ----- 超過字數折疊 ----- */
-	const maxLength = 40;
-	if (languageContent.length > maxLength) {
-		const visible = languageContent.slice(0, maxLength);
-		const hidden  = languageContent.slice(maxLength);
+		/* ----- 超過字數折疊 ----- */
+		const maxLength = 40;
+		if (languageContent.length > maxLength) {
+			const visible = languageContent.slice(0, maxLength);
+			const hidden  = languageContent.slice(maxLength);
 
-		$langEl.html(visible+`
-		<span class="more-ellipsis">...</span>
-		<span class="more-content" style="display:none;">` + hidden + `</span>
-		<span class="show-more-btn" style="cursor:pointer;color:blue;">顯示更多</span>`
-		);
+			$langEl.html(visible+`
+			<span class="more-ellipsis">...</span>
+			<span class="more-content" style="display:none;">` + hidden + `</span>
+			<span class="show-more-btn" style="cursor:pointer;color:blue;">顯示更多</span>`
+			);
 
-		/* ★ 修正 click 切換邏輯 ★ */
-		$langEl.on('click', '.show-more-btn', function () {
-		const $btn   = $(this);
-		const expand = $btn.text() === '顯示更多';   // true = 要展開
+			/* ★ 修正 click 切換邏輯 ★ */
+			$langEl.on('click', '.show-more-btn', function () {
+			const $btn   = $(this);
+			const expand = $btn.text() === '顯示更多';   // true = 要展開
 
-		// 顯示／隱藏各段文字
-		$langEl.find('.more-ellipsis').toggle(!expand);
-		$langEl.find('.more-content').toggle(expand);
+			// 顯示／隱藏各段文字
+			$langEl.find('.more-ellipsis').toggle(!expand);
+			$langEl.find('.more-content').toggle(expand);
 
-		// 切換按鈕文字
-		$btn.text(expand ? '顯示更少' : '顯示更多');
-		});
+			// 切換按鈕文字
+			$btn.text(expand ? '顯示更少' : '顯示更多');
+			});
 
-	} else {
-		// 不用折疊，直接呈現
-		$langEl.text(languageContent);
+		} else {
+			// 不用折疊，直接呈現
+			$langEl.text(languageContent);
+		}
+		}
 	}
-	}
-}
 
     
     // 返回總覽
@@ -589,18 +597,18 @@ function updateLessonTag(tagResponse) {
 			let steamLink = $(this).attr('href');
 			
 			if(steamLink.includes('steam')){
-				// 顯示 loading 模態框
+				
 	        	showLoadingModal('Steam教案啟動中');
-			    // 如果是steam 連結：
 				let steamId = steamLink.split('/')[3];
+				//test(steamId);
+				console.log('steamId', steamId);
 				$.ajax({
-				    url: '${base}/${__lang}/division/api/Monitor/MonitorPlayer',
+				    url: '/Training/api/monitor',
 				    type: 'POST',
-				    data: { "appId": steamId },
+				    data: JSON.stringify({ "appId": steamId }),
 				    dataType: 'json',
 				    success: function(response) {
 	
-	                    // 隱藏 loading 模態框
 	                	$('#loadingModal').modal('hide');
 	                	if(response.success){
 							saveSwal(response);
@@ -615,6 +623,7 @@ function updateLessonTag(tagResponse) {
 	                    alert('監控失敗，請聯絡管理員');
 	                    }
 	            });
+				
 	            } else {
 	            	// 如果不是steam 連結
 	            	console.log('如果不是steam連結');
@@ -632,18 +641,21 @@ function updateLessonTag(tagResponse) {
     }
     
     	  
-    function test2(){
+    function test(appId){
+		console.log("test appId", appId);
 	    $.ajax({
-            url: '${base}/${__lang}/division/api/Monitor/test2',
+            url: '/Training/api/monitorTest',
             type: 'POST',
             dataType: 'json',
-            data: { "appId": appId },
+            data: JSON.stringify({ "appId": appId }),
             success: function(response) {
-                let unlockAch = response.unlockedAchievements;
-                             
-                let stats = response.stats;
-                
-                saveTrainingData(response);
+				console.log("monitor response", response);
+	            $('#loadingModal').modal('hide');
+	            if(response.success){
+					saveSwal(response);
+	            } else {
+					swal('教案啟動失敗','請聯絡管理員','error');                	
+	            }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Error with StartLesson:', textStatus, errorThrown);
@@ -652,9 +664,9 @@ function updateLessonTag(tagResponse) {
         });
 	}
     
-    function test(){
+    function test2(){
 	    $.ajax({
-            url: '${base}/${__lang}/division/api/Monitor/test',
+            url: '/Training/api/monitorTest',
             type: 'POST',
             dataType: 'json',
             success: function(response) {

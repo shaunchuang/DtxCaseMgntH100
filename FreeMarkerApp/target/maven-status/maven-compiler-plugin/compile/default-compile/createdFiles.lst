@@ -59,6 +59,7 @@ demo\freemarker\dto\AssessmentFinalResult.class
 demo\freemarker\handler\restfulapi\SupersetRESTfulAPI.class
 demo\freemarker\handler\restfulapi\WgAvailableSlotsRESTfulAPI.class
 demo\freemarker\dto\Achievement.class
+demo\freemarker\core\SteamUtils.class
 demo\freemarker\handler\restfulapi\AdminRESTfulAPI.class
 demo\freemarker\dto\QuestionOpt.class
 demo\freemarker\dto\UserRoleDTO.class
