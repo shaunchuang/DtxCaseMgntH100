@@ -1779,7 +1779,7 @@ label.form-label{
 
 	        }
         }
-    }
+    });
 	
 	//按上一頁觸發
 	$(".func-btn-prev").click(function(e) {

@@ -31,7 +31,7 @@
 				    </div>
 				    <div class="info-block">
 				      <div class="info-l">年齡</div>
-				      <div class="info-v">${ptInfo.age!""}歲</div>
+				      <div class="info-v">${ptInfo.age!""} 歲</div>
 				    </div>
 				    <div class="info-block">
 				      <div class="info-l">身分證字號</div>
@@ -220,7 +220,7 @@
 			            </div>
 				    	<div class="footer-btn-list">								
 							<button class="func-btn func-btn-prev"><i class="fa fa-circle-arrow-left"></i> 上一步</button>
-							<button class="func-btn func-btn-next" onclick="assessmentCheckpoint()"><i class="fa fa-circle-arrow-right"></i> 下一步</button>										
+							<button class="func-btn func-btn-next" onclick=""><i class="fa fa-circle-arrow-right"></i> 下一步</button>										
 						</div>		    	
 				    </fieldset>
 				    <#if revisit>
@@ -350,7 +350,6 @@
 											</select>
 											<span class="input-group-addon btn" onclick="">小時</span>
 											<select class="planForm form-control" id="durationPerSessionMin" aria-describedby="basic-addon1" data-item="204-2">
-												<option value="" ></option>
 												<option value="0" >0</option>
 												<option value="15" >15</option>
 												<option value="30" >30</option>
@@ -432,9 +431,13 @@
 				    				</tr>
 				    				<tr>
 				    					<td>
-				    						<div class="question-grp">
-					    						<span>預約時間：</span>
-					    						<input type="text" class="form-control therapist-reserve-time" disabled />
+											<div class="question-grp">
+												<span>預約日期：</span>
+												<input type="text" class="form-control therapist-reserve-time" data-cat="date" placeholder="請點選右側可預約時段" disabled />
+											</div>
+											<div class="question-grp">
+												<span>預約時間：</span>
+												<input type="text" class="form-control therapist-reserve-time" data-cat="time" placeholder="請點選右側可預約時段" disabled />
 											</div>
 			    						</td>			  					
 				    				</tr>
@@ -748,7 +751,8 @@ $(document).ready(function(){
 
 
 /*確認個案報到觸發行為*/
-$(".confirm-check").click(function(){
+$(".confirm-check").click(function(e){
+	e.preventDefault();
 	editPatientBaseInfo();
 	var postData = {"slotId": ${slotId}, "cat": 1, "caseno": "${formId!""}"};
 	console.log('postData', postData);
@@ -971,11 +975,10 @@ $("#cleanRow").on('click', function(e){
 });
 
 function triggerPatientEvalList(){
-	//var postData = {"therapistId": cUserId, "patientId": "${formId!""}"};
-	var postData = {"patientId": "${formId!""}"};
-	console.log('eval list postData: ', postData);
-    var result = wg.evalForm.getJson(JSON.stringify(postData), "/Assessment/api/getCaseAssessmentList");
-	console.log('eval list result: ', result);
+	let postData = {"therapistId": cUserId, "patientId": "${formId!""}"};
+	//var postData = {"patientId": "${formId!""}"};
+    console.log('postData', postData);
+	let result = wg.evalForm.getJson(JSON.stringify(postData), "/Assessment/api/getCaseAssessmentList");
     if(result.success){
     	showAssessmentList(result.data);
     }
@@ -1039,8 +1042,8 @@ $("body").on("click", ".list-group-item, .do-fill", function(e) {
 	
 	$(this).parent().find(".list-group-item").removeClass("selected");
 	$(this).toggleClass("selected");
-	
-	wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {"isFromPatient": false}, '/ftl/imas/admin/taskMgnt/evaluation?formId=' + formId + '&mode=' + mode);
+
+	wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {"isFromPatient": false}, '/ftl/imas/admin/taskMgnt/evaluation?formId=' + formId + '&mode=' + mode + '&patientId=' + ${formId!""});
 	$('.evaluation-blk').fadeIn(500); // 0.5秒淡入
 });
 
@@ -1613,11 +1616,10 @@ function selectTarget(lessonAch, lessonStats) {
 $("#completeConsultation").click(function(e){
 	e.preventDefault();
 
-	uploadTrainingPlanV2();
-	editPatientBaseInfo();
+	//uploadTrainingPlanV2();
+	//editPatientBaseInfo();
 	
-
-	var doctorId = $(".therapist-options .option.selected").attr("data-doctor");
+	var doctorId = $(".therapist-options option.selected").val();
 	var slotId = $(".myc-available-time.selected").attr("data-unique");
 	
 	if(doctorId == undefined || slotId == undefined){
@@ -1657,12 +1659,12 @@ function validateTrainingPlan() {
     var weekly = $('select[name="weekly"]').val(); // 請根據實際 name 或 id 調整
     var daily = $('select[name="daily"]').val();   // 請根據實際 name 或 id 調整
     
-    if ((weekly && daily) && (weekly !== "" && daily !== "")) {
+    if ((weekly && daily) && (weekly !== "0" && daily !== "0")) {
         swal("送出失敗", "每週和每天只能選擇其中一項。", "warning");
         return false;
     }
     
-    if ((!weekly || weekly === "") && (!daily || daily === "")) {
+    if ((!weekly || weekly === "0") && (!daily || daily === "0")) {
         swal("送出失敗", "請選擇每週或每天其中一項。", "warning");
         return false;
     }
@@ -1743,21 +1745,21 @@ function fillPatientInfo() {
         $('#patient-address').val(patientInfo.address || "");
         
 		if (patientInfo.birth) {
-		// 期望格式：1995-04-18
-		const [y, m, d] = patientInfo.birth.split("/");
-		console.log('患者出生日期: ', y, m, d);
-		// 將前導零去掉，轉成數字
-		const yearNum = parseInt(y, 10);
+			// 期望格式：1995-04-18
+			const [y, m, d] = patientInfo.birth.split("/");
+			console.log('患者出生日期: ', y, m, d);
+			// 將前導零去掉，轉成數字
+			const yearNum = parseInt(y, 10);
 
-		// 若大於 1911 視為西元年，否則視為本就民國年
-		const rocYear = yearNum > 1911 ? yearNum - 1911 : yearNum;
-		// dropdownDatepicker 會以 input id 為基底產生三個 select
-		$('.form-control.year').val(rocYear);
-		$('.form-control.month').val(m);
-		$('.form-control.day').val(d);
+			// 若大於 1911 視為西元年，否則視為本就民國年
+			const rocYear = yearNum > 1911 ? yearNum - 1911 : yearNum;
+			// dropdownDatepicker 會以 input id 為基底產生三個 select
+			$('.form-control.year').val(rocYear);
+			$('.form-control.month').val(m);
+			$('.form-control.day').val(d);
 
-		// 同步隱藏欄位，供後端送出
-		$("#patient-birth").val(patientInfo.birth);
+			// 同步隱藏欄位，供後端送出
+			$("#patient-birth").val(patientInfo.birth);
 		}
         console.log('患者資料填入完成');
     } else {
@@ -1766,6 +1768,8 @@ function fillPatientInfo() {
 }
 
 function editPatientBaseInfo() {
+	let formId = ${formId!""};
+	console.log('formId: ', formId);
 	// 驗證必要欄位
 	if (!formId) {
 		swal("錯誤", "無法取得病患 ID", "error");
@@ -1774,10 +1778,10 @@ function editPatientBaseInfo() {
 
 	// 收集 Patient 基本資料
 	let patientData = collectPatientBasicData();
-	
+	console.log('收集到的病患基本資料:', patientData);
 	// 收集 OtherPatientInfo 資料
 	let otherPatientInfo = collectOtherPatientInfo();
-	
+	console.log('收集到的其他病患資訊:', otherPatientInfo);
 	// 建立請求資料物件
 	let postData = {
 		"patientId": formId,
@@ -1787,8 +1791,9 @@ function editPatientBaseInfo() {
 
 	// 發送請求
 	try {
+		console.log('發送更新病患資料請求:', postData);
 		let response = wg.evalForm.getJson(JSON.stringify(postData), "/Patient/api/editPatientInfo");
-		
+		console.log('更新病患資料回應:', response);
 		if (response.success) {
 			swal("修改成功", response.message || "患者資料已更新", "success");
 		} else {
@@ -1806,42 +1811,60 @@ function editPatientBaseInfo() {
  */
 function collectPatientBasicData() {
 	let data = {};
+		// 基本個人資料
+	let name = $('#patient-name').val()?.trim();
+	if (name) data.name = name;
 	
-	// 基本個人資料
-	let idno = $('#idno').val()?.trim();
+	let idno = $('#patient-idno').val()?.trim();
 	if (idno) data.idno = idno;
 	
-	let gender = $('#gender').val()?.trim();
+	let gender = $('#patient-gender').val()?.trim();
 	if (gender) data.gender = gender;
 	
-	let maritalStatus = $('#maritalStatus').val()?.trim();
+	let charno = $('#patient-charno').val()?.trim();
+	if (charno) data.charno = charno;
+	
+	let phone = $('#patient-phone').val()?.trim();
+	if (phone) data.phone = phone;
+	
+	let email = $('#patient-email').val()?.trim();
+	if (email) data.email = email;
+	
+	let maritalStatus = $('#patient-marital-status').val()?.trim();
 	if (maritalStatus) data.maritalStatus = maritalStatus;
 	
+	// 生日資料
 	let year = $('.form-control.year').val();
 	let month = $('.form-control.month').val();
 	let day = $('.form-control.day').val();
-	/*
-	let birth = year + `-` + month + `-` + day;
-	if (birth) data.birth = birth;
-	*/
+	if (year && month && day) {
+		// 轉為西元年並組合日期
+		let birthYear = parseInt(year, 10) + 1911;
+		let birth = birthYear + `-` + month.padStart(2, '0') + `-` + day.padStart(2, '0');
+		data.birth = birth;
+	}
+	
 	// 地址資訊
-	let city = $('#city').val()?.trim();
+	let city = $('#twzipcode select[name="county"]').val()?.trim();
 	if (city) data.city = city;
 	
-	let district = $('#district').val()?.trim();
+	let district = $('#twzipcode select[name="district"]').val()?.trim();
 	if (district) data.district = district;
 	
-	let address = $('#address').val()?.trim();
+	let zipcode = $('#twzipcode input[name="zipcode"]').val()?.trim();
+	if (zipcode) data.zipcode = zipcode;
+	
+	let address = $('#patient-address').val()?.trim();
 	if (address) data.address = address;
 	
 	// 緊急聯絡人
-	let emergencyContact = $('#emergencyContact').val()?.trim();
+	let emergencyContact = $('#patient-emergency-contact').val()?.trim();
 	if (emergencyContact) data.emergencyContact = emergencyContact;
 	
-	let emergencyPhone = $('#emergencyPhone').val()?.trim();
+	let emergencyPhone = $('#patient-emergency-phone').val()?.trim();
 	if (emergencyPhone) data.emergencyPhone = emergencyPhone;
 	
-	let emergencyRelation = $('#emergencyRelation').val()?.trim();
+	let emergencyRelation = $('#patient-emergency-relation').val()?.trim();
 	if (emergencyRelation) data.emergencyRelation = emergencyRelation;
 	
 	// 醫療相關資訊
@@ -1882,36 +1905,36 @@ function collectOtherPatientInfo() {
 	
 	// 主要問題和困難描述
 	let mainIssueDesc = $('#mainIssueDesc').val()?.trim();
-	if (mainIssueDesc !== undefined) data.mainIssueDesc = mainIssueDesc;
+	if (mainIssueDesc !== undefined && mainIssueDesc !== "") data.mainIssueDesc = mainIssueDesc;
 	
 	let difficultyDesc = $('#difficultyDesc').val()?.trim();
-	if (difficultyDesc !== undefined) data.difficultyDesc = difficultyDesc;
+	if (difficultyDesc !== undefined && difficultyDesc !== "") data.difficultyDesc = difficultyDesc;
 	
 	// 教育和職業資訊
 	let educationLevel = $('#educationLevel').val()?.trim();
-	if (educationLevel) data.educationLevel = educationLevel;
+	if (educationLevel && educationLevel !== "") data.educationLevel = educationLevel;
 	
 	let occupation = $('#occupation').val()?.trim();
-	if (occupation) data.occupation = occupation;
+	if (occupation && occupation !== "") data.occupation = occupation;
 	
 	let familyLanguage = $('#familyLanguage').val()?.trim();
-	if (familyLanguage) data.familyLanguage = familyLanguage;
+	if (familyLanguage && familyLanguage !== "") data.familyLanguage = familyLanguage;
 	
 	let preeducationExp = $('#preeducationExp').val()?.trim();
-	if (preeducationExp) data.preeducationExp = preeducationExp;
+	if (preeducationExp && preeducationExp !== "") data.preeducationExp = preeducationExp;
 	
 	// 家庭資訊
 	let fatherEducation = $('#fatherEducation').val()?.trim();
-	if (fatherEducation) data.fatherEducation = fatherEducation;
+	if (fatherEducation && fatherEducation !== "") data.fatherEducation = fatherEducation;
 	
 	let motherEducation = $('#motherEducation').val()?.trim();
-	if (motherEducation) data.motherEducation = motherEducation;
+	if (motherEducation && motherEducation !== "") data.motherEducation = motherEducation;
 	
 	let fatherOccupation = $('#fatherOccupation').val()?.trim();
-	if (fatherOccupation) data.fatherOccupation = fatherOccupation;
+	if (fatherOccupation && fatherOccupation !== "") data.fatherOccupation = fatherOccupation;
 	
 	let motherOccupation = $('#motherOccupation').val()?.trim();
-	if (motherOccupation) data.motherOccupation = motherOccupation;
+	if (motherOccupation && motherOccupation !== "") data.motherOccupation = motherOccupation;
 	
 	// 語言和溝通能力
 	$('.speech-dev-issue-options .option.selected').each(function () {
@@ -1921,50 +1944,50 @@ function collectOtherPatientInfo() {
 	if (speechDevIssues.length) data.speechDevIssues = speechDevIssues;
 
 	let communicationMtd = $('#communicationMtd').val()?.trim();
-	if (communicationMtd) data.communicationMtd = communicationMtd;
+	if (communicationMtd && communicationMtd !== "") data.communicationMtd = communicationMtd;
 	
 	let suspectedSpeechIssues = $('#suspectedSpeechIssues').val()?.trim();
-	if (suspectedSpeechIssues) data.suspectedSpeechIssues = suspectedSpeechIssues;
+	if (suspectedSpeechIssues && suspectedSpeechIssues !== "") data.suspectedSpeechIssues = suspectedSpeechIssues;
 	
 	let comprehensionAbility = $('#comprehensionAbility').val()?.trim();
-	if (comprehensionAbility) data.comprehensionAbility = comprehensionAbility;
+	if (comprehensionAbility && comprehensionAbility !== "") data.comprehensionAbility = comprehensionAbility;
 	
 	let expressionAbility = $('#expressionAbility').val()?.trim();
-	if (expressionAbility) data.expressionAbility = expressionAbility;
+	if (expressionAbility && expressionAbility !== "") data.expressionAbility = expressionAbility;
 	
 	// 醫療和發展狀況
 	let swallowDifficulty = $('#swallowDifficulty').val()?.trim();
-	if (swallowDifficulty) data.swallowDifficulty = swallowDifficulty;
+	if (swallowDifficulty && swallowDifficulty !== "") data.swallowDifficulty = swallowDifficulty;
 	
 	let psychologicalState = $('#psychologicalState').val()?.trim();
-	if (psychologicalState) data.psychologicalState = psychologicalState;
+	if (psychologicalState && psychologicalState !== "") data.psychologicalState = psychologicalState;
 	
 	let developmentalDelay = $('#developmentalDelay').val()?.trim();
-	if (developmentalDelay) data.developmentalDelay = developmentalDelay;
+	if (developmentalDelay && developmentalDelay !== "") data.developmentalDelay = developmentalDelay;
 	
 	// 心理治療和風險評估
 	let psychologicalTreatment = $('#psychologicalTreatment').val()?.trim();
-	if (psychologicalTreatment) data.psychologicalTreatment = psychologicalTreatment;
+	if (psychologicalTreatment && psychologicalTreatment !== "") data.psychologicalTreatment = psychologicalTreatment;
 	
 	let treatmentDetails = $('#treatmentDetails').val()?.trim();
-	if (treatmentDetails !== undefined) data.treatmentDetails = treatmentDetails;
+	if (treatmentDetails !== undefined && treatmentDetails !== "") data.treatmentDetails = treatmentDetails;
 	
 	let suicidalThoughts = $('#suicidalThoughts').val()?.trim();
-	if (suicidalThoughts) data.suicidalThoughts = suicidalThoughts;
+	if (suicidalThoughts && suicidalThoughts !== "") data.suicidalThoughts = suicidalThoughts;
 	
 	let selfHarmBehavior = $('#selfHarmBehavior').val()?.trim();
-	if (selfHarmBehavior) data.selfHarmBehavior = selfHarmBehavior;
+	if (selfHarmBehavior && selfHarmBehavior !== "") data.selfHarmBehavior = selfHarmBehavior;
 	
 	// 家庭和社會支持
 	let recentStressEvents = $('#recentStressEvents').val()?.trim();
-	if (recentStressEvents !== undefined) data.recentStressEvents = recentStressEvents;
+	if (recentStressEvents !== undefined && recentStressEvents !== "") data.recentStressEvents = recentStressEvents;
 	
 	let familySupportLevel = $('#familySupportLevel').val()?.trim();
-	if (familySupportLevel) data.familySupportLevel = familySupportLevel;
+	if (familySupportLevel && familySupportLevel !== "") data.familySupportLevel = familySupportLevel;
 	
 	// 其他備註
 	let otherRemarks = $('#otherRemarks').val()?.trim();
-	if (otherRemarks !== undefined) data.otherRemarks = otherRemarks;
+	if (otherRemarks !== undefined && otherRemarks !== "") data.otherRemarks = otherRemarks;
 	
 	return data;
 }
@@ -1983,6 +2006,13 @@ function getSelectedCategoryIds(categoryType) {
 
     return ids;
 }
+
+$('.speech-dev-issue-options .option').on('click', function () {
+	$(this).toggleClass('selected');
+	// 更新選中狀態
+	const selectedIds = getSelectedCategoryIds('speech-dev-issue-options');
+	console.log('選中的語言發展問題 ID:', selectedIds);
+});
 
 </script>
 

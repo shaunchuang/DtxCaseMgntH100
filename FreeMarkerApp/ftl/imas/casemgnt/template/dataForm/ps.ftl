@@ -1,16 +1,15 @@
 <#import "/util/spring.ftl" as spring />
   
-<div id="data-content">
-	<div class="row mg-b-10">
+<div id="data-content">	<div class="row mg-b-10">
 		<div class="col-md-12">
 			<label class="form-label">主要問題描述</label>
-			<textarea rows="3" class="form-control"></textarea>
+			<textarea rows="3" id="mainIssueDesc" class="form-control"></textarea>
 		</div>								
 	</div>
 	<div class="row mg-b-10">
 		<div class="col-md-3">
 			<label class="form-label">情緒與心理狀態</label>
-			<select class="dataForm form-control" data-item="" >
+			<select id="psychologicalState" class="dataForm form-control" data-item="" >
 				<option value="">請選擇</option>
 				<option value="憂鬱/情緒低落">憂鬱/情緒低落</option>
 				<option value="焦慮/容易緊張">焦慮/容易緊張</option>
@@ -21,7 +20,7 @@
 		</div>
 		<div class="col-md-3">
 			<label class="form-label">最近生活壓力事件</label>
-			<select class="dataForm form-control" data-item="" >
+			<select id="recentStressEvents" class="dataForm form-control" data-item="" >
 				<option value="">請選擇</option>
 				<option value="家庭衝突">家庭衝突</option>
 				<option value="工作/經濟困難">工作/經濟困難</option>
@@ -31,7 +30,7 @@
 		</div>
 		<div class="col-md-3">
 			<label class="form-label">家庭支持程度</label>
-			<select class="dataForm form-control" data-item="" >
+			<select id="familySupportLevel" class="dataForm form-control" data-item="" >
 				<option value="">請選擇</option>
 				<option value="很好">很好</option>
 				<option value="普通">普通</option>
@@ -43,17 +42,17 @@
 		<div class="col-md-6">
 			<label class="form-label">是否曾接受心理治療</label>
 			<div class="inline-cotainer">
-				<select class="dataForm form-control w-100" data-item="" >
+				<select id="psychologicalTreatment" class="dataForm form-control w-100" data-item="" >
 					<option value="">請選擇</option>
 					<option value="否">否</option>
 					<option value="是">是</option>
 				</select>
-				<input type="text" class="dataForm form-control" data-item="11" placeholder="簡述時間與原因" readonly="">
+				<input type="text" id="treatmentDetails" class="dataForm form-control" data-item="11" placeholder="簡述時間與原因" readonly="">
 			</div>
 		</div>
 		<div class="col-md-3">
 			<label class="form-label">是否曾有自殺想法？</label>
-			<select class="dataForm form-control" data-item="" >
+			<select id="suicidalThoughts" class="dataForm form-control" data-item="" >
 				<option value="">請選擇</option>
 				<option value="從未">從未</option>
 				<option value="偶爾">偶爾</option>
@@ -62,7 +61,7 @@
 		</div>
 		<div class="col-md-3">
 			<label class="form-label">是否曾有自傷行為？</label>
-			<select class="dataForm form-control" data-item="" >
+			<select id="selfHarmBehavior" class="dataForm form-control" data-item="" >
 				<option value="">請選擇</option>
 				<option value="無">無</option>
 				<option value="有">有</option>
@@ -72,13 +71,13 @@
 	<div class="row mg-b-10">
 		<div class="col-md-12">
 			<label class="form-label">主關陳述/自述困難(個案/家屬)</label>
-			<textarea rows="3" class="form-control"></textarea>
+			<textarea rows="3" id="difficultyDesc" class="form-control"></textarea>
 		</div>								
 	</div>
 	<div class="row mg-b-10">
 		<div class="col-md-12">
 			<label class="form-label">其他備註</label>
-			<textarea rows="3" class="form-control"></textarea>
+			<textarea rows="3" id="otherRemarks" class="form-control"></textarea>
 		</div>								
 	</div>
 	

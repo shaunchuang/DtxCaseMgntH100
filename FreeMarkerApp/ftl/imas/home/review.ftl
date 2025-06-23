@@ -27,9 +27,9 @@
 						      		<th class="col-xs-1">類型</th>
 				                    <th class="col-xs-1-5">患者姓名</th>
 				                    <th class="col-xs-1-5">性別/年齡</th>
-				                    <th class="col-xs-4">適應症</th>
-				                    <th class="col-xs-1-5">預約時間</th>
-				                    <th class="col-xs-2">報到狀態</th>
+				                    <th class="col-xs-4">主訴適應症</th>
+				                    <th class="col-xs-1-5">報到時間</th>
+				                    <th class="col-xs-2">目前狀態</th>
 						      	</tr>
 						    </thead> 
 						    <tbody class="appointment-events">
@@ -48,11 +48,12 @@
 				                    <td class="col-xs-1-5">${appoEvent.name}</td>
 				                    <td class="col-xs-1-5"><#if appoEvent.gender == "M">男<#else>女</#if> / ${appoEvent.age}</td>
 				                    <td class="col-xs-4"><span class="badge badge-tag"><#if appoEvent.indication??>${appoEvent.indication}</#if></span></td>
-				                    <td class="col-xs-1-5">${appoEvent.appoTime}</td>
+				                    <td class="col-xs-1-5"><#if appoEvent.checkinTime??>${appoEvent.checkinTime} <#else> ${appoEvent.appoTime} </#if></td>
 				                    <td class="col-xs-2">
-				                    	<#if appoEvent.checkinTime??><span class="badge badge-checkin">${appoEvent.checkinTime} 已報到</span>
+				                    	<#if appoEvent.checkinTime??>
+				                    	<button class="func-btn-custom func-btn-view btn-primary f-14" data-case="${appoEvent.caseno}"" >檢視評估</button>
 				                    	<#else>
-				                    	<button class="func-btn-custom btn-primary f-14" data-case="${appoEvent.caseno}" data-slot="${appoEvent.slotId}" ><i class="fa fa-user-check"></i> 報到</button>
+				                    	<button class="func-btn-custom func-btn-evaluation btn-primary f-14" data-case="${appoEvent.caseno}" data-slot="${appoEvent.slotId}" >開始評估</button>
 				                    	</#if>
 			                    	</td>
 				                </tr>
@@ -395,15 +396,28 @@ function activTrack(){
 }
 
 .d-today-column span.d-title:before{	
-	content: '\f073';	
+	content: '\f073';
 }
 
 .d-update-column span.d-title:before{	
-	content: '\f4fd';	
+	content: '\f4fd';
 }
 
 .d-abnormal-column span.d-title:before{	
-	content: '\e53f';	
+	content: '\e53f';
+}
+
+.func-btn-evaluation:before{
+	content: '\f328';
+}
+
+.func-btn-view:before{
+	content: '\f002';
+}
+
+.func-btn-evaluation:before,
+.func-btn-view:before{
+	margin-right: 5px;
 }
 
 .d-column span p{

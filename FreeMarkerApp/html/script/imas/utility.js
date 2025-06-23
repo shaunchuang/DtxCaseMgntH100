@@ -235,7 +235,8 @@ function initAjaxSortTable(divclass, pages, ajaxUrl, columnObj, columnDefs, lang
 	$(document).on("click", "table.dataTable tbody tr td", function () {
 		var parent = $(this).parent("tr");
 		var data = table.row(parent).data();
-		window.open(base + "/" + lang_ref + "/division/web/patient/" + data.keyNo + "/caseView");
+		window.open("/ftl/imas/overview?patientId=" + data.keyNo);
+		//window.open(base + "/" + lang_ref + "/division/web/patient/" + data.keyNo + "/caseView");
 	});
 
 	$(document).on("click", ".paginate_button:not(.active)", function () {
@@ -404,7 +405,9 @@ function initPtSortTable(divclass, pages, ajaxUrl, params, columnObj, columnDefs
 	$(document).on("click", "table.dataTable tbody tr td:not(:first-child):not(:last-child)", function () {
 		var parent = $(this).parent("tr");
 		var data = table.row(parent).data();
-		window.open(base + "/" + lang_ref + "/division/web/patient/" + data.keyNo + "/caseView");
+
+		window.open("/ftl/imas/overview?patientId=" + data.keyNo);
+		//window.open(base + "/" + lang_ref + "/division/web/patient/" + data.keyNo + "/caseView");
 	});
 
 	$(document).on("click", ".paginate_button:not(.active)", function () {

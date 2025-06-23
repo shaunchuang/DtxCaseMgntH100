@@ -33,6 +33,7 @@ public class OtherPatientInfo implements IntIdDataEntity, Serializable {
     private static final long serialVersionUID = 18276309L;
     
     @Id
+    @Column(name = "patient_id")   // ← 建議顯式註明
     private Long patientId;
     
     @OneToOne

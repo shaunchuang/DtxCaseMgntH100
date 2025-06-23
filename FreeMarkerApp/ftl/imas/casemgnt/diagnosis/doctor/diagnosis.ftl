@@ -29,7 +29,7 @@
 					    </div>
 					    <div class="info-block">
 					      <div class="info-l">年齡</div>
-					      <div class="info-v">${ptInfo.age!""}歲</div>
+					      <div class="info-v">${ptInfo.age!""} 歲</div>
 					    </div>
 					    <div class="info-block">
 					      <div class="info-l">身分證字號</div>
@@ -38,6 +38,10 @@
 					    <div class="info-block">
 					      <div class="info-l">自述適應症</div>
 					      <div class="info-v">${ptInfo.indication!""}</div>
+					    </div>
+						<div class="info-block">
+					      <div class="info-l">建議轉診類別</div>
+					      <div class="info-v">${ptInfo.therapyItem.therapyName}</div>
 					    </div>
 					</div>
 				</div>
@@ -1255,6 +1259,8 @@ function fillPatientInfo() {
 }
 
 function editPatientBaseInfo() {
+	let formId = ${formId!""};
+	console.log('formId: ', formId);
 	// 驗證必要欄位
 	if (!formId) {
 		swal("錯誤", "無法取得病患 ID", "error");
@@ -1263,10 +1269,10 @@ function editPatientBaseInfo() {
 
 	// 收集 Patient 基本資料
 	let patientData = collectPatientBasicData();
-	
+	console.log('收集到的病患基本資料:', patientData);
 	// 收集 OtherPatientInfo 資料
 	let otherPatientInfo = collectOtherPatientInfo();
-	
+	console.log('收集到的其他病患資訊:', otherPatientInfo);
 	// 建立請求資料物件
 	let postData = {
 		"patientId": formId,
@@ -1276,8 +1282,9 @@ function editPatientBaseInfo() {
 
 	// 發送請求
 	try {
+		console.log('發送更新病患資料請求:', postData);
 		let response = wg.evalForm.getJson(JSON.stringify(postData), "/Patient/api/editPatientInfo");
-		
+		console.log('更新病患資料回應:', response);
 		if (response.success) {
 			swal("修改成功", response.message || "患者資料已更新", "success");
 		} else {
@@ -1346,17 +1353,17 @@ function collectPatientBasicData() {
 	let diseaseId = $('#diseaseId').val();
 	if (diseaseId && !isNaN(diseaseId)) data.diseaseId = parseInt(diseaseId);
 	
-	// 多對多關聯 - 疾病分類
-	let diseaseCategoryIds = getSelectedCategoryIds('history-options');
-	if (diseaseCategoryIds.length > 0) data.diseaseCategoryIds = diseaseCategoryIds;
-	
-	// 多對多關聯 - 藥物分類
-	let medicalCategoryIds = getSelectedCategoryIds('drug-use-status-options');
-	if (medicalCategoryIds.length > 0) data.medicalCategoryIds = medicalCategoryIds;
-	
-	// 多對多關聯 - 藥物使用狀況分類
-	let drugUseStatusCategoryIds = getSelectedCategoryIds('drug-use-status-options');
-	if (drugUseStatusCategoryIds.length > 0) data.drugUseStatusCategoryIds = drugUseStatusCategoryIds;
+	// 個人病史（對應 class="history-options"）
+	const diseaseCategoryIds = getSelectedCategoryIds('history-options');
+	if (diseaseCategoryIds.length) data.diseaseCategoryIds = diseaseCategoryIds;
+
+	// 藥物過敏史（class="allergy-history-options"）
+	const medicalCategoryIds = getSelectedCategoryIds('allergy-history-options');
+	if (medicalCategoryIds.length) data.medicalCategoryIds = medicalCategoryIds;
+
+	// 藥物使用狀況（class="drug-use-status-options"）
+	const drugUseStatusCategoryIds = getSelectedCategoryIds('drug-use-status-options');
+	if (drugUseStatusCategoryIds.length) data.drugUseStatusCategoryIds = drugUseStatusCategoryIds;
 	
 	return data;
 }
@@ -1367,111 +1374,118 @@ function collectPatientBasicData() {
  */
 function collectOtherPatientInfo() {
 	let data = {};
+	let speechDevIssues = [];
 	
 	// 主要問題和困難描述
 	let mainIssueDesc = $('#mainIssueDesc').val()?.trim();
-	if (mainIssueDesc !== undefined) data.mainIssueDesc = mainIssueDesc;
+	if (mainIssueDesc !== undefined && mainIssueDesc !== "") data.mainIssueDesc = mainIssueDesc;
 	
 	let difficultyDesc = $('#difficultyDesc').val()?.trim();
-	if (difficultyDesc !== undefined) data.difficultyDesc = difficultyDesc;
+	if (difficultyDesc !== undefined && difficultyDesc !== "") data.difficultyDesc = difficultyDesc;
 	
 	// 教育和職業資訊
 	let educationLevel = $('#educationLevel').val()?.trim();
-	if (educationLevel) data.educationLevel = educationLevel;
+	if (educationLevel && educationLevel !== "") data.educationLevel = educationLevel;
 	
 	let occupation = $('#occupation').val()?.trim();
-	if (occupation) data.occupation = occupation;
+	if (occupation && occupation !== "") data.occupation = occupation;
 	
 	let familyLanguage = $('#familyLanguage').val()?.trim();
-	if (familyLanguage) data.familyLanguage = familyLanguage;
+	if (familyLanguage && familyLanguage !== "") data.familyLanguage = familyLanguage;
 	
 	let preeducationExp = $('#preeducationExp').val()?.trim();
-	if (preeducationExp) data.preeducationExp = preeducationExp;
+	if (preeducationExp && preeducationExp !== "") data.preeducationExp = preeducationExp;
 	
 	// 家庭資訊
 	let fatherEducation = $('#fatherEducation').val()?.trim();
-	if (fatherEducation) data.fatherEducation = fatherEducation;
+	if (fatherEducation && fatherEducation !== "") data.fatherEducation = fatherEducation;
 	
 	let motherEducation = $('#motherEducation').val()?.trim();
-	if (motherEducation) data.motherEducation = motherEducation;
+	if (motherEducation && motherEducation !== "") data.motherEducation = motherEducation;
 	
 	let fatherOccupation = $('#fatherOccupation').val()?.trim();
-	if (fatherOccupation) data.fatherOccupation = fatherOccupation;
+	if (fatherOccupation && fatherOccupation !== "") data.fatherOccupation = fatherOccupation;
 	
 	let motherOccupation = $('#motherOccupation').val()?.trim();
-	if (motherOccupation) data.motherOccupation = motherOccupation;
+	if (motherOccupation && motherOccupation !== "") data.motherOccupation = motherOccupation;
 	
 	// 語言和溝通能力
-	let speechDevIssues = $('#speechDevIssues').val()?.trim();
-	if (speechDevIssues) data.speechDevIssues = speechDevIssues;
-	
+	$('.speech-dev-issue-options .option.selected').each(function () {
+		const id = parseInt($(this).data('item'));
+		if (!isNaN(id)) speechDevIssues.push(id);
+	});
+	if (speechDevIssues.length) data.speechDevIssues = speechDevIssues;
+
 	let communicationMtd = $('#communicationMtd').val()?.trim();
-	if (communicationMtd) data.communicationMtd = communicationMtd;
+	if (communicationMtd && communicationMtd !== "") data.communicationMtd = communicationMtd;
 	
 	let suspectedSpeechIssues = $('#suspectedSpeechIssues').val()?.trim();
-	if (suspectedSpeechIssues) data.suspectedSpeechIssues = suspectedSpeechIssues;
+	if (suspectedSpeechIssues && suspectedSpeechIssues !== "") data.suspectedSpeechIssues = suspectedSpeechIssues;
 	
 	let comprehensionAbility = $('#comprehensionAbility').val()?.trim();
-	if (comprehensionAbility) data.comprehensionAbility = comprehensionAbility;
+	if (comprehensionAbility && comprehensionAbility !== "") data.comprehensionAbility = comprehensionAbility;
 	
 	let expressionAbility = $('#expressionAbility').val()?.trim();
-	if (expressionAbility) data.expressionAbility = expressionAbility;
+	if (expressionAbility && expressionAbility !== "") data.expressionAbility = expressionAbility;
 	
 	// 醫療和發展狀況
 	let swallowDifficulty = $('#swallowDifficulty').val()?.trim();
-	if (swallowDifficulty) data.swallowDifficulty = swallowDifficulty;
+	if (swallowDifficulty && swallowDifficulty !== "") data.swallowDifficulty = swallowDifficulty;
 	
 	let psychologicalState = $('#psychologicalState').val()?.trim();
-	if (psychologicalState) data.psychologicalState = psychologicalState;
+	if (psychologicalState && psychologicalState !== "") data.psychologicalState = psychologicalState;
 	
 	let developmentalDelay = $('#developmentalDelay').val()?.trim();
-	if (developmentalDelay) data.developmentalDelay = developmentalDelay;
+	if (developmentalDelay && developmentalDelay !== "") data.developmentalDelay = developmentalDelay;
 	
 	// 心理治療和風險評估
 	let psychologicalTreatment = $('#psychologicalTreatment').val()?.trim();
-	if (psychologicalTreatment) data.psychologicalTreatment = psychologicalTreatment;
+	if (psychologicalTreatment && psychologicalTreatment !== "") data.psychologicalTreatment = psychologicalTreatment;
 	
 	let treatmentDetails = $('#treatmentDetails').val()?.trim();
-	if (treatmentDetails !== undefined) data.treatmentDetails = treatmentDetails;
+	if (treatmentDetails !== undefined && treatmentDetails !== "") data.treatmentDetails = treatmentDetails;
 	
 	let suicidalThoughts = $('#suicidalThoughts').val()?.trim();
-	if (suicidalThoughts) data.suicidalThoughts = suicidalThoughts;
+	if (suicidalThoughts && suicidalThoughts !== "") data.suicidalThoughts = suicidalThoughts;
 	
 	let selfHarmBehavior = $('#selfHarmBehavior').val()?.trim();
-	if (selfHarmBehavior) data.selfHarmBehavior = selfHarmBehavior;
+	if (selfHarmBehavior && selfHarmBehavior !== "") data.selfHarmBehavior = selfHarmBehavior;
 	
 	// 家庭和社會支持
 	let recentStressEvents = $('#recentStressEvents').val()?.trim();
-	if (recentStressEvents !== undefined) data.recentStressEvents = recentStressEvents;
+	if (recentStressEvents !== undefined && recentStressEvents !== "") data.recentStressEvents = recentStressEvents;
 	
 	let familySupportLevel = $('#familySupportLevel').val()?.trim();
-	if (familySupportLevel) data.familySupportLevel = familySupportLevel;
+	if (familySupportLevel && familySupportLevel !== "") data.familySupportLevel = familySupportLevel;
 	
 	// 其他備註
 	let otherRemarks = $('#otherRemarks').val()?.trim();
-	if (otherRemarks !== undefined) data.otherRemarks = otherRemarks;
+	if (otherRemarks !== undefined && otherRemarks !== "") data.otherRemarks = otherRemarks;
 	
 	return data;
 }
 
 /**
- * 取得選中的分類 ID 陣列
- * 支援 checkbox 或 select multiple 形式
+ * 從自訂 .option 甚至 checkbox / select all in one 抓取選中 ID
+ * categoryType 例如：history-options、allergy-history-options …
  */
 function getSelectedCategoryIds(categoryType) {
-	
-	// 1. 取得含 .selected 的 .option
-  	const selectedItems = $('.' + categoryType + ' .option.selected')
-    .map(function () {
-      // 2. 讀取 data-item（可用 .data() 或 .attr()）
-      return $(this).data('item');      // => 數值型別 4、6
-      // return $(this).attr('data-item'); // => 字串型別 "4"、"6"
-    })
-    .get(); // 3. 轉成純陣列
+    const ids = [];
 
-	return selectedItems;
+    $(`.` + categoryType + ` .option.selected`).each(function () {
+        const id = parseInt($(this).data('item'));   // 讀 data-item
+        if (!isNaN(id)) ids.push(id);
+    });
+
+    return ids;
 }
 
+$('.speech-dev-issue-options .option').on('click', function () {
+	$(this).toggleClass('selected');
+	// 更新選中狀態
+	const selectedIds = getSelectedCategoryIds('speech-dev-issue-options');
+	console.log('選中的語言發展問題 ID:', selectedIds);
+});
 </script>
 
 <style>

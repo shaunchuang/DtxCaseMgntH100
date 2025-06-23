@@ -80,7 +80,7 @@
 .progressBar li.done,.progressBar li.touched {
 	font-weight: 600;
     background: #adcaeb;
-    color: grey;
+    color: #595959;
 }
 
 .progressBar li.done:after, .progressBar li.touched:after {

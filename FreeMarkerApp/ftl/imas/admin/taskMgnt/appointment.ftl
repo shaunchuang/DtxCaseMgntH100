@@ -17,12 +17,6 @@
         <p>Selected time: <input type='text' class="form-control" <#if category?? >id="${category!""}-selected-time"<#else>id="selected-time"</#if> />
     </div>
     
-    <script type="text/javascript" src="${base}/script/woundInfo/jquery-2.2.0.min.js"></script>   
-	<script type="text/javascript" src="${base}/script/woundInfo/bootstrap.min.js"></script>
-	<!--<script type="text/javascript" src="${base}/script/imas/utility.js?${.now}"></script>-->
-	<script type="text/javascript" src="${base}/script/woundInfo/dataTables/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" src="${base}/script/woundInfo/dataTables/dataTables.bootstrap.min.js"></script>
-	<script type="text/javascript" src="${base}/script/imas/widget/appointment.js"></script> 
 	<link href="${base}/style/imas/widget/appointment.css" rel="stylesheet" type="text/css">
     <script>	
 	var $ = jQuery.noConflict();

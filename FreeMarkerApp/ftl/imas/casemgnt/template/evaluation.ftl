@@ -251,44 +251,66 @@
 			</#if>
 		</#if>
 	</#if>
-	<script type="text/javascript" src="${base}/script/woundInfo/jquery-2.2.0.min.js"></script>
-	<script type="text/javascript" src="${base}/script/woundInfo/bootstrap.min.js"></script>
-	<script type="text/javascript" src="${base}/script/imas/widget/rSlider.min.js"></script>
 	<link href="${base}/style/imas/widget/rSlider.min.css" rel="stylesheet" type="text/css">
 	<script>
-	$.noConflict();
+	var $ = jQuery.noConflict();
+	var loaded = false;
 	
-	jQuery(document).ready(function() {
+	$(document).ready(function() {
 		<#if scale?exists && scale.type == "scale">
-		var sliders = document.querySelectorAll('.slider');
-
-		sliders.forEach(function(element) {
-		    new rSlider({
-		        target: element,
-		        values: {
-		        	min: parseInt(element.dataset.scoreMin), 
-            		max: parseInt(element.dataset.scoreMax)
-		        },
-		        step: 1,
-		        scale: true,
-		        range: false,
-		        <#if mode == "view">
-		        width: '100%',
-		        disabled: true,
-		        <#else>
-		        width: '80%',
-		        disabled: false,
-		        </#if>
-		        leftText: element.dataset.labelLeft,
-				rightText: element.dataset.labelRight,
-		        set: [parseInt(element.dataset.score)],
-		        tooltip: false,	        
-		        onChange: function (vals) {
-		        	$(element).attr("data-score", vals);
-		        }
-		    });
+		$.when(
+			$.Deferred(function (deferred) {
+				if (typeof rSlider !== 'undefined') {
+					deferred.resolve();
+				} else {
+					var checkPlugin = setInterval(function () {
+						if (typeof rSlider !== 'undefined') {
+							clearInterval(checkPlugin);
+							deferred.resolve();
+						} else {
+							$import("${base}/script/imas/widget/rSlider.min.js");
+						}
+					}, 100); // 每 100 毫秒檢查一次
+				}
+			})
+		).done(function () {
+			if (!loaded) {
+				initRSliders();
+				loaded = true;
+			}
 		});
+		
+		function initRSliders() {
+			var sliders = document.querySelectorAll('.slider');
 	
+			sliders.forEach(function(element) {
+			    new rSlider({
+			        target: element,
+			        values: {
+			        	min: parseInt(element.dataset.scoreMin), 
+	            		max: parseInt(element.dataset.scoreMax)
+			        },
+			        step: 1,
+			        scale: true,
+			        range: false,
+			        <#if mode == "view">
+			        width: '100%',
+			        disabled: true,
+			        <#else>
+			        width: '80%',
+			        disabled: false,
+			        </#if>
+			        leftText: element.dataset.labelLeft,
+					rightText: element.dataset.labelRight,
+			        set: [parseInt(element.dataset.score)],
+			        tooltip: false,	        
+			        onChange: function (vals) {
+			        	$(element).attr("data-score", vals);
+			        }
+			    });
+			});
+		}
+		
 		</#if>
 		
 		$(".h-option-list .option:not(.option--disabled)").click(function(){

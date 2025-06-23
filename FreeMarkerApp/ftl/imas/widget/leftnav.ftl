@@ -118,7 +118,7 @@ body{
 }
 
 .footer-btn-list button:not(.func-btn-edit):not(.func-btn-prev):not(.func-btn-next), .order-temp button,
-.item-funclist a , tr td button:not(.func-btn-edit):not(.func-btn-prev):not(.func-btn-next),
+.item-funclist a , tr td button:not(.func-btn-edit):not(.func-btn-prev):not(.func-btn-next):not(.func-btn-custom),
 .btn-blk button, .modal-footer button,
 .default-blk:not(.history-blk) .title button, .evaluation-top-bar button{
 	border: 1px solid #808080 !important;
@@ -1746,6 +1746,36 @@ input[type="text"][readonly], input[type="text"]:disabled, select:disabled{
 	font-weight: 600;
 }
 
+/* control-menu 樣式 */
+
+.control-menu-list{
+	display: flex;
+  	width: 100%;
+  	margin-bottom: 10px;
+  	position: sticky;
+  	top: 0;
+  	background-color: #ffffff;
+	z-index: 10;
+	padding: 10px 0;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+.control-menu-list .menu {
+	font-family: 'FontAwesome';
+	margin-right: 10px;
+	font-size: 16px;
+  	padding: 5px 20px;
+  	cursor: pointer;
+  	border-bottom: 3px solid transparent;
+  	transition: border-color 0.3s;
+}
+
+.control-menu-list .menu.active {
+  	border-bottom: 3px solid #00b383;
+  	font-weight: bold;
+}
+
+
 </style>
 
 <script>
@@ -1759,6 +1789,15 @@ function adjustHeight() {
 
     $('.main-content').height(cntHeight);
 }
+    
+    if($(".main-inner").length > 0){
+		var menuHeight = $('.control-menu-list').outerHeight(true);
+		cntHeight = cntHeight - menuHeight;
+		
+		$('.main-inner').css({
+	    	'max-height': cntHeight + 'px',
+	    });
+	}
 
 function getZoomLevel() {
   	return (window.outerWidth / window.innerWidth) || 1;

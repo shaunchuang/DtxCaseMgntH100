@@ -289,7 +289,8 @@ public class DtxCaseMgntPage extends RequestHandler {
             hcRecordDTO.setDiagDate(sdf.format(record.getCreateTime()));
             hcRecordDTO.setIndication(ptInfo.getIndication());
             hcRecordDTO.setDoctorName(UserAPI.getInstance().getUser(record.getCreator()).getUsername());
-            hcRecordDTO.setMainIcdCode(WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode())).getName());
+            WgIcdCode icd = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
+            hcRecordDTO.setMainIcdCode(icd.getPureCode() +" "+ icd.getName());
             hcRecordDTOs.add(hcRecordDTO);
         }
 
@@ -661,6 +662,7 @@ public class DtxCaseMgntPage extends RequestHandler {
                 return "redirect:/ftl/imas/login";
             }
             Long userId = currentUser.getRoleAlias().equals("DOCTOR") ? null : currentUser.getId();
+            System.out.println("userId " + userId);
             assessment = AssessmentAPI.getInstance().findByIdAndPatientIdAndTherapistId(Long.parseLong(formId), Long.parseLong(patientId), userId);
         }
 
@@ -993,9 +995,9 @@ public class DtxCaseMgntPage extends RequestHandler {
         if(StringUtils.isNotEmpty(code)){
             WgIcdCode obj = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(code));
             
-            icdCode.setCode(code);
-            icdCode.setCodeTxt(code + " " + obj.getName());
-            icdCode.setViewTxt(code + " " + obj.getName() + " (" + obj.getEnName() + ")");
+            icdCode.setCode(obj.getCode());
+            icdCode.setCodeTxt(obj.getCode() + " " + obj.getName());
+            icdCode.setViewTxt(obj.getCode() + " " + obj.getName() + " (" + obj.getEnName() + ")");
         }
         return icdCode;
     }
