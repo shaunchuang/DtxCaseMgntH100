@@ -129,8 +129,8 @@ public class DtxCaseMgntPage extends RequestHandler {
         SecurityUtils.clearCurrentUserAndSession(request);
         HttpSessionManager.getInstance().removeSession(request.exchange);
         String expiredCookie = String.format(
-            "%s=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax",
-            HttpSession.COOKIE_NAME
+                "%s=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax",
+                HttpSession.COOKIE_NAME
         );
         request.exchange.getResponseHeaders().add("Set-Cookie", expiredCookie);
         return "redirect:/ftl/imas/login";
@@ -190,12 +190,12 @@ public class DtxCaseMgntPage extends RequestHandler {
                     executors.add(executor);
                 }
             }
-            
+
             PatientInfo ptInfo = new PatientInfo(patientId, locale);
 
             List<SyndromeDTO> syndromeList = CrossPlatformUtil.getInstance().listSyndrome();
             Boolean revisit = WgTaskAPI.getInstance().checkFirstDiagnosis(patientId, slotId);
-            
+
             List<DiseaseCategory> diseases = DiseaseCategoryAPI.getInstance().listLocale(locale);
             List<DrugUseStatusCategory> drugUseStatus = DrugUseStatusCategoryAPI.getInstance().listAll();
             List<MedicationCategory> medicationCategories = MedicationCategoryAPI.getInstance().listLocale(locale);
@@ -207,7 +207,7 @@ public class DtxCaseMgntPage extends RequestHandler {
             model.addAttribute("maxYear", maxYear);
             model.addAttribute("doctors", executors);
             model.addAttribute("revisit", !revisit);
-            model.addAttribute("menuNum", 2);
+            model.addAttribute("menuNum", 1);
             model.addAttribute("field_abbrev_ename", "ITRI");
             model.addAttribute("currentUser", currentUser);
             model.addAttribute("indications", syndromeList);
@@ -229,23 +229,35 @@ public class DtxCaseMgntPage extends RequestHandler {
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
         }
-        
+
         Locale locale = SecurityUtils.getLocale(request);
-        
+
         String blogname = Config.get("blogname", "測試平台");
         model.addAttribute("blogname", blogname);
         int maxYear = Year.now().getValue();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String toDate = sdf.format(new Date());
+
         Long patientId = Long.parseLong(getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId"));
         Long slotId = Long.parseLong(getValueOfKeyInQuery(request.exchange.getRequestURI(), "slot"));
         Boolean revisit = WgTaskAPI.getInstance().checkFirstDiagnosis(patientId, slotId);
+
         PatientInfo ptInfo = new PatientInfo(patientId, locale);
         List<Executor> executors = new ArrayList<Executor>();
-        List<User> users = UserAPI.getInstance().listUser();
+        List<User> psy = UserAPI.getInstance().listUserByRole("DTX_PSY");
+        List<User> st = UserAPI.getInstance().listUserByRole("DTX_ST");
+        List<User> ot = UserAPI.getInstance().listUserByRole("DTX_OT");
+        List<User> pi = UserAPI.getInstance().listUserByRole("DTX_PI");
+        List<User> users = new ArrayList<User>();
+        users.addAll(psy);
+        users.addAll(st);
+        users.addAll(ot);
+        users.addAll(pi);
         if (users != null && users.size() > 0) {
             for (User user : users) {
-                if(StringUtils.isEmpty(user.getUsername())) continue;
+                if (StringUtils.isEmpty(user.getUsername())) {
+                    continue;
+                }
                 Executor executor = new Executor(user.getId());
                 executor.setName(user.getUsername());
                 executor.setUserNo(user.getAccount());
@@ -260,7 +272,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         List<DiseaseCategory> diseases = DiseaseCategoryAPI.getInstance().listLocale(locale);
         List<MedicationCategory> medicationCategories = MedicationCategoryAPI.getInstance().listLocale(locale);
         List<DrugUseStatusCategory> drugUseStatus = DrugUseStatusCategoryAPI.getInstance().listAll();
-        
+
         model.addAttribute("formId", patientId);
         model.addAttribute("ptInfo", ptInfo);
         model.addAttribute("patientInfo", GsonUtil.toJsonObject(ptInfo));
@@ -271,27 +283,36 @@ public class DtxCaseMgntPage extends RequestHandler {
         model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("maxYear", maxYear);
-        model.addAttribute("menuNum", 2);
+        model.addAttribute("menuNum", 1);
         model.addAttribute("__field", "field");
         model.addAttribute("field_abbrev_ename", "ITRI");
         model.addAttribute("indications", syndromeList);
         model.addAttribute("personalDiseaseHistoryItems", diseases);
         model.addAttribute("drugUseStatus", drugUseStatus);
         model.addAttribute("drugAllergyHistoryItems", medicationCategories);
-        
 
         List<HcRecordDTO> hcRecordDTOs = new ArrayList<HcRecordDTO>();
 
         for (HealthInsuranceRecord record : records) {
-            HcRecordDTO hcRecordDTO = new HcRecordDTO();
-            hcRecordDTO.setSerialno(record.getId());
-            hcRecordDTO.setKeyno(String.valueOf(record.getId()));
-            hcRecordDTO.setDiagDate(sdf.format(record.getCreateTime()));
-            hcRecordDTO.setIndication(ptInfo.getIndication());
-            hcRecordDTO.setDoctorName(UserAPI.getInstance().getUser(record.getCreator()).getUsername());
-            WgIcdCode icd = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
-            hcRecordDTO.setMainIcdCode(icd.getPureCode() +" "+ icd.getName());
-            hcRecordDTOs.add(hcRecordDTO);
+            User user = UserAPI.getInstance().getUser(record.getCreator());
+            List<Role> roles = RoleAPI.getInstance().listRolesByUserId(user.getId());
+            UserRoleDTO doctor = new UserRoleDTO(user, roles);
+            if (doctor.getRoleAlias().equals("DOCTOR")) {
+                HcRecordDTO hcRecordDTO = new HcRecordDTO();
+                hcRecordDTO.setId(record.getId());
+                hcRecordDTO.setSerialno(record.getId());
+                hcRecordDTO.setPatientId(record.getPatientId());
+                hcRecordDTO.setDiagDate(sdf.format(record.getCreateTime()));
+                hcRecordDTO.setIndication(ptInfo.getIndication());
+                hcRecordDTO.setDoctorName(UserAPI.getInstance().getUser(record.getCreator()).getUsername());
+                if (record.getMainDiagnosisCode() != null) {
+                    WgIcdCode icd = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
+                    if (icd != null) {
+                        hcRecordDTO.setMainIcdCode(icd.getPureCode() + " " + icd.getName());
+                    }
+                }
+                hcRecordDTOs.add(hcRecordDTO);
+            }
         }
 
         model.addAttribute("hcRecords", hcRecordDTOs);
@@ -317,6 +338,8 @@ public class DtxCaseMgntPage extends RequestHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("menuNum", 2);
 
         return "/casemgnt/caseList";
     }
@@ -421,9 +444,9 @@ public class DtxCaseMgntPage extends RequestHandler {
 
         return "/casemgnt/template/diagnosisReport";
     }
-    
+
     @RequestMapping(pattern = "/diagnosisReport/msg/chooseMessage")
-    public String diagnosisReportChooseReport(RequestData request, Model model){
+    public String diagnosisReportChooseReport(RequestData request, Model model) {
         UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
@@ -690,9 +713,9 @@ public class DtxCaseMgntPage extends RequestHandler {
     @RequestMapping(pattern = "/admin/taskMgnt/evaluation/message", description = "個案評估表單")
     public String taskEvaluationMsg(RequestData request, Model model) {
         String msg = getValueOfKeyInQuery(request.exchange.getRequestURI(), "msg");
-        
+
         System.out.println("msg: " + msg);
-        
+
         model.addAttribute("message", msg);
         return "/casemgnt/template/evaluation";
     }
@@ -705,112 +728,184 @@ public class DtxCaseMgntPage extends RequestHandler {
         }
         String blogname = Config.get("blogname", "測試平台");
         String viewer = getValueOfKeyInQuery(request.exchange.getRequestURI(), "viewer");
-        return "/casemgnt/template/dataForm/"+ viewer;
+        return "/casemgnt/template/dataForm/" + viewer;
     }
-    
+
     @RequestMapping(pattern = "/patient/caseForm/overview", description = "個案表單")
     public String overview(RequestData request, Model model) {
-                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
         }
         String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         Locale locale = SecurityUtils.getLocale(request);
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("blogname", Config.get("blogname", "測試平台"));
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("field_abbrev_ename", "ITRI");
         model.addAttribute("formId", patientId);
         model.addAttribute("ptInfo", ptInfo);
         model.addAttribute("menuNum", 2);
         return "/casemgnt/overview";
     }
-    
+
     @RequestMapping(pattern = "/patient/caseForm/analysis", description = "分析")
     public String caseFormAnalysis(RequestData request, Model model) {
-                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
         }
         String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         Locale locale = SecurityUtils.getLocale(request);
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+
+        model.addAttribute("__lang", "zh_TW");
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("field_abbrev_ename", "ITRI");
         model.addAttribute("formId", patientId);
         model.addAttribute("ptInfo", ptInfo);
         model.addAttribute("menuNum", 2);
-        return "/casemgnt/caseForm/analysis";
+        return "/casemgnt/template/caseForm/analysis";
     }
-    
+
     @RequestMapping(pattern = "/patient/caseForm/assessment", description = "量表")
     public String caseFormAssessment(RequestData request, Model model) {
-                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
         }
         String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         Locale locale = SecurityUtils.getLocale(request);
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+
+        model.addAttribute("__lang", "zh_TW");
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("field_abbrev_ename", "ITRI");
         model.addAttribute("formId", patientId);
         model.addAttribute("ptInfo", ptInfo);
         model.addAttribute("menuNum", 2);
-        return "/casemgnt/caseForm/assessment";
+        return "/casemgnt/template/caseForm/assessment";
     }
-    
-    @RequestMapping(pattern = "/patient/caseForm/diagnosis", description = "診斷")
-    public String caseFormDiagnosis(RequestData request, Model model) {
-                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+
+    @RequestMapping(pattern = "/patient/caseForm/plan", description = "診斷")
+    public String caseFormPlan(RequestData request, Model model) {
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
         }
         String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         Locale locale = SecurityUtils.getLocale(request);
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+
+        model.addAttribute("__lang", "zh_TW");
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("field_abbrev_ename", "ITRI");
         model.addAttribute("formId", patientId);
         model.addAttribute("ptInfo", ptInfo);
         model.addAttribute("menuNum", 2);
-        return "/casemgnt/caseForm/diagnosis";
+        return "/casemgnt/template/caseForm/plan";
     }
-    
+
     @RequestMapping(pattern = "/patient/caseForm/notes", description = "備註")
     public String caseFormNotes(RequestData request, Model model) {
-                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
         }
         String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         Locale locale = SecurityUtils.getLocale(request);
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+
+        model.addAttribute("__lang", "zh_TW");
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("field_abbrev_ename", "ITRI");
         model.addAttribute("formId", patientId);
         model.addAttribute("ptInfo", ptInfo);
         model.addAttribute("menuNum", 2);
-        return "/casemgnt/caseForm/notes";
+        return "/casemgnt/template/caseForm/notes";
     }
-    
+
     @RequestMapping(pattern = "/patient/caseForm/profile", description = "資料")
     public String caseFormProfile(RequestData request, Model model) {
-                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
         }
-        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         Locale locale = SecurityUtils.getLocale(request);
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        int maxYear = Year.now().getValue();
+
+        List<SyndromeDTO> syndromeList = CrossPlatformUtil.getInstance().listSyndrome();
+        List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getRecordsByPatientId(Long.parseLong(patientId));
+        List<DiseaseCategory> diseases = DiseaseCategoryAPI.getInstance().listLocale(locale);
+        List<MedicationCategory> medicationCategories = MedicationCategoryAPI.getInstance().listLocale(locale);
+        List<DrugUseStatusCategory> drugUseStatus = DrugUseStatusCategoryAPI.getInstance().listAll();
+        model.addAttribute("personalDiseaseHistoryItems", diseases);
+        model.addAttribute("drugUseStatus", drugUseStatus);
+        model.addAttribute("drugAllergyHistoryItems", medicationCategories);
+        model.addAttribute("__lang", "zh_TW");
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("maxYear", maxYear);
+        model.addAttribute("field_abbrev_ename", "ITRI");
         model.addAttribute("formId", patientId);
         model.addAttribute("ptInfo", ptInfo);
         model.addAttribute("menuNum", 2);
-        return "/casemgnt/caseForm/profile";
+        return "/casemgnt/template/caseForm/profile";
     }
-    
+
     @RequestMapping(pattern = "/patient/caseForm/visits", description = "複診")
     public String caseFormVisits(RequestData request, Model model) {
-                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
         }
         String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         Locale locale = SecurityUtils.getLocale(request);
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+
+        List<HcRecordDTO> hcRecordDTOs = new ArrayList<HcRecordDTO>();
+        List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getRecordsByPatientId(Long.parseLong(patientId));
+        for (HealthInsuranceRecord record : records) {
+            User user = UserAPI.getInstance().getUser(record.getCreator());
+            List<Role> roles = RoleAPI.getInstance().listRolesByUserId(user.getId());
+            UserRoleDTO doctor = new UserRoleDTO(user, roles);
+            if (doctor.getRoleAlias().equals("DOCTOR")) {
+                HcRecordDTO hcRecordDTO = new HcRecordDTO();
+                hcRecordDTO.setId(record.getId());
+                hcRecordDTO.setDiagTimes(records.size());
+                hcRecordDTO.setDiagDateTime(HealthInsuranceRecordAPI.getInstance().fullDateFormat(record.getCreateTime()));
+                hcRecordDTO.setDoctorAlias(doctor.getRoleName());
+                WgIcdCode codeObj = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
+                if(codeObj != null) {
+                    hcRecordDTO.setIcdCode(codeObj.getCode() + " " + codeObj.getName());
+                }
+                hcRecordDTO.setSerialno(record.getId());
+                hcRecordDTO.setPatientId(record.getPatientId());
+                hcRecordDTO.setDiagDate(sdf.format(record.getCreateTime()));
+                hcRecordDTO.setIndication(ptInfo.getIndication());
+                hcRecordDTO.setDoctorName(UserAPI.getInstance().getUser(record.getCreator()).getUsername());
+                if (record.getMainDiagnosisCode() != null) {
+                    WgIcdCode icd = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
+                    if (icd != null) {
+                        hcRecordDTO.setMainIcdCode(icd.getPureCode() + " " + icd.getName());
+                    }
+                }
+                hcRecordDTOs.add(hcRecordDTO);
+            }
+        }
+
+
+        model.addAttribute("hcRecords", hcRecordDTOs);
+
+        model.addAttribute("__lang", "zh_TW");
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("field_abbrev_ename", "ITRI");
         model.addAttribute("formId", patientId);
         model.addAttribute("ptInfo", ptInfo);
         model.addAttribute("menuNum", 2);
-        return "/casemgnt/caseForm/visits";
+        return "/casemgnt/template/caseForm/visits";
     }
 
     public TodayReviewInfo qryTodayReview(UserRoleDTO currentUser) {
@@ -1046,9 +1141,11 @@ public class DtxCaseMgntPage extends RequestHandler {
             String divisionName = "", diagnosis = "", order = "";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String printTime = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
-            if(hir == null) return null;
+            if (hir == null) {
+                return null;
+            }
             HcRecordResp resp = new HcRecordResp();
-            if(hir != null) {
+            if (hir != null) {
                 resp.setId(hir.getId());
                 resp.setEvalDate(sdf.format(hir.getCreateTime()));
                 resp.setSubjective(hir.getSubjective());
@@ -1056,25 +1153,25 @@ public class DtxCaseMgntPage extends RequestHandler {
                 resp.setMainIcdCode(convertToIcdName(hir.getMainDiagnosisCode()));
                 List<String> subCodes = hir.getSecondaryDiagnosisCodes();
                 List<Consumer<CodeItem>> setters = List.of(
-                    resp::setSubIcdCode1,
-                    resp::setSubIcdCode2,
-                    resp::setSubIcdCode3,
-                    resp::setSubIcdCode4,
-                    resp::setSubIcdCode5
+                        resp::setSubIcdCode1,
+                        resp::setSubIcdCode2,
+                        resp::setSubIcdCode3,
+                        resp::setSubIcdCode4,
+                        resp::setSubIcdCode5
                 );
                 for (int i = 0; i < subCodes.size() && i < setters.size(); i++) {
                     CodeItem item = convertToIcdName(subCodes.get(i));
                     setters.get(i).accept(item);
                 }
-                
+
                 resp.setCoPaymentCode(convertToCopaymentName(hir.getCopaymentCode()));
                 resp.setTotal_points(String.valueOf(hir.getTotalPoint()));
                 resp.setPart_points(String.valueOf(hir.getCopayment()));
                 resp.setSerial_no(hir.getSerialNum());
                 List<TherapeuticTreatment> treatments = TherapeuticTreatmentAPI.getInstance().getTreatmentsByHiRecordId(hir.getId());
-                if(treatments.size() > 0) {
+                if (treatments.size() > 0) {
                     List<PaymentItem> items = new ArrayList<PaymentItem>();
-                    for(TherapeuticTreatment treatment : treatments) {
+                    for (TherapeuticTreatment treatment : treatments) {
                         PaymentItem item = new PaymentItem();
                         item.setKeyno(treatment.getId());
                         item.setPaymentItemCode(convertToPaymentName(treatment.getTreatmentCode()));
@@ -1094,24 +1191,24 @@ public class DtxCaseMgntPage extends RequestHandler {
             return null;
         }
     }
-    
+
     private CodeItem convertToIcdName(String code) {
         CodeItem icdCode = new CodeItem();
-        if(StringUtils.isNotEmpty(code)){
+        if (StringUtils.isNotEmpty(code)) {
             WgIcdCode obj = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(code));
-            
+
             icdCode.setCode(obj.getCode());
             icdCode.setCodeTxt(obj.getCode() + " " + obj.getName());
             icdCode.setViewTxt(obj.getCode() + " " + obj.getName() + " (" + obj.getEnName() + ")");
         }
         return icdCode;
     }
-    
+
     private CodeItem convertToCopaymentName(String code) {
         CodeItem paymentCode = new CodeItem();
-        if(StringUtils.isNotEmpty(code)){
+        if (StringUtils.isNotEmpty(code)) {
             paymentCode.setCode(code);
-            if(code.equals("K00")){
+            if (code.equals("K00")) {
                 paymentCode.setCodeTxt("K00(居家照護)-部分負擔醫療費用5%");
             } else {
                 paymentCode.setCodeTxt("K20(居家照護且開立藥品)-部分負擔醫療費用(扣除藥費與藥事服務費5%+藥品部分負擔)");
@@ -1119,23 +1216,23 @@ public class DtxCaseMgntPage extends RequestHandler {
         }
         return paymentCode;
     }
-    
+
     private CodeItem convertToPaymentName(String code) {
         CodeItem paymentCode = new CodeItem();
-        if(StringUtils.isNotEmpty(code)){
+        if (StringUtils.isNotEmpty(code)) {
             MedicalServicePaymentItems obj = MedicalServicePaymentItemsAPI.getInstance().findByCode(code);
             paymentCode.setCode(code);
             paymentCode.setCodeTxt("[" + code + "] " + obj.getZhItem());
         }
         return paymentCode;
     }
-    
+
     private CodeItem getUserName(Long userNo) {
         CodeItem executor = new CodeItem();
-        if(userNo != null){
-           User user = UserAPI.getInstance().getUser(userNo);
-           executor.setCode(String.valueOf(userNo));
-           executor.setCodeTxt("[" + user.getAccount() + "] " + user.getUsername());
+        if (userNo != null) {
+            User user = UserAPI.getInstance().getUser(userNo);
+            executor.setCode(String.valueOf(userNo));
+            executor.setCodeTxt("[" + user.getAccount() + "] " + user.getUsername());
         }
         return executor;
     }
@@ -1146,8 +1243,8 @@ public class DtxCaseMgntPage extends RequestHandler {
         Calendar cal = Calendar.getInstance();
         cal.setTime(theDay);
         cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE,    0);
-        cal.set(Calendar.SECOND,    0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Date startOfDay = cal.getTime();
 
@@ -1157,7 +1254,9 @@ public class DtxCaseMgntPage extends RequestHandler {
 
         return new DatePeriod(startOfDay, startOfNextDay);
     }
+
     private class DatePeriod {
+
         private Date start;
         private Date end;
 

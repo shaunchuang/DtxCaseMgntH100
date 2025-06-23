@@ -135,7 +135,7 @@
 										<div class="option<#if ptInfo.diseaseNames?seq_contains(pdhItems.id?string)> selected</#if>" data-item="${pdhItems.id}" >${pdhItems.name}</div>
 										</#list>				                 	
 				                    </div>
-				                    <textarea rows="2" class="form-control" placeholder="請填寫其他個人病史"></textarea>
+				                    <textarea id="otherHistoryDisease" rows="2" class="form-control" placeholder="請填寫其他個人病史"></textarea>
 								</div>
 							</div>
 							<div class="row mg-b-10">
@@ -146,7 +146,7 @@
 										<div class="option<#if ptInfo.medicalHistory?seq_contains(dahItems.id?string)> selected</#if>" data-item="${dahItems.id}" >${dahItems.name}</div>
 										</#list>
 									</div>
-									<textarea rows="2" class="form-control" placeholder="請填寫其他藥物過敏史"></textarea>
+									<textarea id="otherMedicalHistory" rows="2" class="form-control" placeholder="請填寫其他藥物過敏史"></textarea>
 								</div>
 							</div>
 							<div class="row">
@@ -157,7 +157,7 @@
 											<div class="option<#if ptInfo.drugUsageHistory?seq_contains(dus.id?string)> selected</#if>" data-item="${dus.id}" >${dus.name}</div>
 										</#list>
 									</div>
-									<textarea rows="2" class="form-control" placeholder="請填寫其他藥物使用狀況"></textarea>
+									<textarea id="otherDrugUsageHistory" rows="2" class="form-control" placeholder="請填寫其他藥物使用狀況"></textarea>
 								</div>
 							</div>
 							<hr class="divider" />
@@ -185,7 +185,7 @@
 								    <tbody class="diagnosis-records">
 								    	<#if hcRecords?? && (hcRecords?size>0) >
 								    	<#list hcRecords as hcRecord>
-								    	<tr data-record="${hcRecord.keyno}">
+								    	<tr data-record="${hcRecord.id}">
 						                	<td class="col-xs-1">${hcRecord.serialno}</td>
 								      		<td class="col-xs-3">${hcRecord.diagDate}</td>
 								      		<td class="col-xs-2-5">${hcRecord.doctorName}</td>
@@ -421,9 +421,9 @@
 					    						<select class="form-control therapist-options">
 					    							<option value="">請選擇治療師</option>
 					    							<#if doctorList?? && (doctorList?size>0)>
-					    							<#list doctorList as doctor>
-					    							<option <#if doctor.id == currentUser.id>selected</#if>" value="${doctor.id}">${doctor.name}</option>
-					    							</#list>
+														<#list doctorList as doctor>
+															<option <#if doctor.id == currentUser.id>selected</#if> value="${doctor.id}">${doctor.name}</option>
+														</#list>
 					    							</#if>
 					    						</select>
 											</div>
@@ -431,13 +431,13 @@
 				    				</tr>
 				    				<tr>
 				    					<td>
-											<div class="question-grp">
-												<span>預約日期：</span>
-												<input type="text" class="form-control therapist-reserve-time" data-cat="date" placeholder="請點選右側可預約時段" disabled />
+				    						<div class="question-grp">
+					    						<span>預約日期：</span>
+					    						<input type="text" class="form-control therapist-reserve-time" data-cat="date" placeholder="請點選右側可預約時段" disabled />
 											</div>
 											<div class="question-grp">
-												<span>預約時間：</span>
-												<input type="text" class="form-control therapist-reserve-time" data-cat="time" placeholder="請點選右側可預約時段" disabled />
+					    						<span>預約時間：</span>
+					    						<input type="text" class="form-control therapist-reserve-time" data-cat="time" placeholder="請點選右側可預約時段" disabled />
 											</div>
 			    						</td>			  					
 				    				</tr>
@@ -796,29 +796,29 @@ $(".ast-confirm").click(function(){
     }
 });
 
-/*治療師點選變色*/
-$(".option:not(.editable-option):not(.option--disabled)").click(function() {
-    var $parent = $(this).parent("div");
+	/*治療師點選變色*/
+	$(".option:not(.editable-option):not(.option--disabled)").click(function() {
+		var $parent = $(this).parent("div");
 
-    if ($parent.hasClass("single-option")) {
-        // 單選處理
-        $parent.find(".option").removeClass("selected");
-        $(this).addClass("selected");
-    }else{
-        // 多選處理
-        $(this).toggleClass("selected");
-    }
-});
+		if ($parent.hasClass("single-option")) {
+			// 單選處理
+			$parent.find(".option").removeClass("selected");
+			$(this).addClass("selected");
+		}else{
+			// 多選處理
+			$(this).toggleClass("selected");
+		}
+	});
 
-//治療師切換可預約時間表
-$("body").on("change", ".therapist-options", function() {
-	var doctorId = $(this).val();
-	if(doctorId != ""){
-		wg.template.updateNewPageContent('wg-Container', 'therapist-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment?clinician=therapist&doctorId=' + doctorId);
-	}else{
-		wg.template.updateNewPageContent('wg-Container', 'therapist-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment/msg/chooseMessage');
-	}
-});
+	//治療師切換可預約時間表
+	$("body").on("change", ".therapist-options", function() {
+		var doctorId = $(this).val();
+		if(doctorId != ""){
+			wg.template.updateNewPageContent('wg-Container', 'therapist-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment?clinician=therapist&doctorId=' + doctorId);
+		}else{
+			wg.template.updateNewPageContent('wg-Container', 'therapist-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment/msg/chooseMessage');
+		}
+	});
 
 //診斷報告檢視點擊
 $(".diagnosis-records tr").click(function(e){
@@ -1318,157 +1318,27 @@ function selectTarget(lessonAch, lessonStats) {
         });
     });
 }
-
-    function uploadTrainingPlan(){
-        return new Promise(function(resolve, reject){
-            // 準備資料
-            var itemNumArr = getItemNumArray("trainingPlan-table", "basicForm");
-            var itemArray = getItemValue("basicForm", itemNumArr);
-            var hr;
-            var min;
-            itemArray = itemArray.filter((element) => {
-                if (element.itemId == '204-1') {
-                    hr = element.ans;
-                    return false; // 移除符合條件的元素
-                }
-                
-                if (element.itemId == '204-2') {
-                    min = element.ans;
-                    return false; // 移除符合條件的元素
-                }
-                
-                return true; // 保留不符合條件的元素
-            });
-
-            var newAns = (parseInt(hr)*60 + parseInt(min)).toString();
-            var newItem = {'itemId': '204', 'ans': newAns, 'op': 'e'}
-            itemArray.push(newItem);
-            
-	        let lessons = [];
-	        $(".lesson-card.selected").each(function() {
-	            let lessonKeyNo = $(this).data('lesson');
-	
-	            // 收集成就資料
-	            let achievementApis = [];
-	            $(this).find(".clone").each(function() {
-	                let achievement = $(this).find('.selected-ach-text').data('selectedach');
-	                if (achievement) {
-	                    achievementApis.push(achievement);
-	                }
-	            });
-	
-	            // 收集統計資料
-	            let statisticsGoals = [];
-	            $(this).find(".clone").each(function() {
-	                let statistic = $(this).find('.stats-select').val();
-	                let statisticValue = $(this).find('.stats-value').val();
-	                if (statistic && statisticValue) {
-	                    statisticsGoals.push({
-	                        "apiName": statistic,
-	                        "valueGoal": statisticValue
-	                    });
-	                }
-	            });
-	
-	            // 組裝單個 lesson 結構
-	            lessons.push({
-	                "lessonKeyNo": lessonKeyNo,
-	                "achievementApis": achievementApis,
-	                "statisticsGoals": statisticsGoals
-	            });
-	        });
-	        
-            var trainingWeeks = $('.training-period-input').val();
-            
-            // 時間：
-            var startDate = $('#datePicker').val();
-            
-            var endDate;
-
-            // 根據訓練週數計算結束日期
-            switch(trainingWeeks) {
-                case '1': // 一週
-                    endDate = new Date(startDate);
-                    endDate.setDate(endDate.getDate() + 7);
-                    break;
-                case '2': // 兩週
-                    endDate = new Date(startDate);
-                    endDate.setDate(endDate.getDate() + 14);
-                    break;
-                case '3': // 三週
-                    endDate = new Date(startDate);
-                    endDate.setDate(endDate.getDate() + 21);
-                    break;
-                case '4': // 一個月
-                    endDate = new Date(startDate);
-                    endDate.setMonth(endDate.getMonth() + 1);
-                    break;
-                default:
-                    endDate = null;
-            }
-            
-            if (endDate) {
-                var year = endDate.getFullYear();
-                var month = String(endDate.getMonth() + 1).padStart(2, '0');
-                var day = String(endDate.getDate()).padStart(2, '0');
-                var formattedEndDate = year + '/' + month + '/' + day ;
-            }
-            
-            var postData = {
-                "startDate": startDate, 
-                "endDate": formattedEndDate, 
-                "userFormKeyNo": "${formId!""}",
-                "items": itemArray, 
-                "planKeyNo": planKeyNo,
-                "lessonKeyNo": lessonKeyNo, 
-                "creator": cUserId, 
-                "ach": achList, 
-                "stats": statsList, 
-                "lessonEvalFormUserKeyNo": lessonEvalFormUserKeyNo
-            };
-            console.log('saveTrainingData： ', postData); 
-            // 發送 AJAX 請求
-            $.ajax({
-	            url: '${base}/division/api/TrainingPlan/save',
-	            type: 'POST',
-	            data: {"data":JSON.stringify(postData)},
-	            dataType: 'json',
-	            success: function(result){
-	                if(result.success){
-	                    // 更新 planKeyNo 和 lessonEvalFormUserKeyNo
-	                    if(result.planKeyNo){
-	                        planKeyNo = result.planKeyNo;
-	                        lessonEvalFormUserKeyNo = result.lessonEvalFormUserKeyNo;
-	                    }
-	                    resolve(true); // 表示成功
-	                } else {
-	                    swal("<@spring.message 'view.save.fail.title'/>", "<@spring.message 'view.save.fail.text'/>", "error");
-	                    resolve(false); // 表示失敗
-	                }
-	            },
-	            error: function(xhr, status, error){
-	                console.error('AJAX error:', status, error);
-	                swal("錯誤", "無法提交表單，請稍後再試。", "error");
-	                resolve(false); // 表示失敗
-	            }
-	        });
-        });
-    }
-    
-	  /* 測試上傳訓練資料 */
+     /* 測試上傳訓練資料 */
     function uploadTrainingPlanV2(){
         return new Promise(function(resolve, reject){
             // 準備資料
             let subjective = $('.subjective').val();
-			let objective = $('.objective').val();
+            let objective = $('.objective').val();
 
             let hr = $('#durationPerSessionHour').val();
             let min = $('#durationPerSessionMin').val();
             let frequencyPerWeek = $('#frequencyPerWeek').val();
             let frequencyPerDay = $('#frequencyPerDay').val();
             
+            // 獲取訓練日選擇
+            let selectedTrainingDays = [];
+            $('.weekday-circle.active').each(function() {
+                selectedTrainingDays.push($(this).data('day'));
+            });
+            let trainingDaysString = JSON.stringify(selectedTrainingDays);
+            console.log('選擇的訓練日: ', trainingDaysString);
             
-			console.log('選取時間: '+ hr +' 小時, ' + min +' 分鐘');
+            console.log('選取時間: '+ hr +' 小時, ' + min +' 分鐘');
             
             let duration = parseInt(hr)*60 + parseInt(min);
             
@@ -1570,19 +1440,19 @@ function selectTarget(lessonAch, lessonStats) {
 			    let seconds = String(endDate.getSeconds()).padStart(2, '0');
 			    formattedEndDate = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
 			}
-            
-            let trainingData = {
-            	"therapist": cUserId,
-            	"patientId": '${formId!""}',
-            	"title": 'title',
-				"subjective": subjective,
-				"objective": objective,
-            	"startDate": startDateTime,
-            	"endDate": formattedEndDate,
-            	"frequencyPerWeek": frequencyPerWeek,
-            	"frequencyPerDay": frequencyPerDay,
-            	"durationPerSession": duration,
-            	"notes": planNote
+              let trainingData = {
+                "therapist": cUserId,
+                "patientId": '${formId!""}',
+                "title": 'title',
+                "subjective": subjective,
+                "objective": objective,
+                "startDate": startDateTime,
+                "endDate": formattedEndDate,
+                "frequencyPerWeek": frequencyPerWeek,
+                "frequencyPerDay": frequencyPerDay,
+                "durationPerSession": duration,
+                "trainingDays": trainingDaysString,
+                "notes": planNote
             };
             
             console.log('saveTrainingData： ', trainingData); 
@@ -1619,16 +1489,17 @@ function selectTarget(lessonAch, lessonStats) {
 $("#completeConsultation").click(function(e){
 	e.preventDefault();
 
-	//uploadTrainingPlanV2();
-	//editPatientBaseInfo();
+	uploadTrainingPlanV2();
+	editPatientBaseInfo();
 	
-	var doctorId = $(".therapist-options option.selected").val();
+	var doctorId = $(".therapist-options").val();
 	var slotId = $(".myc-available-time.selected").attr("data-unique");
-	
+	console.log('doctorId', doctorId);
+	console.log('slotId', slotId);
 	if(doctorId == undefined || slotId == undefined){
 		swal("送出失敗", "請再次確認是否有安排下次看診時間!", "error");
 	}else{
-		var postData = {"creator": doctorId, "availableSlotId": slotId, "cat": 2, "caseNo": "${formId!""}"};
+		var postData = {"creator": doctorId, "slotId": slotId, "cat": 2, "caseNo": "${formId!""}"};
 		var result = wg.evalForm.getJson(JSON.stringify(postData), "/WgTask/api/createNewAppo");
 		
 		if(result.success){
@@ -1740,9 +1611,9 @@ function fillPatientInfo() {
 
 		// === 地址 (縣市/鄉鎮/郵遞區號) ===
 		$('#twzipcode').twzipcode('set', {
-		zipcode : patientInfo.zipcode  || '',   // 若有郵遞區號可一起帶入
-		county  : patientInfo.city     || '',   // 例如「新竹縣」
-		district: patientInfo.district || ''    // 例如「竹北市」
+			zipcode : patientInfo.zipcode  || '',   // 若有郵遞區號可一起帶入
+			county  : patientInfo.city     || '',   // 例如「新竹縣」
+			district: patientInfo.district || ''    // 例如「竹北市」
 		});
     		// 聯絡地址
         $('#patient-address').val(patientInfo.address || "");
@@ -1764,7 +1635,11 @@ function fillPatientInfo() {
 			// 同步隱藏欄位，供後端送出
 			$("#patient-birth").val(patientInfo.birth);
 		}
-        
+
+		$('#otherHistoryDisease').val(patientInfo.otherDiseaseName || "");
+		$('#otherMedicalHistory').val(patientInfo.otherMedicalHistory || "");
+		$('#otherDrugUsageHistory').val(patientInfo.otherDrugUsageHistory || "");
+
         // === 自動填入 dataForm/pt.ftl 相關欄位 (otherPatientInfo) ===
         if (patientInfo.otherPatientInfoDTO) {
 			
@@ -2098,6 +1973,10 @@ $('.speech-dev-issue-options .option').on('click', function () {
 .report-blks{
 	height: 370px;
 	max-height: 370px;
+}
+
+.report{
+	padding: 5px 10px;
 }
 
 /* 教案字卡樣式 */

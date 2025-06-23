@@ -1173,7 +1173,7 @@ $("#completeConsultation").click(function(e){
 	e.preventDefault();
 	createHcInfo();
 	editPatientBaseInfo();
-	var doctorId = $(".therapist-options .option.selected").attr("data-doctor");
+	var doctorId = $(".therapist-options option.selected").val();
 	console.log('doctorId', doctorId);
 	
 	var slotId = $(".myc-available-time.selected").attr("data-unique");

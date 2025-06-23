@@ -1,4 +1,4 @@
-<#include "/skins/imas/widget/leftnav.ftl" />
+<#include "/imas/widget/leftnav.ftl" />
 		<div class="custom-blk">
 			<!-- 模組標題與功能模組放置區 -->
 			<div class="col-md-12 sub-bar">
@@ -11,17 +11,25 @@
 			<div class="clearfix"></div>
 			<div class="main-content">
 				<div class="col-md-12 pd-h-5 justify-content-between">
-	            	<div class="input-group search-group">																		
-						<span class="input-group-addon"><@spring.message "caseList.label.search"/></span>
-						<select class="form-control itemId" aria-describedby="basic-addon1" >
-							<option value="" ><@spring.message "caseList.option.all"/></option>
-							<option value="240" ><@spring.message "caseList.option.ptno"/></option>
-							<option value="241" ><@spring.message "caseList.option.idno"/></option>
-							<option value="242" ><@spring.message "caseList.option.name"/></option>
+					<div class="input-group search-group">																		
+						<span class="input-group-addon">病歷號</span>
+						<input type="search" class="form-control charno" aria-describedby="basic-addon1">
+						<span class="input-group-addon">身份證</span>
+						<input type="search" class="form-control idno" aria-describedby="basic-addon1">
+						<span class="input-group-addon">姓名</span>
+						<input type="search" class="form-control name" aria-describedby="basic-addon1">
+						<span class="input-group-addon">負責人員</span>
+						<select class="form-control carer" aria-describedby="basic-addon1" >
+							<option value=""> 請選擇 </option>
 						</select>
-						
-						<span class="input-group-addon divide"></span>
-						<input type="search" class="form-control param" aria-describedby="basic-addon1" placeholder="<@spring.message "caseList.placeholder.search"/>">	
+						<span class="input-group-addon">狀態</span>
+						<select class="form-control status" aria-describedby="basic-addon1" >
+							<option value=""> 請選擇 </option>
+							<option value="N30"> 新個案 </option>
+							<option value="N"> 治療中 </option>						    
+						    <option value="Y"> 已結案 </option>
+						</select>
+						<input type="button" class="form-control clear-btn" value="清除" />
 					</div>
 					<div class="table-blk">
 						<div class="table-header">
@@ -48,15 +56,16 @@
 							<thead>
 						      <tr class="tablesorter-headerRow">
 						      	<th width="2%">細</th>
-						      	<th width="15%"><@spring.message "caseList.column.abhint"/></th>
-						      	<th width="13%"><@spring.message "caseList.column.newRecordDate"/></th>
-						      	<th width="14%"><@spring.message "caseList.column.ptno"/></th>					      	
-						      	<th width="12%"><@spring.message "caseList.column.name"/></th>    
+						      	<th width="11%"><@spring.message "caseList.column.ptno"/></th>					      	
+						      	<th width="8%"><@spring.message "caseList.column.name"/></th>    
 						        <th width="11%"><@spring.message "caseList.column.idno"/></th>
-						        <th width="7%"><@spring.message "caseList.column.gender"/></th>
+						        <th width="5%"><@spring.message "caseList.column.gender"/></th>
 						        <th width="5%"><@spring.message "caseList.column.age"/></th>
-						        <th width="11%"><@spring.message "caseList.column.status"/></th>
-						        <th width="10%"><@spring.message "caseList.column.funcItem"/></th>
+						        <th width="20%">主要診斷</th>						        
+						        <th width="13%">最新就診日期</th>
+						        <th width="15%">負責人員</th>
+						        <th width="10%">治療狀態</th>
+						        <!--<th width="5%"><@spring.message "caseList.column.funcItem"/></th>-->
 						      </tr>
 						    </thead>
 							<tbody id="list_cnt">
@@ -86,10 +95,9 @@ var sortClass = "";
 var sortOrder = "";
 var limit = $('.displaynum').val();
 var gSerach = false;
-var api = "${base}/division/api/qryPatientList?location=${__field}";
+//var api = "${base}/division/api/qryPatientList";
+var api = "/Patient/api/qryPatientList";
 var base = "${base}";
-var lang_ref = "${__lang}";
-var field = "${__field}";
 
 /*定義欄位*/
 var columnObj = [
@@ -97,34 +105,14 @@ var columnObj = [
         className:      'details-control',
         orderable:      false,
         defaultContent: '',
-        data:           "keyNo",
+        data:           "keyno",
             render: function ( data, type, row, meta ) {
-          	  	return "<span class='hidden'>" + row.keyNo + "</span>";
+          	  	return "<span class='hidden'>" + row.keyno + "</span>";
             }                
     },
-    { data: "alertContent"},
-    { data: "newRecordDate", className: "newestDate" },
-    <#if demo == "false">
-    { data: "charNo", className: "charNo" },
+    { data: "charno", className: "charno" },
     { data: "name", className: "name" },            
-    { data: "idNo", className: "idNo" },
-    <#else>
-    { data: "charNo", className: "charNo",
-    	render: function ( data, type, row, meta ) {
-    		return replaceTxt(row.charNo);
-    	}
-    },
-    { data: "name", className: "name",
-    	render: function ( data, type, row, meta ) {
-    		return replaceTxt(row.name);
-    	}
-    },
-    { data: "idNo", className: "idNo",
-    	render: function ( data, type, row, meta ) {
-    		return replaceTxt(row.idNo);
-    	}
-    },
-    </#if>
+    { data: "idno", className: "idno" },
     { data: "gender",
     	render: function ( data, type, row, meta ) {
     		var gender = "<@spring.message "caseList.label.unknown"/>";
@@ -134,7 +122,15 @@ var columnObj = [
     	}
     },
     { data: "age" },
-    { data: "status" },
+    { data: "diagnosis" },   
+    { data: "newVisitDate", className: "newVisitDate" },
+    { data: "carer" },
+    { data: "status",
+	    render: function ( data, type, row, meta ) {
+    		return '<span class="status-t">治療中</span>';
+    	} 
+	}
+    /*,
     { data: null,
     	render: function ( data, type, row, meta ) {
     		var viewRef = row.charNo === "" ? row.idNo : row.charNo;
@@ -143,7 +139,7 @@ var columnObj = [
     		//return '<button class="func-btn mg-right-5" onclick="imgZipExport(\'' + row.keyNo + '\')"><i class="fa fa-file-zipper"></i> <@spring.message "caseList.button.imgExport"/></button>';   		
     		return '';
     	}
-    }
+    }*/
 ];
 
 /*定義排序*/
@@ -158,17 +154,19 @@ $(document).ready(function(){
 //顯示所有個案列表
 function showPatientList(){
 	var queryData = {"userId": cUserId, "page_num": 1, "limit": limit};
-	initPtSortTable('.main-table', limit, api, queryData, columnObj, columnDefs, page_info);
+	
+	initPtSortTableV2('.main-table', limit, api, queryData, columnObj, columnDefs, page_info);
+	
 }
 
 //前往個案總覽頁面
 function viewCase(targetFormId){
-	window.location = "${base}/${__lang}/division/web/patient/" + targetFormId + "/caseView";
+	window.location = "/ftl/imas/patient/caseForm/overview?patientId=" + targetFormId;
 }
 
 //圖檔匯出功能
 function imgZipExport(formId){
-	window.open("${base}/division/api/downloadImageZip?formKeyNo=" + formId + "&zipName=IMGEXPORT&location=${__field}");
+	window.open("${base}/division/api/downloadImageZip?formKeyNo=" + formId + "&zipName=IMGEXPORT");
 }
 
 </script>
@@ -208,7 +206,7 @@ tr.sub:hover{
 }
 
 .status-n{
-	background: #3fc0d9;
+	background: #26a6c0;
 }
 
 .status-t{
@@ -257,5 +255,5 @@ tr.shown td.details-control:before {
 
 </style>	
 
-<#include "/skins/imas/casemgnt/socket.ftl" />
-<#include "/skins/imas/widget/widget.ftl" />
+
+<#include "/imas/widget/widget.ftl" />

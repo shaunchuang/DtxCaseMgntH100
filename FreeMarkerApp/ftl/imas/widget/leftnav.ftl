@@ -619,6 +619,22 @@ ul.sub-menu li a.active{
 	flex-grow: 1 !important;
 }
 
+.g-5{
+	gap: 5px;
+}
+
+.g-10{
+	gap: 10px;
+}
+
+.g-15{
+	gap: 15px;
+}
+
+.g-20{
+	gap: 20px;
+}
+
 .w-auto{
 	width: auto !important;
 }
@@ -1096,6 +1112,7 @@ div.dataTables_paginate{
 .default-table tr td{
 	padding: 10px;
 	border-bottom: 0.5px solid #f2f2f2;
+	word-break: break-word;
 }
 
 .default-table tr:last-child td{
@@ -1113,6 +1130,10 @@ div.dataTables_paginate{
 .default-table tr td textarea,
 .default-table tr td select{
 	font-weight: 500;
+}
+
+.default-table tr td.txt-cnt{
+	font-weight: normal !important;
 }
 
 textarea{
@@ -1742,8 +1763,9 @@ input[type="text"][readonly], input[type="text"]:disabled, select:disabled{
 }
 
 .info-message span{
-	font-size: 18px;
+	font-size: 1.6rem;
 	font-weight: 600;
+	color: #808080;
 }
 
 /* control-menu 樣式 */
@@ -1756,7 +1778,7 @@ input[type="text"][readonly], input[type="text"]:disabled, select:disabled{
   	top: 0;
   	background-color: #ffffff;
 	z-index: 10;
-	padding: 10px 0;
+	padding: 5px 0 0 0;
 	border-bottom: 1px solid #e6e6e6;
 }
 
@@ -1773,6 +1795,48 @@ input[type="text"][readonly], input[type="text"]:disabled, select:disabled{
 .control-menu-list .menu.active {
   	border-bottom: 3px solid #00b383;
   	font-weight: bold;
+}
+
+/* 搜尋條件框 客製樣式 */
+.search-group {
+  	display: flex;
+  	flex-wrap: wrap; /* 若空間不足時換行 */
+}
+
+.search-group .input-group-addon {
+	display: flex; /* 將 span 轉為 Flex 容器 */
+  	align-items: center; /* 垂直置中內容 */
+  	justify-content: center; /* 水平居中內容（若需要） */
+  	flex: 0 0 auto; /* 固定寬度，避免縮放 */
+  	width: auto;
+  	min-width: 60px;
+  	font-weight: 600;
+}
+
+.search-group .form-control,
+.search-group select {
+  	flex: 1 1 0%; /* 等寬且允許縮放 */
+  	min-width: 100px; /* 確保最小寬度 */
+}
+
+.search-group input[type="button"].form-control{
+	min-width: 50px;
+	max-width: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	height: 34px;
+	line-height: 34px;
+	background-color: #595959;
+	border: 1px solid #595959;
+	color: #ffffff;
+	font-weight: 600;
+}
+
+.search-group input[type="button"].form-control:hover{
+	background-color: #666666;
+	border: 1px solid #666666;
 }
 
 
@@ -1884,27 +1948,7 @@ $(document).ready(function() {
 		</div>
 	</div>
 </div>
-<#if field_abbrev_ename == "TOYUAN">
-	<#assign logo = "logo_taoyuan">
-<#elseif field_abbrev_ename == "TZUCHI">
-	<#assign logo = "logo_tzuchi">
-<#elseif field_abbrev_ename == "TPECH">
-	<#assign logo = "logo_tpech">
-<#elseif field_abbrev_ename == "SHH">
-	<#assign logo = "logo_shh">
-<#elseif field_abbrev_ename == "WFH">
-	<#assign logo = "logo_wfh">
-<#elseif field_abbrev_ename == "YSH">
-	<#assign logo = "logo_ysh">
-<#elseif field_abbrev_ename == "NTGL">
-	<#assign logo = "logo_ntgl">
-<#elseif field_abbrev_ename == "FUSION">
-	<#assign logo = "logo_fusion">
-<#elseif field_abbrev_ename == "LIEYU">
-	<#assign logo = "logo_lieyu">	
-<#else>
-	<#assign logo = "logo_itri">
-</#if>
+<#assign logo = "logo_itri">
 <#assign roleName = "">
 
 <#list currentUser.roles as role>

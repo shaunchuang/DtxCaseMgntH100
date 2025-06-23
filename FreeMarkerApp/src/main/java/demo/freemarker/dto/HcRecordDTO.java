@@ -1,38 +1,56 @@
 package demo.freemarker.dto;
 
 public class HcRecordDTO {
+
     private Long id;
     private Long serialno;
-    private String keyno = "";
+    private String keyNo;
+    private Long patientId;
     private String diagDate;
+    private String diagDateTime;
     private String mainIcdCode = "";
-    private String visitDate = "";
     private String visitCat = "";
-    private String indication;
-    private String doctorName;
-    private String doctorAlias;
+    private String icdCode = "";
+    private String indication = "";
+    private String doctorName = "";
+    private String doctorAlias = "";
+    private Boolean isFirstDiag = false;
+    private int diagTimes;
 
     public HcRecordDTO() {
     }
 
-    public HcRecordDTO(Long id, String keyno, String mainIcdCode, String visitDate, String visitCat) {
+    public HcRecordDTO(Long serialNo, Long id, Long patientId, String mainIcdCode, String diagDate, String visitCat) {
+        this.serialno = serialNo;
         this.id = id;
-        this.keyno = keyno;
+        this.patientId = patientId;
         this.mainIcdCode = mainIcdCode;
-        this.visitDate = visitDate;
+        this.diagDate = diagDate;
         this.visitCat = visitCat;
     }
 
-    public HcRecordDTO(Long serialno, Long id, String keyno, String diagDate, String indication, String doctorName, String doctorAlias) {
+    public HcRecordDTO(Long serialno, Long id, Long patientId, String diagDate, String icdCode, String doctorName, String doctorAlias) {
         this.serialno = serialno;
         this.id = id;
-        this.keyno = keyno;
+        this.patientId = patientId;
         this.diagDate = diagDate;
-        this.indication = indication;
+        this.icdCode = icdCode;
         this.doctorName = doctorName;
         this.doctorAlias = doctorAlias;
     }
 
+    public HcRecordDTO(Long serialno, Long id, Long patientId, String diagDateTime, Boolean isFirstDiag, int diagTimes, String icdCode,
+            String doctorName, String doctorAlias) {
+        this.serialno = serialno;
+        this.id = id;
+        this.patientId = patientId;
+        this.diagDateTime = diagDateTime;
+        this.isFirstDiag = isFirstDiag;
+        this.diagTimes = diagTimes;
+        this.icdCode = icdCode;
+        this.doctorName = doctorName;
+        this.doctorAlias = doctorAlias;
+    }
 
     public Long getId() {
         return id;
@@ -50,12 +68,20 @@ public class HcRecordDTO {
         this.serialno = serialno;
     }
 
-    public String getKeyno() {
-        return keyno;
+    public String getKeyNo() {
+        return keyNo;
     }
 
-    public void setKeyno(String keyno) {
-        this.keyno = keyno;
+    public void setKeyNo(String keyNo) {
+        this.keyNo = keyNo;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
     }
 
     public String getDiagDate() {
@@ -66,6 +92,14 @@ public class HcRecordDTO {
         this.diagDate = diagDate;
     }
 
+    public String getDiagDateTime() {
+        return diagDateTime;
+    }
+
+    public void setDiagDateTime(String diagDateTime) {
+        this.diagDateTime = diagDateTime;
+    }
+
     public String getMainIcdCode() {
         return mainIcdCode;
     }
@@ -74,20 +108,20 @@ public class HcRecordDTO {
         this.mainIcdCode = mainIcdCode;
     }
 
-    public String getVisitDate() {
-        return visitDate;
-    }
-
-    public void setVisitDate(String visitDate) {
-        this.visitDate = visitDate;
-    }
-
     public String getVisitCat() {
         return visitCat;
     }
 
     public void setVisitCat(String visitCat) {
         this.visitCat = visitCat;
+    }
+
+    public String getIcdCode() {
+        return icdCode;
+    }
+
+    public void setIcdCode(String icdCode) {
+        this.icdCode = icdCode;
     }
 
     public String getIndication() {
@@ -112,6 +146,22 @@ public class HcRecordDTO {
 
     public void setDoctorAlias(String doctorAlias) {
         this.doctorAlias = doctorAlias;
+    }
+
+    public Boolean getIsFirstDiag() {
+        return isFirstDiag;
+    }
+
+    public void setIsFirstDiag(Boolean isFirstDiag) {
+        this.isFirstDiag = isFirstDiag;
+    }
+
+    public int getDiagTimes() {
+        return diagTimes;
+    }
+
+    public void setDiagTimes(int diagTimes) {
+        this.diagTimes = diagTimes;
     }
 
 }

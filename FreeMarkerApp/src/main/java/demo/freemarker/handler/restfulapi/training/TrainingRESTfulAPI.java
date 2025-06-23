@@ -89,6 +89,8 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
             Integer durationPerSession = parseNullableInt(td.optString("durationPerSession", null));
             trainingPlan.setDurationPerSession(durationPerSession);
 
+            trainingPlan.setTrainingWeekDay(td.optString("trainingDays", null));
+
             trainingPlan.setNotes(td.optString("notes", null));
             trainingPlan.setCreateTime(new Date());
             TrainingPlanAPI.getInstance().createTrainingPlan(trainingPlan);

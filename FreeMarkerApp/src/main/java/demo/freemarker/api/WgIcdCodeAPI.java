@@ -92,4 +92,12 @@ public class WgIcdCodeAPI implements API {
             throw new RuntimeException(ex.getMessage());
         }
     }
+
+    public WgIcdCode getByPureCode(String pureCode) {
+        try {
+            return WgIcdCodeDAO.getInstance().searchByPureCode(pureCode).get(0);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
 }

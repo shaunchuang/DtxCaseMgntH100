@@ -2,12 +2,12 @@
 		<div class="custom-blk">
 			<!-- 模組標題與功能模組放置區 -->
 			<div class="col-md-12 sub-bar">
-				<div class="col-md-9 item-title">
+				<div class="col-md-12 item-title">
 					<#if isNewForm?? >
 					<div class="item-name"><@spring.message "casemgnt.label.createCase.title"/></div>
 					<#else>
-					<div class="item-name"><@spring.message "casemgnt.label.caseView.title"/></div>
 					<div class="patient-info">
+						<div class="info-block info-title">個案總覽</div>
 					    <div class="info-block">
 					      <div class="info-l">姓名</div>
 					      <div class="info-v">${ptInfo.name!""}</div>
@@ -28,6 +28,10 @@
 					      <div class="info-l">自述適應症</div>
 					      <div class="info-v">${ptInfo.indication!""}</div>
 					    </div>
+						<div class="info-block">
+					      <div class="info-l">個案狀態</div>
+					      <div class="info-v">治療中</div>
+					    </div>
 					</div>
 					</#if>
 				</div>
@@ -38,10 +42,10 @@
 				<div class="control-menu-list">
 					<div class="menu active" data-menu="profile">基本資料</div>
 					<div class="menu" data-menu="notes">其他紀載</div>
-					<div class="menu" data-menu="assessment">評估結果</div>
-					<div class="menu" data-menu="diagnosis">診斷處置</div>
-					<div class="menu" data-menu="analysis">訓練成果分析</div>
 					<div class="menu" data-menu="visits">就診歷程</div>
+					<div class="menu" data-menu="assessment">評估結果</div>
+					<div class="menu" data-menu="plan">訓練計畫</div>
+					<div class="menu" data-menu="analysis">訓練成果分析</div>					
 				</div>
 				<div class="main-inner pd-h-10 pd-b-10">
 					<div id="content-container"></div>
@@ -56,7 +60,7 @@
 $(document).ready(function(){
 	adjustHeight();
 	
-	wg.template.updateNewPageContent('content-container', 'content', {}, '/ftl/imas/caseForm/profile');
+	wg.template.updateNewPageContent('content-container', 'content', {}, '/ftl/imas/patient/caseForm/profile?patientId=${formId!""}');
 });
 
 $(".control-menu-list .menu").click(function(e){
@@ -65,7 +69,7 @@ $(".control-menu-list .menu").click(function(e){
 	$(this).parent().find(".menu").removeClass('active');
 	$(this).toggleClass('active');
 
-	wg.template.updateNewPageContent('content-container', 'content', {}, '/ftl/imas/caseForm/' + subUrl + '?patientId=' + ${ptInfo.id!""});
+	wg.template.updateNewPageContent('content-container', 'content', {}, '/ftl/imas/patient/caseForm/' + subUrl + '?patientId=${formId!""}');
 });
 	
 </script>
@@ -82,6 +86,13 @@ $(".control-menu-list .menu").click(function(e){
 	overflow-x: hidden;
 	overflow-y: auto;
 	box-sizing: border-box;
+}
+
+.info-title{
+	font-size: 18px;
+	font-weight: 600;
+	color: #666666;
+	justify-content: center;
 }
 
 .item-title{

@@ -149,7 +149,7 @@ public class WgTaskAPI implements API {
         String name = patient.getName();
         String gender = patient.getGender();
         String age = String.valueOf(patient.getAge());
-        String indication = CrossPlatformUtil.getInstance().findSyndromeById(patient.getDiseaseId());
+        String indication = patient.getDiseaseName();
         String checkinTime = task.getCheckinTime() != null ? sdf.format(task.getCheckinTime()) : null;
         Boolean isFirstDiag = checkFirstDiagnosis(formId, slot.getDoctor());
 

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+
 import demo.freemarker.model.healthinsurance.HealthInsuranceRecord;
 
 public class HealthInsuranceRecordDAO extends IntIdBaseDAO {
@@ -44,6 +45,33 @@ public class HealthInsuranceRecordDAO extends IntIdBaseDAO {
         try {
             Query q = em.createNamedQuery("HealthInsuranceRecord.findBySerialNum");
             q.setParameter("serialNum", serialNum);
+            return (HealthInsuranceRecord) q.getSingleResult();
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public HealthInsuranceRecord findLatestRecordByPateintId(Long patientId){
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("HealthInsuranceRecord.findLatestRecordByPatientId");
+            q.setParameter("patientId", patientId);
+            return (HealthInsuranceRecord) q.getSingleResult();
+        } catch (Exception ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public HealthInsuranceRecord findLatestRecordByPatientAndCreator(Long patientId, Long creatorId) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("HealthInsuranceRecord.findLatestRecordByPatientAndCreator");
+            q.setParameter("patientId", patientId);
+            q.setParameter("creatorId", creatorId);
             return (HealthInsuranceRecord) q.getSingleResult();
         } catch (Exception ex) {
             return null;

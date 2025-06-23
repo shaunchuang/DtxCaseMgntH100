@@ -4,38 +4,31 @@
 	<#if message?exists>
 		<#if message == "emptyMessage">
 		<div class="info-message">
-			<i class="fa fa-eye-slash"></i>
 			<span>如需填寫/檢視個案就診紀錄，請點選左側紀錄</span>
 		</div>
 		</#if>
 	<#else>
 	<table class="default-table">
 		<tr>
-			<td class="sub-title" style="width: 22%">
+			<td class="sub-title" style="width: 23%">
 				<@spring.message "hcrecord.detail.label.evalDate"/>						
 			</td>
 			<td><#if hcInfo??>${hcInfo.evalDate!""}</#if></td>
 		</tr>
 		<tr>
-			<td class="sub-title">評估量表結果</td>
-			<td>
-			<#if scale?exists && scale.result?has_content>
-				<div class="evaluation-result">${scale.name!""} <span class="badge badge-tag badge-severe">${scale.result.level!""} / ${scale.result.totalScore!""}</span></div>
-			<#else>
-				<div class="evaluation-result">無量表結果 <span class="badge badge-tag badge-severe"></span></div>
-			</#if>
-			</td>
+			<td colspan="2" class="sub-title"><@spring.message "hcrecord.detail.label.subjective"/></td>
 		</tr>
 		<tr>
-			<td class="sub-title"><@spring.message "hcrecord.detail.label.subjective"/></td>
-			<td><#if hcInfo??>${hcInfo.subjective!""}</#if></td>
+			<td colspan="2" class="txt-cnt"><#if hcInfo.subjective?has_content>${hcInfo.subjective}<#else>無</#if></td>
 		</tr>
 		<tr>
-			<td class="sub-title"><@spring.message "hcrecord.detail.label.objective"/></td>
-			<td><#if hcInfo??>${hcInfo.objective!""}</#if></td>
+			<td colspan="2" class="sub-title"><@spring.message "hcrecord.detail.label.objective"/></td>
 		</tr>
 		<tr>
-			<td class="sub-title"><@spring.message "hcrecord.detail.label.diagnosis"/></td>
+			<td colspan="2" class="txt-cnt"><#if hcInfo.objective?has_content>${hcInfo.objective}<#else>無</#if></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="sub-title"><@spring.message "hcrecord.detail.label.diagnosis"/></td>
 		</tr>
 		<tr>
 			<td><@spring.message "hcrecord.detail.label.maincode"/></td>
@@ -173,6 +166,7 @@
 	}
 	
 	.default-table tr td{
+		font-size: 1.4rem !important;
 		padding: 5px 10px !important;
 	}
 	</style>

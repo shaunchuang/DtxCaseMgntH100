@@ -25,7 +25,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "HealthInsuranceRecord.findAll", query = "SELECT h FROM HealthInsuranceRecord h"),
     @NamedQuery(name = "HealthInsuranceRecord.findByPatientId", query = "SELECT h FROM HealthInsuranceRecord h WHERE h.patientId = :patientId"),
-    @NamedQuery(name = "HealthInsuranceRecord.findBySerialNum", query = "SELECT h FROM HealthInsuranceRecord h WHERE h.serialNum = :serialNum")
+    @NamedQuery(name = "HealthInsuranceRecord.findBySerialNum", query = "SELECT h FROM HealthInsuranceRecord h WHERE h.serialNum = :serialNum"),
+    @NamedQuery(name = "HealthInsuranceRecord.findLatestRecordByPatientId", 
+                query = "SELECT h FROM HealthInsuranceRecord h WHERE h.patientId = :patientId ORDER BY h.createTime DESC"),
+    @NamedQuery(name = "HealthInsuranceRecord.findLatestRecordByPatientAndCreator", 
+                query = "SELECT h FROM HealthInsuranceRecord h WHERE h.patientId = :patientId AND h.creator = :creatorId ORDER BY h.createTime DESC")
 })
 public class HealthInsuranceRecord implements IntIdDataEntity, Serializable {
     private static final long serialVersionUID = 1822843074531309L;

@@ -235,7 +235,7 @@ function initAjaxSortTable(divclass, pages, ajaxUrl, columnObj, columnDefs, lang
 	$(document).on("click", "table.dataTable tbody tr td", function () {
 		var parent = $(this).parent("tr");
 		var data = table.row(parent).data();
-		window.open("/ftl/imas/overview?patientId=" + data.keyNo);
+		window.open("/ftl/imas/patient/caseForm/overview?patientId=" + data.patientId);
 		//window.open(base + "/" + lang_ref + "/division/web/patient/" + data.keyNo + "/caseView");
 	});
 
@@ -406,7 +406,7 @@ function initPtSortTable(divclass, pages, ajaxUrl, params, columnObj, columnDefs
 		var parent = $(this).parent("tr");
 		var data = table.row(parent).data();
 
-		window.open("/ftl/imas/overview?patientId=" + data.keyNo);
+		window.open("/ftl/imas/patient/caseForm/overview?patientId=" + data.patientId);
 		//window.open(base + "/" + lang_ref + "/division/web/patient/" + data.keyNo + "/caseView");
 	});
 
@@ -527,6 +527,238 @@ function initPtSortTable(divclass, pages, ajaxUrl, params, columnObj, columnDefs
 		}
 	});
 }
+
+//使用ajax與可排序病患列表
+function initPtSortTableV2(divclass, pages, ajaxUrl, params, columnObj, columnDefs, lang_info) {
+	//var pages = divclass == ".record-list" ? 2: 10;
+	var searching = false;
+	var lengthChange = false;
+	var info = false;
+	var searchObj = JSON.stringify(params);
+
+	var table = $(divclass).DataTable({
+		ajax: {
+			url: ajaxUrl,
+			type: "POST",
+			data: function (d) {
+				return searchObj;
+			}
+		},
+		responsive: true,
+		sort: true,
+		sorting: [],
+		paging: false,
+		searching: searching,
+		info: info,
+		lengthChange: lengthChange,
+		pageLength: pages,
+		autoWidth: false,
+		destroy: true,
+		columns: columnObj,
+		columnDefs: columnDefs,
+		success: function (data) {
+		},
+		drawCallback: function (data) {
+
+		},
+		initComplete: function (data, type, row, meta) {
+			var openRows = [];
+
+			$('.main-table tbody').off('click').on('click', 'td.details-control', function () {
+				var table = $('.main-table').DataTable();
+				var tr = $(this).closest('tr');
+				var row = table.row(tr);
+				var keyno = $(this).closest('tr').find("span").html();
+
+				if (row.child.isShown()) {
+					// close it
+					row.child.hide();
+					tr.removeClass('shown');
+				} else {
+					var result = wg.evalForm.getJson({ "data": JSON.stringify() }, base + "/" + lang_ref + "/division/api/qryRecordByPatient?infoId=" + keyno);
+					// close all previously opened rows
+					closeOpenedRows(table, tr);
+
+					// and open this row                       
+					var childRow = row.child(format(result)).show();
+
+					tr.addClass('shown');
+
+					// store current selection
+					openRows.push(tr);
+				}
+			});
+
+			$('.total_record').html(data.json.num);
+			$('.pagination').html('');
+			CreatePaging(gCurPage, data.json.num, data.json.data.length);
+
+			function closeOpenedRows(table, selectedRow) {
+				$.each(openRows, function (index, openRow) {
+					// not the selected row!
+					if ($.data(selectedRow) !== $.data(openRow)) {
+						var rowToCollapse = table.row(openRow);
+						rowToCollapse.child.hide();
+						openRow.removeClass('shown');
+						// replace icon to expand
+						//$(openRow).find('td.details-control').html('<span class="glyphicon glyphicon-plus"></span>');
+						// remove from list
+						var index = $.inArray(selectedRow, openRows);
+						openRows.splice(index, 1);
+					}
+				});
+			}
+		},
+		language: lang_info
+	});
+
+	$("table.dataTable thead th").on("click", function () {
+		var qryBy = $(".qryBy").val();
+		var param = $(".param").val();
+		var className = $(this).attr("class").split(" ")[0];
+		var orderStr = $(this).attr("aria-sort");
+		var order = orderStr === "ascending" || orderStr === undefined ? "asc" : "desc";
+
+		var queryData = { "userId": cUserId, "qryBy": qryBy, "param": param, "sort": className, "order": order, "page_num": 1, "limit": limit };
+
+		searchObj = JSON.stringify(queryData);
+		sortClass = className;
+		sortOrder = order;
+
+		table.clear().draw();
+		table.ajax.url(api).load(function (data) {
+			$('.total_record').html(data.num);
+			$('.pagination').html('');
+			CreatePaging(1, data.num, data.data.length);
+		});
+	});
+
+	$(document).on("click", "table.dataTable tbody tr td:not(:first-child):not(:last-child)", function () {
+		var parent = $(this).parent("tr");
+		var data = table.row(parent).data();
+
+		window.open("/ftl/imas/patient/caseForm/overview?patientId=" + data.patientId);
+		//window.open(base + "/" + lang_ref + "/division/web/patient/" + data.keyNo + "/caseView");
+	});
+
+	$(document).on("click", ".paginate_button:not(.active)", function () {
+		var qryBy = $(".qryBy").val();
+		var param = $(".param").val();
+		var pagenum = $(this).attr("data-paging");
+		if (pagenum != undefined) {
+			var queryData = "";
+
+			if (sortClass != "" && sortOrder != "") {
+				queryData = { "userId": cUserId, "qryBy": qryBy, "param": param, "sort": sortClass, "order": order, "page_num": pagenum, "limit": limit };
+			} else {
+				queryData = { "userId": cUserId, "qryBy": qryBy, "param": param, "page_num": pagenum, "limit": limit };
+			}
+
+			searchObj = JSON.stringify(queryData);
+
+			table.clear().draw();
+			table.ajax.url(api).load(function (data) {
+				$('.total_record').html(data.num);
+				$('.pagination').html('');
+				CreatePaging(pagenum, data.num, data.data.length);
+			});
+		}
+	});
+
+	$(".qryBy").on("change", function () {
+		$(".param").val("");
+		var queryData = { "userId": cUserId, "page_num": 1, "limit": limit };
+		searchObj = JSON.stringify(queryData);
+
+		table.clear().draw();
+		table.ajax.url(api).load(function (data) {
+			$('.total_record').html(data.num);
+			$('.pagination').html('');
+			CreatePaging(1, data.num, data.data.length);
+		});
+	});
+
+	//搜尋符合特定條件之個案
+	$(".param").on("input", function () {
+		var param = $(this).val();
+		var qryBy = $(".qryBy").val();
+		var queryData = "";
+
+		if (qryBy == "") {
+			queryData = { "userId": cUserId, "param": param, "page_num": 1, "limit": limit };
+		} else {
+			queryData = { "userId": cUserId, "qryBy": qryBy, "param": param, "page_num": 1, "limit": limit };
+		}
+
+		searchObj = JSON.stringify(queryData);
+
+		table.clear().draw();
+		table.ajax.url(api).load(function (data) {
+			$('.total_record').html(data.num);
+			$('.pagination').html('');
+			CreatePaging(1, data.num, data.data.length);
+		});
+	});
+
+	$.contextMenu({
+		selector: '#list_cnt tr',
+		callback: function (key, opt) {
+			var targetLink = $(this);
+			if (key == "delete") {
+				var keyno = targetLink.find(".status-btn").data("keyno");
+				var occasionDate = $(this).val();
+				var param = $(".param").val();
+				var itemId = $(".itemId").val() == "" ? null : $(".itemId").val();
+				var queryData = "";
+				var pagenum = $(".paginate_button.active > a").html();
+				var remainRecords = $("#list_cnt tr").length;
+
+				if (remainRecords - 1 == 0) pagenum--;
+
+				confirmCheck("刪除確認", "您確認要刪除此筆個案所有紀錄嗎?", "warning", "btn-danger", "刪除", "取消", function (confirmed) {
+					if (confirmed) {
+						var postData = { "caseno": keyno, "useMark": false };
+						var result = wg.evalForm.getJson({ "data": JSON.stringify(postData) }, "../division/api/delRecord?location=" + field);
+						if (result.success) {
+							opt.$menu.trigger('contextmenu:hide');
+							swal("刪除成功", "個案相關紀錄已刪除完成!", "success");
+
+							if (pagenum != undefined) {
+								if (itemId == undefined) {
+									queryData = { "userId": cUserId, "occasionDate": occasionDate, "param": param, "page_num": 1, "limit": limit };
+								} else {
+									queryData = { "userId": cUserId, "occasionDate": occasionDate, "itemId": itemId, "param": param, "page_num": 1, "limit": limit };
+								}
+
+								searchObj = JSON.stringify(queryData);
+
+								table.clear().draw();
+								$("table .dataTables_empty").text(zh_ver.loadingRecords);
+								table.ajax.url(api).load(function (data) {
+									$('.total_record').html(data.num);
+									$('.pagination').html('');
+									CreatePaging(pagenum, data.num, data.data.length);
+								});
+							}
+						}
+					}
+				});
+			}
+		},
+		items: {
+			"delete": {
+				name: "刪除個案紀錄", icon: "delete"
+			},
+			"sep1": "---------",
+			"quit": {
+				name: "離開", icon: function () {
+					return 'context-menu-icon context-menu-icon-quit';
+				}
+			}
+		}
+	});
+}
+
 
 //使用ajax與可排序FHIR病患列表
 function initFhirPtSortTable(divclass, pages, ajaxUrl, params, columnObj, columnDefs, lang_info) {

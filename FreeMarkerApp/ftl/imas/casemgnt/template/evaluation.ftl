@@ -235,17 +235,14 @@
 	<#if message?exists >
 		<#if message == "nextStepMessage">
 			<div class="info-message">
-				<i class="fa fa-hand-point-right"></i>
 				<span>無需填寫評估量表，可點選【下一步】跳過</span>
 			</div>
 			<#elseif message == "emptyMessage">
 			<div class="info-message">
-				<i class="fa fa-eye-slash"></i>
 				<span>如需填寫/檢視評估量表，請點選左側紀錄</span>
 			</div>
 			<#elseif message == "addMessage">
 			<div class="info-message">
-				<i class="fa fa-file-circle-plus"></i>
 				<span>如需填寫/檢視評估量表，請點選【新增量表】</span>
 			</div>
 			</#if>

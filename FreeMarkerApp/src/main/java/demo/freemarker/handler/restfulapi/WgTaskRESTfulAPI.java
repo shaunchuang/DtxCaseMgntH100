@@ -95,9 +95,9 @@ public class WgTaskRESTfulAPI extends RESTfulAPI {
 
             //{"userId": doctorId, "slotId": slotId, "cat": 2, "caseno": "${formId!""}"};
             Long availableSlotId = jsonRequest.getLong("slotId");
-            Long caseNo = jsonRequest.getLong("caseno");
+            Long caseNo = jsonRequest.getLong("caseNo");
             Long cat = jsonRequest.getLong("cat");
-            Long creatorId = jsonRequest.getLong("userId");
+            Long creatorId = jsonRequest.getLong("creator");
 
             WgTask wgTask = new WgTask(new Date(), new Date(), creatorId, creatorId, false, cat.intValue(), caseNo, null, null, availableSlotId, null);
             WgTaskAPI.getInstance().createWgTask(wgTask);

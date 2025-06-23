@@ -44,6 +44,7 @@ demo\freemarker\core\CrossPlatformUtil.class
 demo\freemarker\model\scale\ScaleItem.class
 demo\freemarker\api\DiseaseCategoryAPI.class
 demo\freemarker\dao\RoleDAO.class
+demo\freemarker\dto\QryPtInfoDTO.class
 demo\freemarker\api\training\StatisticsGoalAPI.class
 demo\freemarker\handler\restfulapi\scale\ScaleSectionRESTfulAPI.class
 demo\freemarker\dto\PaymentItem.class
@@ -161,6 +162,7 @@ demo\freemarker\dto\AssessmentSectionScoreResult.class
 demo\freemarker\handler\restfulapi\WgTaskRESTfulAPI.class
 demo\freemarker\handler\restfulapi\PatientRESTfulAPI$OtherInfoSetter.class
 demo\freemarker\handler\restfulapi\RoleRESTfulAPI.class
+demo\freemarker\handler\restfulapi\PatientRESTfulAPI$QryInfoResp.class
 demo\freemarker\api\DrugUseStatusCategoryAPI.class
 demo\freemarker\core\MessageSource$1$1.class
 demo\freemarker\model\Role.class
