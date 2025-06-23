@@ -1,12 +1,15 @@
 package demo.freemarker.api;
 
 import demo.freemarker.dao.OtherPatientInfoDAO;
+import demo.freemarker.dto.OtherPatientInfoDTO;
 import demo.freemarker.model.OtherPatientInfo;
 import demo.freemarker.model.Patient;
+import demo.freemarker.model.SpeechDevIssueCategory;
 import itri.sstc.framework.core.api.API;
 import itri.sstc.framework.core.database.IntIdDataEntity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OtherPatientInfoAPI implements API {
 
@@ -75,5 +78,59 @@ public class OtherPatientInfoAPI implements API {
         } catch (Exception ex) {
             throw new RuntimeException("Failed to delete OtherPatientInfo: " + ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * 將 OtherPatientInfo 實體轉換為 OtherPatientInfoDTO
+     * @param otherPatientInfo 要轉換的 OtherPatientInfo 實體
+     * @return 轉換後的 OtherPatientInfoDTO 物件
+     */
+    public OtherPatientInfoDTO convertToDTO(OtherPatientInfo otherPatientInfo) {
+        if (otherPatientInfo == null) {
+            return null;
+        }
+
+        OtherPatientInfoDTO dto = new OtherPatientInfoDTO();
+        
+        // 設定病患 ID
+        dto.setPatientId(otherPatientInfo.getPatientId());
+        
+        // 複製所有基本欄位
+        dto.setMainIssueDesc(otherPatientInfo.getMainIssueDesc());
+        dto.setDifficultyDesc(otherPatientInfo.getDifficultyDesc());
+        dto.setEducationLevel(otherPatientInfo.getEducationLevel());
+        dto.setOccupation(otherPatientInfo.getOccupation());
+        dto.setFamilyLanguage(otherPatientInfo.getFamilyLanguage());
+        dto.setPreeducationExp(otherPatientInfo.getPreeducationExp());
+        dto.setFatherEducation(otherPatientInfo.getFatherEducation());
+        dto.setMotherEducation(otherPatientInfo.getMotherEducation());
+        
+        // 處理語言發展問題類別 - 轉換為 ID 列表
+        if (otherPatientInfo.getSpeechDevIssues() != null) {
+            List<Long> speechDevIssueIds = otherPatientInfo.getSpeechDevIssues()
+                    .stream()
+                    .map(SpeechDevIssueCategory::getId)
+                    .collect(Collectors.toList());
+            dto.setSpeechDevIssueIds(speechDevIssueIds);
+        }
+        
+        dto.setCommunicationMtd(otherPatientInfo.getCommunicationMtd());
+        dto.setSwallowDifficulty(otherPatientInfo.getSwallowDifficulty());
+        dto.setPsychologicalState(otherPatientInfo.getPsychologicalState());
+        dto.setOtherRemarks(otherPatientInfo.getOtherRemarks());
+        dto.setFatherOccupation(otherPatientInfo.getFatherOccupation());
+        dto.setMotherOccupation(otherPatientInfo.getMotherOccupation());
+        dto.setDevelopmentalDelay(otherPatientInfo.getDevelopmentalDelay());
+        dto.setSuspectedSpeechIssues(otherPatientInfo.getSuspectedSpeechIssues());
+        dto.setComprehensionAbility(otherPatientInfo.getComprehensionAbility());
+        dto.setExpressionAbility(otherPatientInfo.getExpressionAbility());
+        dto.setRecentStressEvents(otherPatientInfo.getRecentStressEvents());
+        dto.setFamilySupportLevel(otherPatientInfo.getFamilySupportLevel());
+        dto.setPsychologicalTreatment(otherPatientInfo.getPsychologicalTreatment());
+        dto.setTreatmentDetails(otherPatientInfo.getTreatmentDetails());
+        dto.setSuicidalThoughts(otherPatientInfo.getSuicidalThoughts());
+        dto.setSelfHarmBehavior(otherPatientInfo.getSelfHarmBehavior());
+        
+        return dto;
     }
 }

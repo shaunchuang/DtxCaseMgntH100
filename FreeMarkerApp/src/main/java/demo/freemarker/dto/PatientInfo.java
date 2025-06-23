@@ -1,8 +1,9 @@
 package demo.freemarker.dto;
 
+import demo.freemarker.api.OtherPatientInfoAPI;
 import demo.freemarker.api.PatientAPI;
-import demo.freemarker.api.UserAPI;
 import demo.freemarker.core.MessageSource;
+import demo.freemarker.model.OtherPatientInfo;
 import demo.freemarker.model.Patient;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -34,11 +35,14 @@ public class PatientInfo{
     private String city;
     private String district;
     private String address;
+    private TherapyItem therapyItem;
+    private OtherPatientInfoDTO otherPatientInfoDTO;
 
     public PatientInfo(Long patientId, Locale locale) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Patient patient = PatientAPI.getInstance().getPatient(patientId);
-        this.charno = String.valueOf(patientId);        this.idno = patient.getIdno();
+        this.charno = String.valueOf(patientId);
+        this.idno = patient.getIdno();
         this.name = patient.getName();
         this.gender = patient.getGender();
         this.genderName = getGenderName(patient.getGender(), locale);
@@ -73,6 +77,7 @@ public class PatientInfo{
         this.city = patient.getCity();
         this.district = patient.getDistrict();
         this.address = patient.getAddress();
+        this.otherPatientInfoDTO = OtherPatientInfoAPI.getInstance().convertToDTO(patient.getOtherPatientInfo());
     }
 
     public String getIdno() {
@@ -260,6 +265,14 @@ public class PatientInfo{
     public void setDistrict(String district) {
         this.district = district;
     }
+
+    public TherapyItem getTherapyItem() {
+        return therapyItem;
+    }
+
+    public void setTherapyItem(TherapyItem therapyItem) {
+        this.therapyItem = therapyItem;
+    }
     
     public static PatientInfo getPatientInfo(Long patientId, Locale locale) {
         return new PatientInfo(patientId, locale);
@@ -271,7 +284,8 @@ public class PatientInfo{
         } else if(gender.toLowerCase().equals("f")) {
             gender = MessageSource.getMessage("caseList.label.female", locale);
         } else {
-            gender = MessageSource.getMessage("caseList.label.unknown", locale);        }
+            gender = MessageSource.getMessage("caseList.label.unknown", locale);
+        }
         return gender;
     }
     
@@ -283,5 +297,12 @@ public class PatientInfo{
         }
         return ms;
     }
-    
+
+    public OtherPatientInfoDTO getOtherPatientInfoDTO() {
+        return otherPatientInfoDTO;
+    }
+
+    public void setOtherPatientInfoDTO(OtherPatientInfoDTO otherPatientInfoDTO) {
+        this.otherPatientInfoDTO = otherPatientInfoDTO;
+    }
 }

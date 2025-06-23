@@ -707,6 +707,111 @@ public class DtxCaseMgntPage extends RequestHandler {
         String viewer = getValueOfKeyInQuery(request.exchange.getRequestURI(), "viewer");
         return "/casemgnt/template/dataForm/"+ viewer;
     }
+    
+    @RequestMapping(pattern = "/patient/caseForm/overview", description = "個案表單")
+    public String overview(RequestData request, Model model) {
+                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
+        Locale locale = SecurityUtils.getLocale(request);
+        PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("formId", patientId);
+        model.addAttribute("ptInfo", ptInfo);
+        model.addAttribute("menuNum", 2);
+        return "/casemgnt/overview";
+    }
+    
+    @RequestMapping(pattern = "/patient/caseForm/analysis", description = "分析")
+    public String caseFormAnalysis(RequestData request, Model model) {
+                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
+        Locale locale = SecurityUtils.getLocale(request);
+        PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("formId", patientId);
+        model.addAttribute("ptInfo", ptInfo);
+        model.addAttribute("menuNum", 2);
+        return "/casemgnt/caseForm/analysis";
+    }
+    
+    @RequestMapping(pattern = "/patient/caseForm/assessment", description = "量表")
+    public String caseFormAssessment(RequestData request, Model model) {
+                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
+        Locale locale = SecurityUtils.getLocale(request);
+        PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("formId", patientId);
+        model.addAttribute("ptInfo", ptInfo);
+        model.addAttribute("menuNum", 2);
+        return "/casemgnt/caseForm/assessment";
+    }
+    
+    @RequestMapping(pattern = "/patient/caseForm/diagnosis", description = "診斷")
+    public String caseFormDiagnosis(RequestData request, Model model) {
+                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
+        Locale locale = SecurityUtils.getLocale(request);
+        PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("formId", patientId);
+        model.addAttribute("ptInfo", ptInfo);
+        model.addAttribute("menuNum", 2);
+        return "/casemgnt/caseForm/diagnosis";
+    }
+    
+    @RequestMapping(pattern = "/patient/caseForm/notes", description = "備註")
+    public String caseFormNotes(RequestData request, Model model) {
+                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
+        Locale locale = SecurityUtils.getLocale(request);
+        PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("formId", patientId);
+        model.addAttribute("ptInfo", ptInfo);
+        model.addAttribute("menuNum", 2);
+        return "/casemgnt/caseForm/notes";
+    }
+    
+    @RequestMapping(pattern = "/patient/caseForm/profile", description = "資料")
+    public String caseFormProfile(RequestData request, Model model) {
+                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
+        Locale locale = SecurityUtils.getLocale(request);
+        PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("formId", patientId);
+        model.addAttribute("ptInfo", ptInfo);
+        model.addAttribute("menuNum", 2);
+        return "/casemgnt/caseForm/profile";
+    }
+    
+    @RequestMapping(pattern = "/patient/caseForm/visits", description = "複診")
+    public String caseFormVisits(RequestData request, Model model) {
+                UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
+        Locale locale = SecurityUtils.getLocale(request);
+        PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("formId", patientId);
+        model.addAttribute("ptInfo", ptInfo);
+        model.addAttribute("menuNum", 2);
+        return "/casemgnt/caseForm/visits";
+    }
 
     public TodayReviewInfo qryTodayReview(UserRoleDTO currentUser) {
         try {

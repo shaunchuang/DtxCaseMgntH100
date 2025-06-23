@@ -96,5 +96,4 @@ $(".control-menu-list .menu").click(function(e){
 
 </style>
 
-<#include "/skins/imas/casemgnt/socket.ftl" />
-<#include "/skins/imas/widget/widget.ftl" />
+<#include "/imas/widget/widget.ftl" />

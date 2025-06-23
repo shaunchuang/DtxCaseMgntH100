@@ -375,8 +375,12 @@ function activTrack(){
 }
 
 /* 統一設置圖標大小和樣式 */
-.d-column span.d-title:before {
-    font-family: 'FontAwesome'; /* 確保使用 Font Awesome 字體 */
+.d-column span.d-title:before,
+.func-btn-custom:before{
+	font-family: 'FontAwesome'; /* 確保使用 Font Awesome 字體 */
+}
+
+.d-column span.d-title:before {    
     font-weight: 900; /* 確保使用 Font Awesome 的粗體字重 */
     color: #ffffff; /* 設置圖標顏色 */
     background-color: #00CB96; /* 設置圖標背景顏色 */

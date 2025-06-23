@@ -89,6 +89,7 @@ D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\d
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\HcRecordDTO.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\HcRecordResp.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\LessonDTO.java
+D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\OtherPatientInfoDTO.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\PatientInfo.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\PaymentItem.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\QuestionEvaluationType.java
@@ -102,6 +103,7 @@ D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\d
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\StatisticsGoalDTO.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\StatsData.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\SyndromeDTO.java
+D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\TherapyItem.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\TodayReviewInfo.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\TodayReviewResp.java
 D:\project_code\newDTX\DtxCaseMgnt\FreeMarkerApp\src\main\java\demo\freemarker\dto\TrainingData.java

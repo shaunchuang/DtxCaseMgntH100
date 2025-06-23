@@ -564,8 +564,7 @@ $(document).ready(function(){
     	zipcodeIntoDistrict: false
     });
 
-	// 初始化患者基本資料
-	fillPatientInfo();
+
 
 	$(".icd-code").each(function(idx){
 		$(this).select2({
@@ -709,7 +708,11 @@ $(document).ready(function(){
 	//顯示個案評估結果列表
  	triggerPatientEvalList();
 	//初始化就診基本資料
-	wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=pt')
+	wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=pt');
+	// 初始化患者基本資料
+	setTimeout(function() {
+		fillPatientInfo();
+	}, 500);
 	//初始化就診紀錄
 	wg.template.updateNewPageContent('report-container', 'report-content', {}, '/ftl/imas/diagnosisReport/msg/chooseMessage');
 	//初始化治療師預約畫面
@@ -1741,7 +1744,7 @@ function fillPatientInfo() {
 		county  : patientInfo.city     || '',   // 例如「新竹縣」
 		district: patientInfo.district || ''    // 例如「竹北市」
 		});
-        // 聯絡地址
+    		// 聯絡地址
         $('#patient-address').val(patientInfo.address || "");
         
 		if (patientInfo.birth) {
@@ -1761,6 +1764,75 @@ function fillPatientInfo() {
 			// 同步隱藏欄位，供後端送出
 			$("#patient-birth").val(patientInfo.birth);
 		}
+        
+        // === 自動填入 dataForm/pt.ftl 相關欄位 (otherPatientInfo) ===
+        if (patientInfo.otherPatientInfoDTO) {
+			
+            console.log('正在自動填入其他患者資料:', patientInfo.otherPatientInfoDTO);
+            const otherInfo = patientInfo.otherPatientInfoDTO;
+
+            // 主要問題描述
+            $('#mainIssueDesc').val(otherInfo.mainIssueDesc || "");
+            
+            // 教育和職業資訊
+            $('#educationLevel').val(otherInfo.educationLevel || "");
+            $('#occupation').val(otherInfo.occupation || "");
+            $('#preeducationExp').val(otherInfo.preeducationExp || "");
+            
+            // 家庭教育程度
+            $('#fatherEducation').val(otherInfo.fatherEducation || "");
+            $('#motherEducation').val(otherInfo.motherEducation || "");
+            
+            // 家庭職業
+            $('#fatherOccupation').val(otherInfo.fatherOccupation || "");
+            $('#motherOccupation').val(otherInfo.motherOccupation || "");
+            
+            // 家庭語言
+            $('#familyLanguage').val(otherInfo.familyLanguage || "");
+            
+            // 發展和語言問題
+            $('#developmentalDelay').val(otherInfo.developmentalDelay || "");
+            $('#suspectedSpeechIssues').val(otherInfo.suspectedSpeechIssues || "");
+            
+            // 語言發展問題(複選) - speechDevIssues 是陣列
+            if (otherInfo.speechDevIssues && Array.isArray(otherInfo.speechDevIssues)) {
+				console.log('語言發展問題:', otherInfo.speechDevIssues);
+                $('.speech-dev-issue-options .option').removeClass('selected');
+                otherInfo.speechDevIssues.forEach(function(id) {
+                    $('.speech-dev-issue-options .option[data-item="' + id + '"]').addClass('selected');
+                });
+            }
+            
+            // 溝通和表達能力
+            $('#communicationMtd').val(otherInfo.communicationMtd || "");
+            $('#swallowDifficulty').val(otherInfo.swallowDifficulty || "");
+            $('#comprehensionAbility').val(otherInfo.comprehensionAbility || "");
+            $('#expressionAbility').val(otherInfo.expressionAbility || "");
+              // 困難描述和備註
+            $('#difficultyDesc').val(otherInfo.difficultyDesc || "");
+            $('#otherRemarks').val(otherInfo.otherRemarks || "");
+            
+            // === ps.ftl 相關欄位 ===
+            // 情緒與心理狀態
+            $('#psychologicalState').val(otherInfo.psychologicalState || "");
+            
+            // 最近生活壓力事件
+            $('#recentStressEvents').val(otherInfo.recentStressEvents || "");
+            
+            // 家庭支持程度
+            $('#familySupportLevel').val(otherInfo.familySupportLevel || "");
+            
+            // 心理治療相關
+            $('#psychologicalTreatment').val(otherInfo.psychologicalTreatment || "");
+            $('#treatmentDetails').val(otherInfo.treatmentDetails || "");
+            
+            // 風險評估
+            $('#suicidalThoughts').val(otherInfo.suicidalThoughts || "");
+            $('#selfHarmBehavior').val(otherInfo.selfHarmBehavior || "");
+            
+            console.log('其他患者資料填入完成');
+        }
+        
         console.log('患者資料填入完成');
     } else {
         console.warn('patientInfo 資料不存在或格式不正確');
