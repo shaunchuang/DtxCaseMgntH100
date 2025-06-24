@@ -29,7 +29,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "HealthInsuranceRecord.findLatestRecordByPatientId", 
                 query = "SELECT h FROM HealthInsuranceRecord h WHERE h.patientId = :patientId ORDER BY h.createTime DESC"),
     @NamedQuery(name = "HealthInsuranceRecord.findLatestRecordByPatientAndCreator", 
-                query = "SELECT h FROM HealthInsuranceRecord h WHERE h.patientId = :patientId AND h.creator = :creatorId ORDER BY h.createTime DESC")
+                query = "SELECT h FROM HealthInsuranceRecord h WHERE h.patientId = :patientId AND h.creator = :creatorId ORDER BY h.createTime DESC"),
+    @NamedQuery(name = "HealthInsuranceRecord.findLatestRecordByPatientAndDoctorRole", 
+                query = "SELECT h FROM HealthInsuranceRecord h WHERE h.patientId = :patientId AND h.creator IN (SELECT ur.userId FROM UserRole ur WHERE ur.roleId = 3) ORDER BY h.createTime DESC"),
+    @NamedQuery(name = "HealthInsuranceRecord.findLatestRecordByPatientAndTherapistRoles", 
+                query = "SELECT h FROM HealthInsuranceRecord h WHERE h.patientId = :patientId AND h.creator IN (SELECT ur.userId FROM UserRole ur WHERE ur.roleId IN (4, 5, 6, 7)) ORDER BY h.createTime DESC"),
+    @NamedQuery(name = "HealthInsuranceRecord.findLatestRecordByPatientAndSpecificRole", 
+                query = "SELECT h FROM HealthInsuranceRecord h WHERE h.patientId = :patientId AND h.creator IN (SELECT ur.userId FROM UserRole ur WHERE ur.roleId = :roleId) ORDER BY h.createTime DESC")
 })
 public class HealthInsuranceRecord implements IntIdDataEntity, Serializable {
     private static final long serialVersionUID = 1822843074531309L;

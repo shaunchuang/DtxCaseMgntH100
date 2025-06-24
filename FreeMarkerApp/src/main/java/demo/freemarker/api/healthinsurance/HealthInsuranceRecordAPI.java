@@ -114,7 +114,143 @@ public class HealthInsuranceRecordAPI implements API {
             throw new RuntimeException(ex.getMessage());
         }
     }
-
+    
+    /**
+     * 取得指定病患的醫師最後看診記錄
+     * @param patientId 病患ID
+     * @return 醫師最後看診記錄
+     */
+    public HealthInsuranceRecord getLatestDoctorVisitByPatient(Long patientId) {
+        try {
+            return HealthInsuranceRecordDAO.getInstance().findLatestDoctorRecordByPatient(patientId);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+    
+    /**
+     * 取得指定病患的治療師最後看診記錄
+     * @param patientId 病患ID
+     * @return 治療師最後看診記錄
+     */
+    public HealthInsuranceRecord getLatestTherapistVisitByPatient(Long patientId) {
+        try {
+            return HealthInsuranceRecordDAO.getInstance().findLatestTherapistRecordByPatient(patientId);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+    
+    /**
+     * 取得指定病患的特定角色最後看診記錄
+     * @param patientId 病患ID
+     * @param roleId 角色ID (3=醫師, 4=心理治療師, 5=語言治療師, 6=職能治療師, 7=物理治療師)
+     * @return 特定角色最後看診記錄
+     */
+    public HealthInsuranceRecord getLatestVisitByPatientAndRole(Long patientId, Long roleId) {
+        try {
+            return HealthInsuranceRecordDAO.getInstance().findLatestRecordByPatientAndRole(patientId, roleId);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+    
+    /**
+     * 取得指定病患的所有醫師看診記錄
+     * @param patientId 病患ID
+     * @return 醫師看診記錄列表
+     */
+    public List<HealthInsuranceRecord> getDoctorVisitsByPatient(Long patientId) {
+        try {
+            return HealthInsuranceRecordDAO.getInstance().findDoctorRecordsByPatient(patientId);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+    
+    /**
+     * 取得指定病患的所有治療師看診記錄
+     * @param patientId 病患ID
+     * @return 治療師看診記錄列表
+     */
+    public List<HealthInsuranceRecord> getTherapistVisitsByPatient(Long patientId) {
+        try {
+            return HealthInsuranceRecordDAO.getInstance().findTherapistRecordsByPatient(patientId);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+    
+    /**
+     * 取得醫師最後看診時間（格式化後的字串）
+     * @param patientId 病患ID
+     * @return 格式化的最後看診時間字串，如果沒有記錄則回傳 null
+     */
+    public String getLastDoctorVisitTime(Long patientId) {
+        try {
+            HealthInsuranceRecord record = getLatestDoctorVisitByPatient(patientId);
+            if (record != null && record.getCreateTime() != null) {
+                return fullDateFormat(record.getCreateTime());
+            }
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
+    /**
+     * 取得治療師最後看診時間（格式化後的字串）
+     * @param patientId 病患ID
+     * @return 格式化的最後看診時間字串，如果沒有記錄則回傳 null
+     */
+    public String getLastTherapistVisitTime(Long patientId) {
+        try {
+            HealthInsuranceRecord record = getLatestTherapistVisitByPatient(patientId);
+            if (record != null && record.getCreateTime() != null) {
+                return fullDateFormat(record.getCreateTime());
+            }
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    
+    /**
+     * 計算治療週數
+     * @param patientId 病患ID
+     * @return 治療週數，如果無法計算則回傳 0
+     */
+    public int calculateTreatmentWeeks(Long patientId) {
+        try {
+            // 取得第一次治療記錄
+            List<HealthInsuranceRecord> allRecords = getRecordsByPatientId(patientId);
+            if (allRecords == null || allRecords.isEmpty()) {
+                return 0;
+            }
+            
+            // 找到最早的治療記錄
+            HealthInsuranceRecord firstRecord = allRecords.stream()
+                .min((r1, r2) -> r1.getCreateTime().compareTo(r2.getCreateTime()))
+                .orElse(null);
+                
+            if (firstRecord == null) {
+                return 0;
+            }
+            
+            // 計算從第一次治療到現在的週數
+            Date firstTreatmentDate = firstRecord.getCreateTime();
+            Date currentDate = new Date();
+            
+            long diffInMillies = currentDate.getTime() - firstTreatmentDate.getTime();
+            long diffInDays = diffInMillies / (1000 * 60 * 60 * 24);
+            
+            return (int) Math.ceil(diffInDays / 7.0);
+            
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
+    
     public HcRecordDTO convertToHcRecordDTO(HealthInsuranceRecord hcForm, Long serialNo, Boolean isDetailInfo) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 

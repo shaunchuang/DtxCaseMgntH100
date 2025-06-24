@@ -172,7 +172,7 @@ public class PatientRESTfulAPI extends RESTfulAPI {
                 totalSize = patients.size();
                 for (Patient patient : patients){
                     QryInfoResp qir = new QryInfoResp();
-                    HealthInsuranceRecord hcRecord = HealthInsuranceRecordAPI.getInstance().getLatestRecord(patient.getId());
+                    HealthInsuranceRecord hcRecord = HealthInsuranceRecordAPI.getInstance().getLatestDoctorVisitByPatient(patient.getId());
                     if(hcRecord != null ){
                         WgIcdCode icdCode = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(hcRecord.getMainDiagnosisCode()));
                         qir.diagnosis = icdCode.getPureCode() + " " + icdCode.getName();

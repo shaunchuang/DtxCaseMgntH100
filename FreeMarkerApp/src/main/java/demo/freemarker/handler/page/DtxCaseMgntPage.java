@@ -872,15 +872,17 @@ public class DtxCaseMgntPage extends RequestHandler {
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
 
         List<HcRecordDTO> hcRecordDTOs = new ArrayList<HcRecordDTO>();
-        List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getRecordsByPatientId(Long.parseLong(patientId));
+        //List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getRecordsByPatientId(Long.parseLong(patientId));
+        List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getDoctorVisitsByPatient(Long.parseLong(patientId));
+        int diagTimes = 0;
         for (HealthInsuranceRecord record : records) {
             User user = UserAPI.getInstance().getUser(record.getCreator());
             List<Role> roles = RoleAPI.getInstance().listRolesByUserId(user.getId());
             UserRoleDTO doctor = new UserRoleDTO(user, roles);
-            if (doctor.getRoleAlias().equals("DOCTOR")) {
                 HcRecordDTO hcRecordDTO = new HcRecordDTO();
                 hcRecordDTO.setId(record.getId());
-                hcRecordDTO.setDiagTimes(records.size());
+                hcRecordDTO.setDiagTimes(diagTimes);
+                diagTimes++;
                 hcRecordDTO.setDiagDateTime(HealthInsuranceRecordAPI.getInstance().fullDateFormat(record.getCreateTime()));
                 hcRecordDTO.setDoctorAlias(doctor.getRoleName());
                 WgIcdCode codeObj = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
@@ -899,14 +901,21 @@ public class DtxCaseMgntPage extends RequestHandler {
                     }
                 }
                 hcRecordDTOs.add(hcRecordDTO);
-            }
-        }
+                    }
 
-
+        // 取得醫師和治療師最後看診時間以及治療週數
+        String lastDoctorVisit = HealthInsuranceRecordAPI.getInstance().getLastDoctorVisitTime(Long.parseLong(patientId));
+        System.out.println("lastDoctorVisit: " + lastDoctorVisit);
+        String lastTherapistVisit = HealthInsuranceRecordAPI.getInstance().getLastTherapistVisitTime(Long.parseLong(patientId));
+        System.out.println("lastTherapistVisit: " + lastTherapistVisit);
+        int treatmentWeeks = HealthInsuranceRecordAPI.getInstance().calculateTreatmentWeeks(Long.parseLong(patientId));
+        System.out.println("treatmentWeeks: " + treatmentWeeks);
+        
+        
         model.addAttribute("hcRecords", hcRecordDTOs);
-        model.addAttribute("lastDoctorVisit", null);
-        model.addAttribute("lastTherapistVisit", null);
-        model.addAttribute("treatmentWeeks", null);
+        model.addAttribute("lastDoctorVisit", lastDoctorVisit);
+        model.addAttribute("lastTherapistVisit", lastTherapistVisit);
+        model.addAttribute("treatmentWeeks", treatmentWeeks);
         model.addAttribute("__lang", "zh_TW");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("field_abbrev_ename", "ITRI");
