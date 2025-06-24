@@ -78,7 +78,7 @@
         getTrainingRecord(function(trainingRecords){
             createChart(trainingRecords);
         });
-        getTrainingPlan();
+        getTrainingPlanNew();
         // 如果需要使用新版本的訓練計畫解析，可以呼叫 getTrainingPlanNew(trainingPlan);
     });
 

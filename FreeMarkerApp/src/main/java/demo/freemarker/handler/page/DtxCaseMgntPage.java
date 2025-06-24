@@ -922,6 +922,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         }
         
         String msg = getValueOfKeyInQuery(request.exchange.getRequestURI(), "msg");
+        model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         System.out.println("msg: " + msg);
         model.addAttribute("message", msg);
         model.addAttribute("planId", 0);
@@ -943,6 +944,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         TrainingPlan trainingPlan = TrainingPlanAPI.getInstance().getTrainingPlan(Long.parseLong(planId));
         TrainingPlanDTO trainingPlanDTO = TrainingPlanAPI.getInstance().convertPlanDTO(trainingPlan);
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         model.addAttribute("planId", planId);
         model.addAttribute("trainingPlan", GsonUtil.toJson(trainingPlanDTO));
         model.addAttribute("formId", patientId);
