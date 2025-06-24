@@ -1,0 +1,107 @@
+/* 評估量表相關css */
+
+.select-chk input[type='checkbox']{
+	scale: 1.5;
+}
+
+.add-ast:before, .do-fill:before,
+.video-play:before, .chart-review:before{
+	font-family: 'FontAwesome';
+	margin-right: 5px;
+}
+
+.add-ast:before{
+	content: "\f055";
+}
+
+.do-fill:before{
+	content:"\f044";
+}
+
+.video-play:before{
+	content:"\f03d";
+}
+
+.chart-review:before{
+	content:"\e473";
+}
+
+.list-group{
+	max-height: 350px;
+	overflow-y: auto;
+}
+
+.list-group-item.selected {
+  	border-left: 6px solid #cc6600; /* Bootstrap 主色：藍色 */
+}
+
+.card-hover:hover {
+	background-color: #f1f1f1;
+	cursor: pointer;
+}
+
+.score-box {
+	font-size: 1.6rem;
+	background: #e9f3ff;
+	padding: 0.25rem 0.75rem;
+	border-radius: 8px;
+	font-weight: 600;
+	color: #0d6efd;
+	text-align: center;
+}
+
+.category-label {
+	font-size: 1.3rem;
+	font-weight: 600;
+	padding: 0.25rem 0.75rem;
+	border-radius: 0.5rem;
+	color: #ffffff;
+	margin-right: 0.5rem;
+}
+
+/* 物理標籤 */
+.label-pt { 
+	background-color: #198754; 
+}
+
+/* 職能標籤 */
+.label-ot { 
+	background-color: #0aa3c2;
+}
+
+/* 心理標籤 */
+.label-ps { 
+	background-color: #ff6666;
+}
+
+/* 語言標籤 */
+.label-st { 
+	background-color: #ffbf00; 
+}
+
+.form-name{
+	font-size: 1.6rem;
+}
+	
+.sub-content {
+  	display: flex;
+  	justify-content: space-between;
+  	align-items: center;
+  	margin-top: 0.25rem;
+}
+
+.sub-content-left {
+  	display: flex;
+  	flex-direction: column;
+}
+
+.sub-content-right {
+	font-size: 1.8rem;
+  	white-space: nowrap;
+  	margin-left: 1rem;
+  	text-align: right;
+}
+
+.sub-func-list{
+	margin-top: 10px;
+}

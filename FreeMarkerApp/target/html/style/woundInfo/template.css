@@ -1,0 +1,100 @@
+html{
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+	position:relative;
+	background: #fbfbfb;
+}
+
+a, a:hover, a:active, a:visited, a:focus {
+    text-decoration:none;
+    color: black;
+}
+
+button{
+  margin-left: 5px;
+  margin-right: 10px;
+  
+}
+
+button > a{
+	font-size: 16px;
+}
+
+.main-footer{
+	position:absolute;
+	width:100%;
+	bottom:0;
+}
+
+.login-info{
+	float: right;
+	font-weight: 500;
+}
+
+.prjTitle{
+	background: linear-gradient(#42a1ec,#0070c9);
+}
+
+.prjTitle h2{
+	vertical-align: middle;
+	margin-top:	0px; 
+    margin-bottom:	0px;
+    padding: 1rem 0;
+}
+
+.field-name{
+	display: inline-block;
+}
+
+.func-list{
+	padding: 5rem 0;
+	display: flex;
+    justify-content: center;
+}
+
+.func-area ul{
+	list-style: none outside none;
+	padding: 0;
+	margin-bottom: 0;
+	width: 100%;
+	height: 250px;
+	text-align: center;	
+	margin-bottom: 10px;
+	border-radius: 10px;
+	background: #fff;
+	border: 1.5px solid grey;
+	box-shadow: 0 6px 2px -2px grey;
+}
+
+.func-area ul:hover{
+	background: #f2f2f2;
+}
+
+.img-hint{
+	display: table;
+}
+
+.func-area ul a{
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.func-area ul a img{
+	width: 100px;
+	height: 100px;	
+}
+
+.func-area ul a h3{
+	margin-top: 20px;
+	font-weight: 600;
+}
+
+.isDisabled{
+	color: currentColor;
+	cursor: default;
+	text-decoration: none;
+	opacity: 0.8;
+}
