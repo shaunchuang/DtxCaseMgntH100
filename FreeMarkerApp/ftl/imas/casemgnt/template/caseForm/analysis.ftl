@@ -142,11 +142,35 @@
             
             // 更新訓練項目與參數設定
             $('.method-list-group').empty();
+            /* ---------- 追蹤指標 ---------- */
+            const achRes = wg.evalForm.getJson(JSON.stringify({"lessonId": lessonIdForStore}), lessonStoreUrl + '/LessonAchievement/api/lesson');
+            console.log('achRes', achRes);
+            const statsRes = wg.evalForm.getJson(JSON.stringify({"lessonId": lessonIdForStore}), lessonStoreUrl + '/LessonStatistics/api/lesson');
+            console.log('statsRes', statsRes);
             if (planDetail.lessons && planDetail.lessons.length > 0) {
                 planDetail.lessons.forEach(lesson => {
-                    if (lesson.methods) {
-                        lesson.methods.forEach(method => {
-                            $('.method-list-group').append('<li>' + method + '</li>');
+                    if(lesson.achievements && lesson.achievements.length > 0) {
+                        lesson.achievements.forEach(ach => {
+                            console.log('list ach');
+                            achRes.forEach(resAch => {
+                                if(resAch.apiName == ach.apiName) {
+                                    console.log('match achievement:', resAch);
+                                    let achImage = lessonStoreUrl + '/File/api/file/path' + resAch.unlockedIconUrl;
+                                    $('.method-list-group').append('<li><img src="' + achImage + '" class="achievement-image" style="width: 30px; height: 30px; margin-right: 10px; vertical-align: middle;">' + resAch.displayName + ' | ' + resAch.description + '</li>');
+                                }
+                            });
+                        });
+                    }
+
+                    if (lesson.statistics && lesson.statistics.length > 0) {
+                        lesson.statistics.forEach(stat => {
+                            console.log('list stat');
+                            statsRes.forEach(resStat => {
+                            if(resStat.apiName == stat.apiName) {
+                                console.log('match stat:', resStat);
+                                $('.method-list-group').append('<li>' + resStat.displayName + ' | ' + resStat.apiName + ` &gt; ` + stat.valueGoal + ' </li>');
+                            }
+                            });
                         });
                     }
                 });
@@ -274,6 +298,7 @@
             }
         });
     }
+
     
     // 重新渲染訓練紀錄到原始數據表格
     function renderTrainingRecord(res, achievements) {
@@ -389,6 +414,10 @@
     .method-list-group{
     	list-style-type: none;
     	padding-left: 20px;
+    }
+
+    .method-list-group li{
+        margin-bottom: 10px;
     }
     
     .method-list-group li:before,

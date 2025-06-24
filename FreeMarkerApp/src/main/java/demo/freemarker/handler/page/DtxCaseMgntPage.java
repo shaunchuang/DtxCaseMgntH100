@@ -200,6 +200,7 @@ public class DtxCaseMgntPage extends RequestHandler {
             List<DiseaseCategory> diseases = DiseaseCategoryAPI.getInstance().listLocale(locale);
             List<DrugUseStatusCategory> drugUseStatus = DrugUseStatusCategoryAPI.getInstance().listAll();
             List<MedicationCategory> medicationCategories = MedicationCategoryAPI.getInstance().listLocale(locale);
+
             model.addAttribute("blogname", blogname);
             model.addAttribute("formId", patientId);
             model.addAttribute("ptInfo", ptInfo);
@@ -903,7 +904,9 @@ public class DtxCaseMgntPage extends RequestHandler {
 
 
         model.addAttribute("hcRecords", hcRecordDTOs);
-
+        model.addAttribute("lastDoctorVisit", null);
+        model.addAttribute("lastTherapistVisit", null);
+        model.addAttribute("treatmentWeeks", null);
         model.addAttribute("__lang", "zh_TW");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("field_abbrev_ename", "ITRI");
