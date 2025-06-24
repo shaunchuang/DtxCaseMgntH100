@@ -73,58 +73,25 @@
     let lessonIdForStore = trainingPlan.lessons[0].lessonId; // 教案市集KeyNo
     let lessonAch; // 教案成就
     let therapistId = trainingPlan.therapistId; // 治療師Id
-    let therapistName = trainingPlan.therapistName; // 治療師姓名
-      $(document).ready(function(){
+    let therapistName = trainingPlan.therapistName; // 治療師姓名    $(document).ready(function(){
         getTrainingRecord(function(trainingRecords){
             createChart(trainingRecords);
         });
-        getTrainingPlanNew();
-        // 如果需要使用新版本的訓練計畫解析，可以呼叫 getTrainingPlanNew(trainingPlan);
+        getTrainingPlan();
     });
-
-    function getTrainingPlanNew(trainingPlan) {
-        console.log('getTrainingPlanNew', trainingPlan);
-
-        /* ---------- 1. 解析計畫主體 ---------- */
-        const planDetail = trainingPlan.trainingPlan || trainingPlan;
-
-        /* ---------- 2. 取得教案 ID ---------- */
-        if (!planDetail.lessons || planDetail.lessons.length === 0) {
-            swal('載入訓練計畫失敗', '找不到訓練教案資料', 'error');
-            return;
-        }
-        lessonIdForStore = planDetail.lessons[0].lessonId;
-
-        /* ---------- 3. 基本欄位 ---------- */
-        const perWeek       = planDetail.frequencyPerWeek;   // 新格式沒有，但保留向下相容
-        const perDay        = planDetail.frequencyPerDay;
-        const duration      = planDetail.durationPerSession;
-        const therapistName = planDetail.therapistName;
-        let   otherNote     = planDetail.notes || '';
-
-        /* ---------- 4. 把分鐘換成「幾小時幾分鐘」 ---------- */
-        const minutes          = parseInt(duration, 10) || 0;
-        const hours            = Math.floor(minutes / 60);
-        const remainingMinutes = minutes % 60;
-        const formattedTime    = (hours > 0 ? hours + '小時' : '') + remainingMinutes + '分鐘';
-
-        /* ---------- 5. 組合規則文字 ---------- */
-        let ruleText = '';
-        if (perWeek !== undefined && perWeek !== null)  ruleText += '每週' + perWeek + '次';
-        if (perDay  !== undefined && perDay  !== null) {
-            if (ruleText) ruleText += '; ';
-            ruleText += '每天' + perDay + '次';
-        }
-        if (ruleText) ruleText += '; ';
-        ruleText += '每次' + formattedTime;
-
-        /* ---------- 6. 讀教案基本資料 ---------- */
-        let lessonMain;
+    
+    function getTrainingPlan(){
+        console.log('trainingPlan: ', trainingPlan);
+        if(trainingPlan) {
+            let planDetail = trainingPlan;
+            let lessonMain = '';
+            lessonIdForStore = planDetail.lessons[0].lessonId;
+            
             $.ajax({
                 url: lessonStoreUrl + '/LessonMainInfo/api/get/lessonId/' + lessonIdForStore,
                 type: 'GET',
                 dataType: 'json',
-                async: false, // 同步請求
+                async: false,
                 success: function(response) {
                     lessonMain = response;
                 },
@@ -135,80 +102,52 @@
                 }
             });
             console.log('lessonMain: ', lessonMain);
-
-        const imageUrl   = lessonStoreUrl + '/File/api/file/path' + lessonMain.headerImageUrl   || "";   // 可能是 /images/... 或完整 http 路徑
-        const lessonName = lessonMain.lessonName       || "（未命名課程）";
-        const startDate  = formatDateNew(planDetail.startDate);
-        const endDate    = formatDateNew(planDetail.endDate);
-
-        /* ---------- 7. 更新畫面 ---------- */
-        $('.plan-title').text(lessonName + ' 訓練計畫');
-        $('.plan-period').text(startDate + ' ~ ' + endDate);
-        $('.plan-creator').text(therapistName + ' 治療師');
-        $('.plan-rule').text(ruleText);
-
-        if (otherNote.includes('\n')) {
-            otherNote = otherNote.replace(/\n/g, '<br>');
-            $('.other-note').html(otherNote);
-        } else {
-            $('.other-note').text(otherNote);
-        }
-
-        /* ---------- 8. 追蹤指標 ---------- */
-        const achRes = wg.evalForm.getJson(JSON.stringify({"lessonId": lessonIdForStore}), lessonStoreUrl + '/LessonAchievement/api/lesson');
-        console.log('achRes', achRes);
-
-
-        const lessonAch      = achRes;
-        const trainingLesson = planDetail.lessons[0];
-        const achievements   = trainingLesson.achievements || [];
-        const statistics     = trainingLesson.statistics  || [];
-
-        $('#target-table tbody').empty();
-
-        if (achievements.length === 0 && statistics.length === 0) {
-            $('#target-table').remove();
-            $('.training-target').append('<div class="no-target-msg">此計畫無追蹤目標</div>');
-        } else {
-            /* ----- 成就目標 ----- */
-            achievements.forEach(achTarget => {
-                lessonAch.forEach(ach => {
-                    if (achTarget.apiName == ach.apiName) {
-                        const achName  = ach.displayName;
-                        const achDes   = ach.description;
-                        const achImage = lessonStoreUrl + '/File/api/file/path' + ach.unlockedIconUrl;
-                        $('#target-table tbody').append(`
-                            <tr>
-                                <td>成就</td>
-                                <td>
-                                    <div class="default-blks">
-                                        <div class="col-3">
-                                            <img src="` + achImage + `" class="achievement-image">
-                                        </div>
-                                        <div class="col-9">
-                                            <div>` + achName + `</div>
-                                            <div>` + achDes + `</div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        `);
+            
+            let imageUrl = lessonStoreUrl + '/File/api/file/path' + lessonMain.headerImageUrl || "";
+            let lessonName = lessonMain.lessonName;
+            let startDateStr = formatDateNew(planDetail.startDate);
+            let endDateStr = formatDateNew(planDetail.endDate);
+            
+            // 更新訓練計畫詳細資訊
+            $('.detailPlanTitle').text(lessonName + ' 訓練計畫');
+            $('.detailUsePeriod').text(startDateStr + '~' + endDateStr);
+            $('.detailTherapist').text((planDetail.therapistName || therapistName) + ' 治療師');
+            
+            // 組合規則文字
+            let ruleText = '';
+            if (planDetail.frequencyPerWeek) ruleText += '每週' + planDetail.frequencyPerWeek + '次';
+            if (planDetail.frequencyPerDay) {
+                if (ruleText) ruleText += '，';
+                ruleText += '每天' + planDetail.frequencyPerDay + '次';
+            }
+            if (planDetail.durationPerSession) {
+                if (ruleText) ruleText += '，';
+                const minutes = parseInt(planDetail.durationPerSession, 10) || 0;
+                const hours = Math.floor(minutes / 60);
+                const remainingMinutes = minutes % 60;
+                const formattedTime = (hours > 0 ? hours + '小時' : '') + remainingMinutes + '分鐘';
+                ruleText += '每次' + formattedTime;
+            }
+            $('.detailParameters').text(ruleText || '未設定');
+            
+            // 更新訓練項目與參數設定
+            $('.method-list-group').empty();
+            if (planDetail.lessons && planDetail.lessons.length > 0) {
+                planDetail.lessons.forEach(lesson => {
+                    if (lesson.methods) {
+                        lesson.methods.forEach(method => {
+                            $('.method-list-group').append('<li>' + method + '</li>');
+                        });
                     }
                 });
-            });
-
-            /* ----- 統計目標 ----- */
-            statistics.forEach(statsTarget => {
-                $('#target-table tbody').append(`
-                    <tr>
-                        <td>統計</td>
-                        <td>` + statsTarget.apiName + ` &gt; ` + statsTarget.valueGoal + `</td>
-                    </tr>
-                `);
-            });
+            }
+            
+            // 更新備註
+            $('.detailNotes').text(planDetail.notes || '無特殊備註');
+        } else {            swal('載入訓練計畫失敗','請聯絡管理員','error');
         }
     }
-
+    
     function createChart(trainingRecords) {
     	console.log('chart record:', trainingRecords);
     	// 確保訓練記錄按 startTime 升序排序
@@ -299,67 +238,6 @@
                 }
             }
         });
-    }
-
-    function getTrainingRecord(callback){
-        console.log('lessonId For Store', lessonIdForStore);
-        $.ajax({
-            url: '/Training/api/listData',
-            type: "POST",
-            dataType: 'json',
-            data: JSON.stringify({"planId": planId, "lessonId": lessonIdForStore}), // 訓練教案KeyNo
-            success: function(response){
-                console.log('Training Record:', response);
-                getAchievement(function(achievement) {
-                    renderTrainingRecord(response, achievement);
-                    if (callback && typeof callback === 'function') {
-                        callback(response.data);
-                    }
-                });
-            },
-            error: function(err){
-                console.log('Error:', err);
-            }
-        });
-    }
-
-    function getTrainingPlan(){
-        console.log('trainingPlan: ', trainingPlan);
-        if(trainingPlan) {
-            // 解析計畫主體
-            const planDetail = trainingPlan.trainingPlan || trainingPlan;
-            
-            // 格式化日期
-            const startDateStr = formatDateNew(planDetail.startDate);
-            const endDateStr = formatDateNew(planDetail.endDate);
-            
-            // 更新訓練計畫詳細資訊
-            $('.detailPlanTitle').text(planDetail.trainingPlanName || '訓練計畫內容');
-            $('.detailUsePeriod').text(startDateStr + '~' + endDateStr);
-            $('.detailTherapist').text((planDetail.therapistName || '未指定') + ' 治療師');
-            
-            // 組合規則文字
-            let ruleText = '';
-            if (planDetail.frequencyPerWeek) ruleText += '每週' + planDetail.frequencyPerWeek + '次';
-            if (planDetail.frequencyPerDay) {
-                if (ruleText) ruleText += '，';
-                ruleText += '每天' + planDetail.frequencyPerDay + '次';
-            }
-            if (planDetail.durationPerSession) {
-                if (ruleText) ruleText += '，';
-                const minutes = parseInt(planDetail.durationPerSession, 10) || 0;
-                const hours = Math.floor(minutes / 60);
-                const remainingMinutes = minutes % 60;
-                const formattedTime = (hours > 0 ? hours + '小時' : '') + remainingMinutes + '分鐘';
-                ruleText += '每次' + formattedTime;
-            }
-            $('.detailParameters').text(ruleText || '未設定');
-            
-            // 更新備註
-            $('.detailNotes').text(planDetail.notes || '無特殊備註');
-        } else {
-            console.log('trainingPlan is null or undefined');
-        }
     }
     
     /* 取得成就資料 */
