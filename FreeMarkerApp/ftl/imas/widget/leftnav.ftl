@@ -1852,7 +1852,7 @@ function adjustHeight() {
     var cntHeight = containerHeight - topHeight - subHeight;
 
     $('.main-content').height(cntHeight);
-}
+
     
     if($('.control-menu-list').length > 0){
 		var menuHeight = $('.control-menu-list').outerHeight(true);
@@ -1870,7 +1870,7 @@ function adjustHeight() {
 		    });
 	    }
 	}
-
+}
 function getZoomLevel() {
   	return (window.outerWidth / window.innerWidth) || 1;
 }
