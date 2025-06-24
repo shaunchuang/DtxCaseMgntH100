@@ -66,18 +66,28 @@
     let lessonStoreUrl = '${lessonStoreUrl}';
     let planId = '${planId}'; // 訓練計畫Id
     console.log('planId', planId);
-    let trainingPlan = ${trainingPlan!""};
-    console.log('trainingPlan: ', trainingPlan);
-
+    let trainingPlan
     let lessonIdForPlan = ''; // 訓練教案KeyNo
-    let lessonIdForStore = trainingPlan.lessons[0].lessonId; // 教案市集KeyNo
-    let lessonAch; // 教案成就
-    let therapistId = trainingPlan.therapistId; // 治療師Id
-    let therapistName = trainingPlan.therapistName; // 治療師姓名    $(document).ready(function(){
+    let lessonIdForStore;
+    let lessonAch;
+    let therapistId;
+    let therapistName;
+    <#if trainingPlan??>
+        trainingPlan = ${trainingPlan!""};
+        console.log('trainingPlan: ', trainingPlan);
+        lessonIdForStore = trainingPlan.lessons[0].lessonId; // 教案市集KeyNo
+        lessonAch; // 教案成就
+        therapistId = trainingPlan.therapistId; // 治療師Id
+        therapistName = trainingPlan.therapistName; // 治療師姓名
+    </#if>
+
+    $(document).ready(function(){
+        <#if trainingPlan??>
         getTrainingRecord(function(trainingRecords){
             createChart(trainingRecords);
         });
         getTrainingPlan();
+        </#if>
     });
     
     function getTrainingPlan(){
@@ -144,7 +154,8 @@
             
             // 更新備註
             $('.detailNotes').text(planDetail.notes || '無特殊備註');
-        } else {            swal('載入訓練計畫失敗','請聯絡管理員','error');
+        } else {
+            swal('載入訓練計畫失敗','請聯絡管理員','error');
         }
     }
     
@@ -276,21 +287,21 @@
             $tbody.append('<tr><td colspan="4" class="text-center text-muted">目前沒有訓練紀錄</td></tr>');
             return;
         }
-        
+        $('p.text-muted').hide(); // 隱藏提示文字
         let recordHtml = '';
         response.data.forEach(function (record, index) {
+            console.log('Record: ', record);
             const startDate = new Date(record.startTime);
             const endDate = new Date(record.endTime);
             const formattedStartTime = formatDate(startDate);
             const formattedEndTime = formatDate(endDate);
             const formattedPeriod = formatPeriod(record.period);
-            
             recordHtml += `
-                <tr data-record-index="${index}">
-                    <td>${index + 1}</td>
-                    <td>${formattedStartTime}</td>
-                    <td>${formattedEndTime}</td>
-                    <td>${formattedPeriod}</td>
+                <tr data-record-index="` + index + `">
+                    <td>` + (index + 1) + `</td>
+                    <td>` + formattedStartTime + `</td>
+                    <td>` + formattedEndTime + `</td>
+                    <td>` + formattedPeriod + `</td>
                 </tr>
             `;
         });
@@ -330,6 +341,28 @@
                String(minutes).padStart(2, '0') + ':' + 
                String(seconds).padStart(2, '0');
     }
+
+    function getTrainingRecord(callback){
+		console.log('lessonId For Store', lessonIdForStore);
+		$.ajax({
+            url: '/Training/api/listData',
+            type: "POST",
+            dataType: 'json',
+            data: JSON.stringify({"planId": planId, "lessonId": lessonIdForStore}), // 訓練教案KeyNo
+            success: function(response){
+                console.log('Training Record:', response);
+                getAchievement(function(achievement) {
+	                renderTrainingRecord(response, achievement);
+	                if (callback && typeof callback === 'function') {
+                        callback(response.data);
+                    }
+            	});
+            },
+            error: function(err){
+                console.log('Error:', err);
+            }
+        });
+	}
     </script>
 	<style>
 	
