@@ -44,8 +44,7 @@
 					<div class="menu" data-menu="notes">其他紀載</div>
 					<div class="menu" data-menu="visits">就診歷程</div>
 					<div class="menu" data-menu="assessment">評估結果</div>
-					<div class="menu" data-menu="plan">訓練計畫</div>
-					<div class="menu" data-menu="analysis">訓練成果分析</div>					
+					<div class="menu" data-menu="plan">訓練計畫與成果</div>					
 				</div>
 				<div class="main-inner pd-h-10 pd-b-10">
 					<div id="content-container"></div>
@@ -94,6 +93,14 @@ $(".control-menu-list .menu").click(function(e){
 	color: #666666;
 	justify-content: center;
 }
+
+.info-title:before{
+	font-family: 'FontAwesome';
+	margin-right: 10px;
+	content:"\f406";
+	display: contents;
+}
+
 
 .item-title{
 	gap: 20px;

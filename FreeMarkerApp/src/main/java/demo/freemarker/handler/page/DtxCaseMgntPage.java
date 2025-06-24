@@ -35,6 +35,7 @@ import demo.freemarker.dto.ScaleForm;
 import demo.freemarker.dto.SyndromeDTO;
 import demo.freemarker.dto.TodayReviewInfo;
 import demo.freemarker.dto.TrainingEvent;
+import demo.freemarker.dto.TrainingPlanDTO;
 import demo.freemarker.dto.UserRoleDTO;
 import demo.freemarker.model.DiseaseCategory;
 import demo.freemarker.model.DrugUseStatusCategory;
@@ -740,6 +741,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         Locale locale = SecurityUtils.getLocale(request);
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         model.addAttribute("blogname", Config.get("blogname", "測試平台"));
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("field_abbrev_ename", "ITRI");
@@ -797,6 +799,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         Locale locale = SecurityUtils.getLocale(request);
         PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
 
+        model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         model.addAttribute("__lang", "zh_TW");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("field_abbrev_ename", "ITRI");
@@ -841,6 +844,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         List<DiseaseCategory> diseases = DiseaseCategoryAPI.getInstance().listLocale(locale);
         List<MedicationCategory> medicationCategories = MedicationCategoryAPI.getInstance().listLocale(locale);
         List<DrugUseStatusCategory> drugUseStatus = DrugUseStatusCategoryAPI.getInstance().listAll();
+
         model.addAttribute("patientInfo", GsonUtil.toJsonObject(ptInfo));
         model.addAttribute("personalDiseaseHistoryItems", diseases);
         model.addAttribute("drugUseStatus", drugUseStatus);
@@ -907,6 +911,44 @@ public class DtxCaseMgntPage extends RequestHandler {
         model.addAttribute("ptInfo", ptInfo);
         model.addAttribute("menuNum", 2);
         return "/casemgnt/template/caseForm/visits";
+    }
+
+    @RequestMapping(pattern = "/patient/analysis", description = "空訊息")
+    public String patientAnalysisEmptyMessage(RequestData request, Model model) {
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        
+        String msg = getValueOfKeyInQuery(request.exchange.getRequestURI(), "msg");
+        System.out.println("msg: " + msg);
+        model.addAttribute("message", msg);
+        model.addAttribute("planId", 0);
+        return "/casemgnt/template/caseForm/analysis";
+    }
+
+    @RequestMapping(pattern = "/patient/analysis/detail", description = "詳細資料")
+    public String patientAnalysisDetail(RequestData request, Model model) {
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        Locale locale = SecurityUtils.getLocale(request);
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
+        String planId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "planId");
+        System.out.println("patientId: " + patientId);
+        System.out.println("planId: " + planId);
+        TrainingPlan trainingPlan = TrainingPlanAPI.getInstance().getTrainingPlan(Long.parseLong(planId));
+        TrainingPlanDTO trainingPlanDTO = TrainingPlanAPI.getInstance().convertPlanDTO(trainingPlan);
+        PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+        model.addAttribute("planId", planId);
+        model.addAttribute("trainingPlan", GsonUtil.toJson(trainingPlanDTO));
+        model.addAttribute("formId", patientId);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("ptInfo", ptInfo);
+        return "/casemgnt/template/caseForm/analysis";
     }
 
     public TodayReviewInfo qryTodayReview(UserRoleDTO currentUser) {

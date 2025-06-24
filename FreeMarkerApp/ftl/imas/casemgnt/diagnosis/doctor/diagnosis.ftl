@@ -688,7 +688,7 @@ $(document).ready(function(){
 	        current_fs.hide().removeClass("active");
 	        target_fs.show().addClass("active");
 	    } else {
-	        swal("","您只能跳轉到已完成、已觸及或當前的步驟！", "warning");
+	        swal("提醒通知", "為確保資料正確，請依步驟順序進行，尚未填寫的步驟無法點選。", "warning");
 	    }
 	});
 	

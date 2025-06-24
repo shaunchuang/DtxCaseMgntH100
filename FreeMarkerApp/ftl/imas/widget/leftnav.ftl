@@ -1854,12 +1854,12 @@ function adjustHeight() {
     $('.main-content').height(cntHeight);
 }
     
-    if($(".main-inner").length > 0){
+    if($('.control-menu-list').length > 0){
 		var menuHeight = $('.control-menu-list').outerHeight(true);
 		cntHeight = cntHeight - menuHeight;
 		
 		$('.main-inner').css({
-	    	'max-height': cntHeight + 'px',
+	    	'height': cntHeight + 'px',
 	    });
 	}
 
