@@ -790,6 +790,17 @@ public class DtxCaseMgntPage extends RequestHandler {
         return "/casemgnt/template/caseForm/assessment";
     }
 
+    @RequestMapping(pattern = "/patient/caseForm/assessment/charts", description = "量表圖表")
+    public String caseFormAssessmentChart(RequestData request, Model model) {
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        String formId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "formId");
+        model.addAttribute("formId", formId);
+        return "/casemgnt/template/caseForm/assessmentChart";
+    }
+
     @RequestMapping(pattern = "/patient/caseForm/plan", description = "診斷")
     public String caseFormPlan(RequestData request, Model model) {
         UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);

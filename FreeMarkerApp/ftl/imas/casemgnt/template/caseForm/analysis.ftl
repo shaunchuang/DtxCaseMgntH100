@@ -88,6 +88,7 @@
         });
         getTrainingPlan();
         </#if>
+        adjustHeight();
     });
     
     function getTrainingPlan(){

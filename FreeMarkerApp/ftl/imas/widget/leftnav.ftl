@@ -1861,6 +1861,14 @@ function adjustHeight() {
 		$('.main-inner').css({
 	    	'height': cntHeight + 'px',
 	    });
+			    
+	    if($(".data-blk").length > 0){
+	    	var pd = $(".mb-0").outerHeight(true);
+	    	$('.data-blk').css({
+	    		'height': cntHeight + 'px',
+		    	'padding': '0 5px ' + pd + 'px 0' 
+		    });
+	    }
 	}
 
 function getZoomLevel() {

@@ -54,6 +54,12 @@
 	</#if>
 	
 	<script>
+	$(document).ready(function(){
+		if($(".timeline li").length > 0){
+			$(".timeline li:eq(0)").trigger('click');
+		}
+	});
+	
 	$(".timeline li").click(function(e){
 		e.preventDefault();
 		

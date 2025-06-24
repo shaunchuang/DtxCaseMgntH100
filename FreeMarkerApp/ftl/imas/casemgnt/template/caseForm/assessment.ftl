@@ -3,26 +3,48 @@
 <div id="content">
 
 	<div class="col-md-12 pd-h-0 d-flex g-15 justify-content-between">
-    	<div class="col-md-5 pd-h-0">
-    		<div class="d-flex justify-content-between align-items-center mb-3">
+    	<div class="col-md-5 pd-h-0 data-blk">
+    		<div class="d-flex justify-content-between align-items-center pd-b-5">
               	<h4 class="mb-0">個案評估歷程紀錄</h4>
               	<!--<button class="btn btn-outline-primary btn-sm add-ast">新增量表</button>-->
+              	<button class="btn btn-outline-primary b-radius-50 view-chart">綜合評估總覽</button>             	
+            </div>
+            <div class="input-group search-group ">
+                <select class="form-control">
+                    <option value="">所有量表類型</option>
+                    <option value="pt">職能治療</option>
+                    <option value="ot">物理治療</option>
+                    <option value="ps">心理治療</option>
+                    <option value="st">語言治療</option>
+                </select>
+                <input type="button" class="form-control search-btn" value="篩選" />
             </div>
 			<div class="list-group">
 			
 			</div>
 		</div>
-		<div class="col-md-7 default-blk evaluation-blk">    			
+		<div class="col-md-7 pd-h-0 data-blk">
 			<div id="evaluation-container" class="evaluation"></div>
-		</div>							
+		</div>
+		<!--<div class="col-md-7 default-blk evaluation-blk">    			
+			<div id="evaluation-container" class="evaluation"></div>
+		</div>-->							
     </div>
     
     <script>
 	var cUserId = ${currentUser.id!""};
 	
 	$(document).ready(function(){
+		adjustHeight();
 		triggerPatientEvalList();
+		wg.template.updateNewPageContent('evaluation-container', 'data-content', {}, '/ftl/imas/patient/caseForm/assessment/charts?formId=${formId!""}');
+
 	});
+
+	$(".view-chart").click(function(e){
+		e.preventDefault();
+		wg.template.updateNewPageContent('evaluation-container', 'data-content', {}, '/ftl/imas/patient/caseForm/assessment/charts?formId=${formId!""}');
+	})
 	
 	function triggerPatientEvalList(){
 		var postData = {"therapistId": cUserId, "patientId": "${formId!""}"};

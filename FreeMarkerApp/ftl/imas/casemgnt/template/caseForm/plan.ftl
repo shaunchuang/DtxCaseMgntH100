@@ -2,15 +2,15 @@
   
 <div id="content">
 	<div class="col-md-12 pd-h-0 d-flex g-15 justify-content-between">
-    	<div class="col-md-5 pd-h-0">
+    	<div class="col-md-5 pd-h-0 data-blk">
     		<div class="d-flex justify-content-between align-items-center mb-3">
               	<h4 class="mb-0">訓練計畫列表</h4>
             </div>
-			<div class="list-group">
+			<div class="lesson-list-group">
 				
 			</div>
 		</div>
-		<div class="col-md-7 pd-h-0">
+		<div class="col-md-7 pd-h-0 data-blk">
 			<div class="d-flex justify-content-between align-items-center mb-3">
               	<h4 class="mb-0">詳細內容與成果</h4>
             </div>    			
@@ -22,6 +22,8 @@
     const lessonStoreUrl = '${lessonStoreUrl!""}';
     console.log('lessonStoreUrl: ', lessonStoreUrl);
     $(document).ready(function(){
+		adjustHeight();
+
 		fetchTrainingPlan();		
 	});
 	
@@ -84,12 +86,12 @@
 		        		`;
 		        	}
 		        });
-		        $('.list-group').append(lessonCardHtml);	        
+		        $('.lesson-list-group').append(lessonCardHtml);	        
 	        }else{
-	        	$(".list-group").append("<div class='cnt-empty'>目前尚無訓練計畫</div>")
+	        	$(".lesson-list-group").append("<div class='cnt-empty'>目前尚無訓練計畫</div>")
 	        }
 		} else {
-			$(".list-group").append("<div class='cnt-empty'>目前尚無訓練計畫</div>")
+			$(".lesson-list-group").append("<div class='cnt-empty'>目前尚無訓練計畫</div>")
 		}
 		
 		wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/patient/analysis?msg=emptyMessage');
@@ -195,6 +197,15 @@
         margin: 0; /* 移除預設外邊距 */
         color: #6c757d; /* 較淺的顏色 */
     }
+
+	    .main-content, .main-inner {
+		overflow-y: hidden !important;
+	}
+	
+	.data-blk {
+	    overflow-y: auto; /* 讓這兩個區域各自擁有滾動條 */
+	    box-sizing: border-box; /* 確保 padding 和 border 不會增加元素總寬高 */
+	}
 	</style>
 </div>
 
