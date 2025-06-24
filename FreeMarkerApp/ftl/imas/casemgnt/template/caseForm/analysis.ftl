@@ -150,6 +150,8 @@
                         });
                     }
                 });
+            } else {
+                $('.method-list-group').append('<li>無訓練項目</li>');
             }
             
             // 更新備註
