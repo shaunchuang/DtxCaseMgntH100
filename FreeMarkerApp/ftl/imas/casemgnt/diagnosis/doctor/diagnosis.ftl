@@ -41,7 +41,7 @@
 					    </div>
 						<div class="info-block">
 					      <div class="info-l">建議轉診類別</div>
-					      <div class="info-v">${ptInfo.therapyItem.therapyName}</div>
+					      <div class="info-v">心理治療</div>
 					    </div>
 					</div>
 				</div>
@@ -138,10 +138,10 @@
 										<label class="form-label">個人病史</label>
 										<div class="history-options multi-option">
 											<#list personalDiseaseHistoryItems as pdhItems>
-											<div class="option<#if ptInfo.medicalHistory?seq_contains(pdhItems.name)>selected</#if>" data-item="${pdhItems.id}" >${pdhItems.name}</div>
+											<div class="option<#if ptInfo.diseaseNames?seq_contains(pdhItems.id?string)> selected</#if>" data-item="${pdhItems.id}" >${pdhItems.name}</div>
 											</#list>				                 	
 					                    </div>
-					                    <textarea rows="2" class="form-control" placeholder="請填寫其他個人病史"></textarea>
+					                    <textarea id="otherHistoryDisease" rows="2" class="form-control" placeholder="請填寫其他個人病史"></textarea>
 									</div>
 								</div>
 								<div class="row mg-b-10">
@@ -149,21 +149,21 @@
 										<label class="form-label">藥物過敏史</label>
 										<div class="allergy-history-options multi-option">
 											<#list drugAllergyHistoryItems as dahItems>
-											<div class="option" data-item="${dahItems.id}" >${dahItems.name}</div>
+											<div class="option<#if ptInfo.medicalHistory?seq_contains(dahItems.id?string)> selected</#if>" data-item="${dahItems.id}" >${dahItems.name}</div>
 											</#list>
 										</div>
-										<textarea rows="2" class="form-control" placeholder="請填寫其他藥物過敏史"></textarea>
+										<textarea id="otherMedicalHistory" rows="2" class="form-control" placeholder="請填寫其他藥物過敏史"></textarea>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-md-12">
 										<label class="form-label">藥物使用狀況</label>
-										<div class="drug-use-status-options multi-option">
-											<#list drugUseStatus as dus>
-											<div class="option<#if ptInfo.drugUsageHistory?seq_contains(dus.name)>selected</#if>" data-item="${dus.id}" >${dus.name}</div>
-											</#list>
-										</div>
-										<textarea rows="2" class="form-control" placeholder="請填寫其他藥物使用狀況"></textarea>
+											<div class="drug-use-status-options multi-option">
+												<#list drugUseStatus as dus>
+													<div class="option<#if ptInfo.drugUsageHistory?seq_contains(dus.id?string)> selected</#if>" data-item="${dus.id}" >${dus.name}</div>
+												</#list>
+											</div>
+										<textarea id="otherDrugUsageHistory" rows="2" class="form-control" placeholder="請填寫其他藥物使用狀況"></textarea>
 									</div>
 								</div>
 								<hr class="divider" />
@@ -1228,30 +1228,103 @@ function fillPatientInfo() {
 
 		// === 地址 (縣市/鄉鎮/郵遞區號) ===
 		$('#twzipcode').twzipcode('set', {
-		zipcode : patientInfo.zipcode  || '',   // 若有郵遞區號可一起帶入
-		county  : patientInfo.city     || '',   // 例如「新竹縣」
-		district: patientInfo.district || ''    // 例如「竹北市」
+			zipcode : patientInfo.zipcode  || '',   // 若有郵遞區號可一起帶入
+			county  : patientInfo.city     || '',   // 例如「新竹縣」
+			district: patientInfo.district || ''    // 例如「竹北市」
 		});
-        // 聯絡地址
+    		// 聯絡地址
         $('#patient-address').val(patientInfo.address || "");
         
 		if (patientInfo.birth) {
-		// 期望格式：1995-04-18
-		const [y, m, d] = patientInfo.birth.split("/");
-		console.log('患者出生日期: ', y, m, d);
-		// 將前導零去掉，轉成數字
-		const yearNum = parseInt(y, 10);
+			// 期望格式：1995-04-18
+			const [y, m, d] = patientInfo.birth.split("/");
+			console.log('患者出生日期: ', y, m, d);
+			// 將前導零去掉，轉成數字
+			const yearNum = parseInt(y, 10);
 
-		// 若大於 1911 視為西元年，否則視為本就民國年
-		const rocYear = yearNum > 1911 ? yearNum - 1911 : yearNum;
-		// dropdownDatepicker 會以 input id 為基底產生三個 select
-		$('.form-control.year').val(rocYear);
-		$('.form-control.month').val(m);
-		$('.form-control.day').val(d);
+			// 若大於 1911 視為西元年，否則視為本就民國年
+			const rocYear = yearNum > 1911 ? yearNum - 1911 : yearNum;
+			// dropdownDatepicker 會以 input id 為基底產生三個 select
+			$('.form-control.year').val(rocYear);
+			$('.form-control.month').val(m);
+			$('.form-control.day').val(d);
 
-		// 同步隱藏欄位，供後端送出
-		$("#patient-birth").val(patientInfo.birth);
+			// 同步隱藏欄位，供後端送出
+			$("#patient-birth").val(patientInfo.birth);
 		}
+
+		$('#otherHistoryDisease').val(patientInfo.otherDiseaseName || "");
+		$('#otherMedicalHistory').val(patientInfo.otherMedicalHistory || "");
+		$('#otherDrugUsageHistory').val(patientInfo.otherDrugUsageHistory || "");
+
+        // === 自動填入 dataForm/pt.ftl 相關欄位 (otherPatientInfo) ===
+        if (patientInfo.otherPatientInfoDTO) {
+			
+            console.log('正在自動填入其他患者資料:', patientInfo.otherPatientInfoDTO);
+            const otherInfo = patientInfo.otherPatientInfoDTO;
+
+            // 主要問題描述
+            $('#mainIssueDesc').val(otherInfo.mainIssueDesc || "");
+            
+            // 教育和職業資訊
+            $('#educationLevel').val(otherInfo.educationLevel || "");
+            $('#occupation').val(otherInfo.occupation || "");
+            $('#preeducationExp').val(otherInfo.preeducationExp || "");
+            
+            // 家庭教育程度
+            $('#fatherEducation').val(otherInfo.fatherEducation || "");
+            $('#motherEducation').val(otherInfo.motherEducation || "");
+            
+            // 家庭職業
+            $('#fatherOccupation').val(otherInfo.fatherOccupation || "");
+            $('#motherOccupation').val(otherInfo.motherOccupation || "");
+            
+            // 家庭語言
+            $('#familyLanguage').val(otherInfo.familyLanguage || "");
+            
+            // 發展和語言問題
+            $('#developmentalDelay').val(otherInfo.developmentalDelay || "");
+            $('#suspectedSpeechIssues').val(otherInfo.suspectedSpeechIssues || "");
+            
+            // 語言發展問題(複選) - speechDevIssues 是陣列
+            if (otherInfo.speechDevIssues && Array.isArray(otherInfo.speechDevIssues)) {
+				console.log('語言發展問題:', otherInfo.speechDevIssues);
+                $('.speech-dev-issue-options .option').removeClass('selected');
+                otherInfo.speechDevIssues.forEach(function(id) {
+                    $('.speech-dev-issue-options .option[data-item="' + id + '"]').addClass('selected');
+                });
+            }
+            
+            // 溝通和表達能力
+            $('#communicationMtd').val(otherInfo.communicationMtd || "");
+            $('#swallowDifficulty').val(otherInfo.swallowDifficulty || "");
+            $('#comprehensionAbility').val(otherInfo.comprehensionAbility || "");
+            $('#expressionAbility').val(otherInfo.expressionAbility || "");
+              // 困難描述和備註
+            $('#difficultyDesc').val(otherInfo.difficultyDesc || "");
+            $('#otherRemarks').val(otherInfo.otherRemarks || "");
+            
+            // === ps.ftl 相關欄位 ===
+            // 情緒與心理狀態
+            $('#psychologicalState').val(otherInfo.psychologicalState || "");
+            
+            // 最近生活壓力事件
+            $('#recentStressEvents').val(otherInfo.recentStressEvents || "");
+            
+            // 家庭支持程度
+            $('#familySupportLevel').val(otherInfo.familySupportLevel || "");
+            
+            // 心理治療相關
+            $('#psychologicalTreatment').val(otherInfo.psychologicalTreatment || "");
+            $('#treatmentDetails').val(otherInfo.treatmentDetails || "");
+            
+            // 風險評估
+            $('#suicidalThoughts').val(otherInfo.suicidalThoughts || "");
+            $('#selfHarmBehavior').val(otherInfo.selfHarmBehavior || "");
+            
+            console.log('其他患者資料填入完成');
+        }
+        
         console.log('患者資料填入完成');
     } else {
         console.warn('patientInfo 資料不存在或格式不正確');
