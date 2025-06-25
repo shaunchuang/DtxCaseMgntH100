@@ -129,7 +129,7 @@ public class WgTaskAPI implements API {
 
     @APIDefine(description = "檢查是否為初診")
     public Boolean checkFirstDiagnosis(Long caseNo, Long creator) {
-        List<WgTask> tasks = WgTaskDAO.getInstance().listWgTaskByCaseNoAndCreatorAndisChecked(creator, caseNo);
+        List<WgTask> tasks = WgTaskDAO.getInstance().listWgTaskByCaseNoAndCreatorAndisChecked(caseNo, creator);
         for (WgTask task : tasks) {
             WgAvailableSlots slot = WgAvailableSlotsAPI.getInstance().getWgAvailableSlot(task.getAvailableSlotId());
             if(slot != null && slot.getSlotDate().before(new Date()) && task.getCheckinTime() != null){

@@ -2,9 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2025-06-05T01:02:11.668360500Z</date>
-  <millis>1749085331668</millis>
-  <nanos>360500</nanos>
+  <date>2025-06-25T07:04:44.981889700Z</date>
+  <millis>1750835084981</millis>
+  <nanos>889700</nanos>
   <sequence>0</sequence>
   <logger>itri.sstc.freemarker.core.Language</logger>
   <level>INFO</level>
@@ -13,3 +13,82 @@
   <thread>1</thread>
   <message>初始化語言庫 ...</message>
 </record>
+<record>
+  <date>2025-06-25T07:04:45.049056Z</date>
+  <millis>1750835085049</millis>
+  <nanos>56000</nanos>
+  <sequence>1</sequence>
+  <logger>itri.sstc.freemarker.core.Language</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.Language$1</class>
+  <method>accept</method>
+  <thread>1</thread>
+  <message>Load language for en_US, file=messages_en_US.properties</message>
+</record>
+<record>
+  <date>2025-06-25T07:04:45.059941500Z</date>
+  <millis>1750835085059</millis>
+  <nanos>941500</nanos>
+  <sequence>2</sequence>
+  <logger>itri.sstc.freemarker.core.Language</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.Language$1</class>
+  <method>accept</method>
+  <thread>1</thread>
+  <message>Load language for th_TH, file=messages_th_TH.properties</message>
+</record>
+<record>
+  <date>2025-06-25T07:04:45.066484400Z</date>
+  <millis>1750835085066</millis>
+  <nanos>484400</nanos>
+  <sequence>3</sequence>
+  <logger>itri.sstc.freemarker.core.Language</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.Language$1</class>
+  <method>accept</method>
+  <thread>1</thread>
+  <message>Load language for zh_TW, file=messages_zh_TW.properties</message>
+</record>
+<record>
+  <date>2025-06-25T07:04:45.067639900Z</date>
+  <millis>1750835085067</millis>
+  <nanos>639900</nanos>
+  <sequence>4</sequence>
+  <logger>itri.sstc.freemarker.core.Language</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.Language</class>
+  <method>init</method>
+  <thread>1</thread>
+  <message>初始化語言庫 OK</message>
+</record>
+<record>
+  <date>2025-06-25T07:04:45.096564Z</date>
+  <millis>1750835085096</millis>
+  <nanos>564000</nanos>
+  <sequence>5</sequence>
+  <logger>itri.sstc.framework.core.httpd.HttpService</logger>
+  <level>SEVERE</level>
+  <class>itri.sstc.framework.core.httpd.HttpService</class>
+  <method>log</method>
+  <thread>1</thread>
+  <message>Start FreeMarkerService Error, exit(1)</message>
+  <exception>
+    <message>java.io.IOException: 在網路埠 8262 建立 HTTP 服務失敗: Address already in use: bind</message>
+    <frame>
+      <class>itri.sstc.framework.core.httpd.HttpService</class>
+      <method>&lt;init&gt;</method>
+      <line>85</line>
+    </frame>
+    <frame>
+      <class>itri.sstc.framework.core.httpd.HttpService</class>
+      <method>&lt;init&gt;</method>
+      <line>49</line>
+    </frame>
+    <frame>
+      <class>itri.sstc.freemarker.Server</class>
+      <method>main</method>
+      <line>49</line>
+    </frame>
+  </exception>
+</record>
+</log>

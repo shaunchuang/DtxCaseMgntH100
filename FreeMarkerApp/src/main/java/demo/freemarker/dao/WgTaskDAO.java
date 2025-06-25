@@ -64,11 +64,11 @@ public class WgTaskDAO extends IntIdBaseDAO {
         }
     }
 
-    public List<WgTask> listWgTaskByCaseNoAndCreatorAndisChecked(Long creator, Long caseNo) {
+    public List<WgTask> listWgTaskByCaseNoAndCreatorAndisChecked(Long caseNo, Long creator) {
         EntityManager em = getEntityManager();
         try {
             Query q = em.createNamedQuery("WgTask.findByCaseNoAndCreatorAndisChecked");
-            q.setParameter("CaseNo", caseNo);
+            q.setParameter("caseNo", caseNo);
             q.setParameter("creator", creator);
 
             return q.getResultList();

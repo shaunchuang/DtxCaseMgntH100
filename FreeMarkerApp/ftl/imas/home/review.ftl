@@ -271,10 +271,16 @@ $(".appointment-events button").click(function(){
 	//wg.evalForm.getJson("", "/checkpoint/api/checkin");
 	console.log("caseno: ", caseno);
 	console.log("slot: ", slot);
+    // 判斷 slot 是否為 null、undefined 或空字串
+    if(!slot || slot === "null" || slot === "undefined"){
+        // slot 無值時才開啟 overview
+        window.open("/ftl/imas/patient/caseForm/overview?patientId=" + caseno);
+    }
+
 	<#if roleAlias == "DOCTOR">
-	window.open("/ftl/imas/diagnosis/doctor?patientId=" + caseno + "&slot=" + slot);
+		window.open("/ftl/imas/diagnosis/doctor?patientId=" + caseno + "&slot=" + slot);
 	<#else>
-	window.open("/ftl/imas/diagnosis/therapist?patientId=" + caseno + "&slot=" + slot);
+		window.open("/ftl/imas/diagnosis/therapist?patientId=" + caseno + "&slot=" + slot);
 	</#if>
 });
 
