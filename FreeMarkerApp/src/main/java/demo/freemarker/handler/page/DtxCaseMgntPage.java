@@ -895,7 +895,7 @@ public class DtxCaseMgntPage extends RequestHandler {
                 hcRecordDTO.setDiagTimes(diagTimes);
                 diagTimes--;
                 System.out.println("diagTimes: " + diagTimes + " diagTimes: " + diagTimes);
-                if(diagTimes == 0) {
+                if(diagTimes == -1) {
                     hcRecordDTO.setIsFirstDiag(true);
                 } else {
                     hcRecordDTO.setIsFirstDiag(false);
