@@ -301,9 +301,8 @@ public class HealthInsuranceRecordAPI implements API {
             String dayStr = dayOfWeekNames[dayOfWeek.getValue() % 7];
 
             String datePart = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String timePart = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 
-            return String.format("%s (%s) %s", datePart, dayStr, timePart);
+            return String.format("%s (%s)", datePart, dayStr);
         } catch (Exception e) {
             e.printStackTrace();
         }

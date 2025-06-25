@@ -885,7 +885,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         List<HcRecordDTO> hcRecordDTOs = new ArrayList<HcRecordDTO>();
         //List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getRecordsByPatientId(Long.parseLong(patientId));
         List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getDoctorVisitsByPatient(Long.parseLong(patientId));
-        int diagTimes = 0;
+        int diagTimes = records.size() - 1 ;
         for (HealthInsuranceRecord record : records) {
             User user = UserAPI.getInstance().getUser(record.getCreator());
             List<Role> roles = RoleAPI.getInstance().listRolesByUserId(user.getId());
@@ -893,7 +893,12 @@ public class DtxCaseMgntPage extends RequestHandler {
                 HcRecordDTO hcRecordDTO = new HcRecordDTO();
                 hcRecordDTO.setId(record.getId());
                 hcRecordDTO.setDiagTimes(diagTimes);
-                diagTimes++;
+                diagTimes--;
+                if(diagTimes == 0) {
+                    hcRecordDTO.setIsFirstDiag(true);
+                } else {
+                    hcRecordDTO.setIsFirstDiag(false);
+                }
                 hcRecordDTO.setDiagDateTime(HealthInsuranceRecordAPI.getInstance().fullDateFormat(record.getCreateTime()));
                 hcRecordDTO.setDoctorAlias(doctor.getRoleName());
                 WgIcdCode codeObj = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
