@@ -15,12 +15,12 @@
 		            		<div class="default-blks">
 		            		    <div class="col-4">
 		            		    	<div>
-		            		    		<img class="trainingImg" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1672970/header.jpg?t=1717003107">
+		            		    		<img class="trainingImg" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/header.jpg?t=1711128146">
 		            		    	</div>
 	                			</div>
 	                			<div class="col-8 plan-detail">
 	                				<div>
-	                					<div class="sub-title training-title">Minecraft 訓練計畫 | <span>程靜雯治療師</span></div>
+	                					<div class="sub-title training-title">Minecraft 訓練計畫 | <span>葉忠賢 治療師</span></div>
 	                				</div>
 	                				<div class="trainingPlan-Period">訓練期間：2024/08/04~2024/08/06</div>
 	                				<!--<div>追蹤指標1：完成時間00:30:00</div>
@@ -68,12 +68,12 @@
                 		<div class="default-blk chat-messages" id="chatRoom" data-group="">
                 			<div class="chat-message right">
 							    <div class="chat-avatar">
-							        <img src="${base}/images/dccs/avatar2.png" alt="Avatar">
+							        <img src="/File/api/file/path/avatar/avatar2.png" alt="Avatar">
 							    </div>
 							    <div class="chat-text">
 							        <div class="chat-message-content">您好，請問要如何讓小明達成追蹤的指標?</div>
 							        <div class="chat-username-timestamp">
-							            <div class="chat-username">陳建倫</div>
+							            <div class="chat-username">王小明</div>
 							            <div class="chat-timestamp">今天, 晚上11:30</div>
 							        </div>
 							    </div>
@@ -85,12 +85,12 @@
 							
 	                		<div class="chat-message">
 	                            <div class="chat-avatar">
-	                                <img src="${base}/images/dccs/avatar1.png" alt="Avatar">
+	                                <img src="/File/api/file/path/avatar/avatar1.png" alt="Avatar">
 	                            </div>
 	                            <div class="chat-text">
 	                                <div class="chat-message-content">讓小明適度休息後，重新鼓勵他進行訓練，會達成目標的。</div>
 	                                <div class="chat-username-timestamp">
-		                                <div class="chat-username">程靜雯治療師</div>
+		                                <div class="chat-username">葉忠賢 治療師</div>
 		                                <div class="chat-timestamp">今天, 晚上11:30</div>
 	                                </div>
 	                            </div>
