@@ -38,4 +38,18 @@ public class TrainingPlanDAO extends IntIdBaseDAO {
             em.close();
         }
     }
+
+    public List<TrainingPlan> findByTherapist(Long therapistId) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("TrainingPlan.findByTherapistId");
+            q.setParameter("therapistId", therapistId);
+            
+            return q.getResultList();
+        } catch (Exception ex) {
+            return new ArrayList<TrainingPlan>();
+        } finally {
+            em.close();
+        }
+    }
 }

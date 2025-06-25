@@ -112,10 +112,14 @@ public class DtxCaseTrainingPage extends RequestHandler {
         }
         String planId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "planId");
         String blogname = Config.get("blogname", "測試平台");
-        model.addAttribute("planId", planId);
+        TrainingPlan trainingPlan = TrainingPlanAPI.getInstance().getTrainingPlan(Long.parseLong(planId));
+        TrainingPlanDTO trainingPlanDTO = TrainingPlanAPI.getInstance().convertPlanDTO(trainingPlan);
         model.addAttribute("__field", "field");
         model.addAttribute("menuNum", 1);
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
+        model.addAttribute("planId", planId);
+        model.addAttribute("trainingPlan", GsonUtil.toJson(trainingPlanDTO));
         model.addAttribute("blogname", blogname);
         model.addAttribute("field_abbrev_ename", "ITRI");
         return "/trainingQuestion";

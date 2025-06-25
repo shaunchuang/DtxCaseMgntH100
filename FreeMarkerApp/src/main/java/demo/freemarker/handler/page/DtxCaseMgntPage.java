@@ -885,40 +885,40 @@ public class DtxCaseMgntPage extends RequestHandler {
         List<HcRecordDTO> hcRecordDTOs = new ArrayList<HcRecordDTO>();
         //List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getRecordsByPatientId(Long.parseLong(patientId));
         List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getDoctorVisitsByPatient(Long.parseLong(patientId));
-        int diagTimes = records.size() - 1 ;
+        int diagTimes = records.size() - 1;
         for (HealthInsuranceRecord record : records) {
             User user = UserAPI.getInstance().getUser(record.getCreator());
             List<Role> roles = RoleAPI.getInstance().listRolesByUserId(user.getId());
             UserRoleDTO doctor = new UserRoleDTO(user, roles);
-                HcRecordDTO hcRecordDTO = new HcRecordDTO();
-                hcRecordDTO.setId(record.getId());
-                hcRecordDTO.setDiagTimes(diagTimes);
-                diagTimes--;
-                System.out.println("diagTimes: " + diagTimes + " diagTimes: " + diagTimes);
-                if(diagTimes == -1) {
-                    hcRecordDTO.setIsFirstDiag(true);
-                } else {
-                    hcRecordDTO.setIsFirstDiag(false);
+            HcRecordDTO hcRecordDTO = new HcRecordDTO();
+            hcRecordDTO.setId(record.getId());
+            hcRecordDTO.setDiagTimes(diagTimes);
+            diagTimes--;
+            System.out.println("diagTimes: " + diagTimes + " diagTimes: " + diagTimes);
+            if (diagTimes == -1) {
+                hcRecordDTO.setIsFirstDiag(true);
+            } else {
+                hcRecordDTO.setIsFirstDiag(false);
+            }
+            hcRecordDTO.setDiagDateTime(HealthInsuranceRecordAPI.getInstance().fullDateFormat(record.getCreateTime()));
+            hcRecordDTO.setDoctorAlias(doctor.getRoleName());
+            WgIcdCode codeObj = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
+            if (codeObj != null) {
+                hcRecordDTO.setIcdCode(codeObj.getCode() + " " + codeObj.getName());
+            }
+            hcRecordDTO.setSerialno(record.getId());
+            hcRecordDTO.setPatientId(record.getPatientId());
+            hcRecordDTO.setDiagDate(sdf.format(record.getCreateTime()));
+            hcRecordDTO.setIndication(ptInfo.getIndication());
+            hcRecordDTO.setDoctorName(UserAPI.getInstance().getUser(record.getCreator()).getUsername());
+            if (record.getMainDiagnosisCode() != null) {
+                WgIcdCode icd = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
+                if (icd != null) {
+                    hcRecordDTO.setMainIcdCode(icd.getPureCode() + " " + icd.getName());
                 }
-                hcRecordDTO.setDiagDateTime(HealthInsuranceRecordAPI.getInstance().fullDateFormat(record.getCreateTime()));
-                hcRecordDTO.setDoctorAlias(doctor.getRoleName());
-                WgIcdCode codeObj = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
-                if(codeObj != null) {
-                    hcRecordDTO.setIcdCode(codeObj.getCode() + " " + codeObj.getName());
-                }
-                hcRecordDTO.setSerialno(record.getId());
-                hcRecordDTO.setPatientId(record.getPatientId());
-                hcRecordDTO.setDiagDate(sdf.format(record.getCreateTime()));
-                hcRecordDTO.setIndication(ptInfo.getIndication());
-                hcRecordDTO.setDoctorName(UserAPI.getInstance().getUser(record.getCreator()).getUsername());
-                if (record.getMainDiagnosisCode() != null) {
-                    WgIcdCode icd = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(record.getMainDiagnosisCode()));
-                    if (icd != null) {
-                        hcRecordDTO.setMainIcdCode(icd.getPureCode() + " " + icd.getName());
-                    }
-                }
-                hcRecordDTOs.add(hcRecordDTO);
-                    }
+            }
+            hcRecordDTOs.add(hcRecordDTO);
+        }
 
         // 取得醫師和治療師最後看診時間以及治療週數
         String lastDoctorVisit = HealthInsuranceRecordAPI.getInstance().getLastDoctorVisitTime(Long.parseLong(patientId));
@@ -927,8 +927,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         System.out.println("lastTherapistVisit: " + lastTherapistVisit);
         int treatmentWeeks = HealthInsuranceRecordAPI.getInstance().calculateTreatmentWeeks(Long.parseLong(patientId));
         System.out.println("treatmentWeeks: " + treatmentWeeks);
-        
-        
+
         model.addAttribute("hcRecords", hcRecordDTOs);
         model.addAttribute("lastDoctorVisit", lastDoctorVisit);
         model.addAttribute("lastTherapistVisit", lastTherapistVisit);
@@ -949,7 +948,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         if (currentUser == null) {
             return "redirect:/ftl/imas/login";
         }
-        
+
         String msg = getValueOfKeyInQuery(request.exchange.getRequestURI(), "msg");
         model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         System.out.println("msg: " + msg);
@@ -1080,98 +1079,168 @@ public class DtxCaseMgntPage extends RequestHandler {
                 }
             }
         } else {
-            Map<Long, WgTask> latestTaskMap = new HashMap<>();
-            List<WgTask> taskList = WgTaskAPI.getInstance().listWgTaskByUserAndCat(currentUser.getId(), 2);
-            for (WgTask task : taskList) {
-                if (task.getCheckinTime() == null) {
-                    continue;
+            List<TrainingPlan> trainingPlans = TrainingPlanAPI.getInstance().listTrainingPlanByTherapist(currentUser.getId());
+            if (trainingPlans.isEmpty()) {
+                return trainingEvents; // 如果沒有訓練計畫，直接返回空列表
+            } else {
+                ZoneId zone = ZoneId.of("Asia/Taipei");
+                Iterator<TrainingPlan> iterator = trainingPlans.iterator();
+
+                // 移除在startDate和endDate之外的計畫
+                while (iterator.hasNext()) {
+                    TrainingPlan plan = iterator.next();
+                    Instant start = plan.getStartDate().toInstant();
+                    Instant end = plan.getEndDate().toInstant();
+                    if (now.isBefore(start) || now.isAfter(end)) {
+                        iterator.remove();
+                    }
                 }
 
-                Instant taskModifyInstant = task.getModifyTime().toInstant();
+                for (TrainingPlan tp : trainingPlans) {
+                    String startTimeStr = "";
+                    String endTimeStr = "";
+                    LocalDate startDate = null;
+                    LocalDate endDate = null;
+                    Patient patient = PatientAPI.getInstance().getPatient(tp.getPatientId());
+                    TrainingEvent trainingEvent = new TrainingEvent();
+                    // 取得 ZonedDateTime
+                    ZonedDateTime zdtStart = tp.getStartDate().toInstant().atZone(zone);
+                    ZonedDateTime zdtEnd = tp.getEndDate().toInstant().atZone(zone);
 
-                // 如果當前 caseNo 已經存在於 map 中，並且該 task 的 modifyTime 比已存在的 task 更新，則替換
-                if (latestTaskMap.containsKey(task.getCaseNo())) {
-                    WgTask existingTask = latestTaskMap.get(task.getCaseNo());
-                    Instant existingTaskModifyInstant = existingTask.getModifyTime().toInstant();
+                    // 取 LocalDate
+                    startDate = zdtStart.toLocalDate();
+                    endDate = zdtEnd.toLocalDate();
 
-                    if (taskModifyInstant.isAfter(existingTaskModifyInstant)) {
-                        latestTaskMap.put(task.getCaseNo(), task);
-                    }
-                } else {
-                    latestTaskMap.put(task.getCaseNo(), task); // 如果該 caseNo 尚未存在於 map 中，則直接加入
-                }
-            }
-            for (WgTask task : latestTaskMap.values()) {
-                TrainingEvent trainingEvent = new TrainingEvent();
-                Patient patient = PatientAPI.getInstance().getPatient(task.getCaseNo());
-                List<TrainingPlan> trainingPlans = TrainingPlanAPI.getInstance().listByPatient(patient.getId());
-                String startTimeStr = "";
-                String endTimeStr = "";
-                LocalDate startDate = null;
-                LocalDate endDate = null;
-                if (trainingPlans.isEmpty()) {
-                    continue;
-                } else {
-                    ZoneId zone = ZoneId.of("Asia/Taipei");
-                    Iterator<TrainingPlan> iterator = trainingPlans.iterator();
-                    // 移除在startDate和endDate之外的計畫
-                    while (iterator.hasNext()) {
-                        TrainingPlan plan = iterator.next();
-                        Instant start = plan.getStartDate().toInstant();
-                        Instant end = plan.getEndDate().toInstant();
-                        if (now.isBefore(start) || now.isAfter(end)) {
-                            iterator.remove();
-                        }
-                    }
-                    // 將剩餘的training plan 放入trainingEvent
-                    if (trainingPlans.isEmpty()) {
+                    // 格式化字串（如果你需要）
+                    startTimeStr = zdtStart.toLocalDate().toString();
+                    endTimeStr = zdtEnd.toLocalDate().toString();
+                    Long patientId = patient.getId();
+                    trainingEvent.setName(patient.getName());
+
+                    trainingEvent.setGender(patient.getGender());
+                    trainingEvent.setAge(String.valueOf(patient.getAge()));
+
+                    trainingEvent.setIndication(
+                            CrossPlatformUtil.getInstance().findSyndromeById(patient.getDiseaseId()));
+                    List<Long> lessonIds = PlanLessonMappingAPI.getInstance()
+                            .listLessonIdsByPlanId(tp.getId());
+                    if(lessonIds.size() == 0 ){
                         continue;
-                    } else {
-                        TrainingPlan firstPlan = trainingPlans.get(0);
-                        // 取得 ZonedDateTime
-                        ZonedDateTime zdtStart = firstPlan.getStartDate().toInstant().atZone(zone);
-                        ZonedDateTime zdtEnd = firstPlan.getEndDate().toInstant().atZone(zone);
-
-                        // 取 LocalDate
-                        startDate = zdtStart.toLocalDate();
-                        endDate = zdtEnd.toLocalDate();
-
-                        // 格式化字串（如果你需要）
-                        startTimeStr = zdtStart.toLocalDate().toString();
-                        endTimeStr = zdtEnd.toLocalDate().toString();
-                        Long patientId = patient.getId();
-                        trainingEvent.setName(patient.getName());
-
-                        trainingEvent.setGender(patient.getGender());
-                        trainingEvent.setAge(String.valueOf(patient.getAge()));
-
-                        trainingEvent.setIndication(
-                                CrossPlatformUtil.getInstance().findSyndromeById(patient.getDiseaseId()));
-                        List<Long> lessonIds = PlanLessonMappingAPI.getInstance()
-                                .listLessonIdsByPlanId(firstPlan.getId());
-                        Long lessonId = lessonIds.get(0);
-                        trainingEvent.setLesson(CrossPlatformUtil.getInstance().getLessonName(lessonId));
-                        trainingEvent.setIsAbnormal(false);
-
-                        Integer freqWeek = firstPlan.getFrequencyPerWeek();
-                        Integer freqDay = firstPlan.getFrequencyPerDay();
-
-                        if (freqWeek != null) {
-                            // 真正有設定每週頻率
-                            trainingEvent.setFrequency("每週");
-                            trainingEvent.setTimes(String.valueOf(freqWeek));
-                        } else if (freqDay != null) {
-                            trainingEvent.setFrequency("每天");
-                            trainingEvent.setTimes(String.valueOf(freqDay));
-                        }
-
-                        long weeksBetween = ChronoUnit.WEEKS.between(startDate, endDate);
-                        trainingEvent.setBeginDate(startTimeStr.replace("/", "-"));
-                        trainingEvent.setDuration(String.valueOf(weeksBetween));
-                        trainingEvents.add(trainingEvent);
                     }
+                    Long lessonId = lessonIds.get(0);
+                    trainingEvent.setLesson(CrossPlatformUtil.getInstance().getLessonName(lessonId));
+                    trainingEvent.setIsAbnormal(false);
+
+                    Integer freqWeek = tp.getFrequencyPerWeek();
+                    Integer freqDay = tp.getFrequencyPerDay();
+
+                    if (freqWeek != null) {
+                        // 真正有設定每週頻率
+                        trainingEvent.setFrequency("每週");
+                        trainingEvent.setTimes(String.valueOf(freqWeek));
+                    } else if (freqDay != null) {
+                        trainingEvent.setFrequency("每天");
+                        trainingEvent.setTimes(String.valueOf(freqDay));
+                    }
+
+                    long weeksBetween = ChronoUnit.WEEKS.between(startDate, endDate);
+                    trainingEvent.setBeginDate(startTimeStr.replace("/", "-"));
+                    trainingEvent.setDuration(String.valueOf(weeksBetween));
+                    trainingEvents.add(trainingEvent);
                 }
             }
+//            Map<Long, WgTask> latestTaskMap = new HashMap<>();
+//            List<WgTask> taskList = WgTaskAPI.getInstance().listWgTaskByUserAndCat(currentUser.getId(), 2);
+//            for (WgTask task : taskList) {
+//                if (task.getCheckinTime() == null) {
+//                    continue;
+//                }
+//
+//                Instant taskModifyInstant = task.getModifyTime().toInstant();
+//
+//                // 如果當前 caseNo 已經存在於 map 中，並且該 task 的 modifyTime 比已存在的 task 更新，則替換
+//                if (latestTaskMap.containsKey(task.getCaseNo())) {
+//                    WgTask existingTask = latestTaskMap.get(task.getCaseNo());
+//                    Instant existingTaskModifyInstant = existingTask.getModifyTime().toInstant();
+//
+//                    if (taskModifyInstant.isAfter(existingTaskModifyInstant)) {
+//                        latestTaskMap.put(task.getCaseNo(), task);
+//                    }
+//                } else {
+//                    latestTaskMap.put(task.getCaseNo(), task); // 如果該 caseNo 尚未存在於 map 中，則直接加入
+//                }
+//            }
+//            for (WgTask task : latestTaskMap.values()) {
+//                TrainingEvent trainingEvent = new TrainingEvent();
+//                Patient patient = PatientAPI.getInstance().getPatient(task.getCaseNo());
+//                List<TrainingPlan> trainingPlans = TrainingPlanAPI.getInstance().listByPatient(patient.getId());
+//                String startTimeStr = "";
+//                String endTimeStr = "";
+//                LocalDate startDate = null;
+//                LocalDate endDate = null;
+//                if (trainingPlans.isEmpty()) {
+//                    continue;
+//                } else {
+//                    ZoneId zone = ZoneId.of("Asia/Taipei");
+//                    Iterator<TrainingPlan> iterator = trainingPlans.iterator();
+//                    // 移除在startDate和endDate之外的計畫
+//                    while (iterator.hasNext()) {
+//                        TrainingPlan plan = iterator.next();
+//                        Instant start = plan.getStartDate().toInstant();
+//                        Instant end = plan.getEndDate().toInstant();
+//                        if (now.isBefore(start) || now.isAfter(end)) {
+//                            iterator.remove();
+//                        }
+//                    }
+//                    // 將剩餘的training plan 放入trainingEvent
+//                    if (trainingPlans.isEmpty()) {
+//                        continue;
+//                    } else {
+//                        TrainingPlan firstPlan = trainingPlans.get(0);
+//                        // 取得 ZonedDateTime
+//                        ZonedDateTime zdtStart = firstPlan.getStartDate().toInstant().atZone(zone);
+//                        ZonedDateTime zdtEnd = firstPlan.getEndDate().toInstant().atZone(zone);
+//
+//                        // 取 LocalDate
+//                        startDate = zdtStart.toLocalDate();
+//                        endDate = zdtEnd.toLocalDate();
+//
+//                        // 格式化字串（如果你需要）
+//                        startTimeStr = zdtStart.toLocalDate().toString();
+//                        endTimeStr = zdtEnd.toLocalDate().toString();
+//                        Long patientId = patient.getId();
+//                        trainingEvent.setName(patient.getName());
+//
+//                        trainingEvent.setGender(patient.getGender());
+//                        trainingEvent.setAge(String.valueOf(patient.getAge()));
+//
+//                        trainingEvent.setIndication(
+//                                CrossPlatformUtil.getInstance().findSyndromeById(patient.getDiseaseId()));
+//                        List<Long> lessonIds = PlanLessonMappingAPI.getInstance()
+//                                .listLessonIdsByPlanId(firstPlan.getId());
+//                        Long lessonId = lessonIds.get(0);
+//                        trainingEvent.setLesson(CrossPlatformUtil.getInstance().getLessonName(lessonId));
+//                        trainingEvent.setIsAbnormal(false);
+//
+//                        Integer freqWeek = firstPlan.getFrequencyPerWeek();
+//                        Integer freqDay = firstPlan.getFrequencyPerDay();
+//
+//                        if (freqWeek != null) {
+//                            // 真正有設定每週頻率
+//                            trainingEvent.setFrequency("每週");
+//                            trainingEvent.setTimes(String.valueOf(freqWeek));
+//                        } else if (freqDay != null) {
+//                            trainingEvent.setFrequency("每天");
+//                            trainingEvent.setTimes(String.valueOf(freqDay));
+//                        }
+//
+//                        long weeksBetween = ChronoUnit.WEEKS.between(startDate, endDate);
+//                        trainingEvent.setBeginDate(startTimeStr.replace("/", "-"));
+//                        trainingEvent.setDuration(String.valueOf(weeksBetween));
+//                        trainingEvents.add(trainingEvent);
+//                    }
+//                }
+//            }
         }
         return trainingEvents;
     }

@@ -70,8 +70,8 @@ public class WgTaskRESTfulAPI extends RESTfulAPI {
     
             Date checkinOnlyTime = sdf.parse(sdf.format(new Date()));
             Long slotId = jsonRequest.getLong("slotId");
-    
-            WgTask wgTask = WgTaskAPI.getInstance().getWgTask(slotId);
+            System.out.println("checkin slotId: " + slotId);
+            WgTask wgTask = WgTaskAPI.getInstance().geWgTaskBySlotId(slotId);
             wgTask.setCheckinTime(checkinOnlyTime);
             WgTaskAPI.getInstance().updateWgTask(wgTask);
     

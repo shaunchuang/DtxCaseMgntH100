@@ -113,13 +113,7 @@
 </body>
 <script>
 
-
-	var currentUserId = ${currentUserId!""};
-	var currentUserName = '${currentUserName!""}';
-    var therapistId = ${thrapistId!""};
-    var therapistName = '${thrapistName!""}';
-	var caseMgntUrl = '${caseMgntUrl!""}';
-	var trainingPlanKeyNo = '${lessonPlanKeyNo!""}';
+	var trainingPlan = ${trainingPlan!""};
 	var lessonStoreUrl = '${lessonStoreUrl!""}';
 	var lessonKeyNo = '';
 	var lessonId = '';

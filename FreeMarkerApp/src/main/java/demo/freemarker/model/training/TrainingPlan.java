@@ -18,7 +18,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TrainingPlan.findAll", query = "SELECT m FROM TrainingPlan m "),
-    @NamedQuery(name = "TrainingPlan.findByPatientId", query = "SELECT m FROM TrainingPlan m WHERE m.patientId = :patientId")
+    @NamedQuery(name = "TrainingPlan.findByPatientId", query = "SELECT m FROM TrainingPlan m WHERE m.patientId = :patientId"),
+    @NamedQuery(name = "TrainingPlan.findByTherapistId", query = "SELECT m FROM TrainingPlan m WHERE m.therapist = :therapistId ORDER BY m.startDate DESC"),
 })
 public class TrainingPlan implements IntIdDataEntity, Serializable {
     

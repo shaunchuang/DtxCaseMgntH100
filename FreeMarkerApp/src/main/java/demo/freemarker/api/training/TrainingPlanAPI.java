@@ -93,6 +93,15 @@ public class TrainingPlanAPI implements API {
             throw new RuntimeException(ex.getMessage());
         }
     }
+
+    @APIDefine(description = "取得治療師的訓練計畫清單")
+    public List<TrainingPlan> listTrainingPlanByTherapist(Long therapistId) {
+        try {
+            return TrainingPlanDAO.getInstance().findByTherapist(therapistId);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
     
     
     public TrainingPlanDTO convertPlanDTO(TrainingPlan trainingPlan) {

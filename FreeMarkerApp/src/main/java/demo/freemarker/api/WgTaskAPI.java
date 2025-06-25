@@ -167,10 +167,10 @@ public class WgTaskAPI implements API {
         return new CaseAppoEvent(serialno, patient.getId(), slotId, name, gender, age, indication, appoTimeStr, checkinTime, isFirstDiag);
     }
 
-    public List<WgTask> listWgTaskByUserAndCat(Long creator, int caseNo) {
+    public List<WgTask> listWgTaskByUserAndCat(Long creator, int cat) {
         List<WgTask> taskList = new ArrayList<>();
         try {
-            taskList = WgTaskDAO.getInstance().listWgTaskByUserAndCat(creator, caseNo);
+            taskList = WgTaskDAO.getInstance().listWgTaskByUserAndCat(creator, cat);
         } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage());
         }
