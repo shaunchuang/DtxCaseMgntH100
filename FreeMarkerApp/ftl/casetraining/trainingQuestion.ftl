@@ -23,19 +23,11 @@
 	                					<div class="sub-title training-title">Minecraft 訓練計畫 | <span>葉忠賢 治療師</span></div>
 	                				</div>
 	                				<div class="trainingPlan-Period">訓練期間：2024/08/04~2024/08/06</div>
-	                				<!--<div>追蹤指標1：完成時間00:30:00</div>
-	                				<div>追蹤指標2：完成分數80分</div>-->
 	                			</div>
 	                		</div>
 	                		<div class="default-blks" id="recordList">
 	                			<table class="table table-striped table-bordered bootstrap-datatable table-customed main-table">
 	                				<thead>
-	                					<!--<tr>
-	                						<th>編號</th>
-	                						<th>訓練日期</th>
-	                						<th>時間</th>
-	                						<th>訓練結果</th>
-	                					<tr>-->
 	                					<tr>
 	                						<th>編號</th>
 	                						<th>訓練開始時間</th>
@@ -44,18 +36,7 @@
 	                					<tr>
 	                				</thead>
 	                				<tbody>
-	                					<!--<tr>
-	                						<td>01</td>
-	                						<td>2024/08/04</td>
-	                						<td>下午05:06</td>
-	                						<td class="aim-fail">未通過指標</td>
-	                					</tr>
-	                					<tr>
-	                						<td>02</td>
-	                						<td>2024/08/05</td>
-	                						<td>下午05:13</td>
-	                						<td class="aim-success">通過指標</td>
-	                					</tr>-->
+
 	                				</tbody>
 	                			</table>
 	                		</div>
@@ -113,10 +94,17 @@
 </body>
 <script>
 
-	var trainingPlan = ${trainingPlan!""};
-	var lessonStoreUrl = '${lessonStoreUrl!""}';
-	var lessonKeyNo = '';
-	var lessonId = '';
+	let trainingPlan = ${trainingPlan!""};
+	let lessonStoreUrl = '${lessonStoreUrl!""}';
+	let lessonId = '';
+	let lessonMain;
+	// 從 trainingPlan 中取得治療師資訊
+	let therapistId = '';
+	let therapistName = '';
+	if (trainingPlan && trainingPlan.therapistId) {
+		therapistId = trainingPlan.therapistId;
+		therapistName = trainingPlan.therapistName || '治療師';
+	}
 
 	$(document).ready(function() {
         // 聊天室訊息區塊滾動至最底部
@@ -148,9 +136,10 @@
 	// 建立聊天室 聊天室姓名待更新
 	function loadRoom() {
 	    $.ajax({
-	        url: caseMgntUrl + "/division/api/chat/loadChatRoom",
+	        url: "/Chat/api/loadChatRoom",
 	        type: "POST",
-	        data: {data: JSON.stringify({'currentUserId': currentUserId, 'careUserId': therapistId})},
+	        data: {data: JSON.stringify({'currentUserId': ${currentUser.id!""}, 'careUserId': therapistId})},
+			async: false,
 	        success: function(data) {
 	            console.log(data);
 	            let chatInfo = JSON.parse(data);
@@ -165,7 +154,7 @@
 		                let messageHtml = '';
 		                
 		                let formattedTime = formatTime(new Date(message.createTime));
-		                if (message.userId == currentUserId) {
+		                if (message.userId == currentUser.id) {
 		                    messageHtml = 
 		                        '<div class="chat-message right">' +
 		                            '<div class="chat-avatar">' +
@@ -217,9 +206,9 @@
 	    let groupId = $('#chatRoom').attr('data-group');
 	    /* 發送訊息至API */
 	    $.ajax({
-	        url: caseMgntUrl + "/division/api/chat/sendMessage",
+	        url: "/Chat/api/sendMessage",
 	        type: "POST",
-	        data: {data: JSON.stringify({'chatGroupId': groupId, 'careUserId': therapistId, 'currentUserId': currentUserId, 'message': message})},
+	        data: {data: JSON.stringify({'chatGroupId': groupId, 'careUserId': therapistId, 'currentUserId': ${currentUser.id!""}, 'message': message})},
 	        success: function(data) {
 	            console.log(data);
 	        },
@@ -265,74 +254,158 @@
     
     
     function getTrainingPlan(){
-    	console.log(trainingPlanKeyNo);
-    	var result = wg.evalForm.getJson({"data": trainingPlanKeyNo}, caseMgntUrl + '/division/api/TrainingPlan/get');
-    	if(result.success){
-    		var lessonMain = '';
-    		var trainingPlan = result.trainingPlan;
-    		var trainingLessons = trainingPlan.trainingLessons;
+		console.log(trainingPlan);
+    	
+    	let trainingLessons = trainingPlan.lessons;
     		
-			var startDateStr = formatDate(trainingPlan.startTime);
-			var endDateStr = formatDate(trainingPlan.startTime);
+		let startDateStr = formatDate(trainingPlan.startDate);
+		let endDateStr = formatDate(trainingPlan.endDate);
+
+		console.log('訓練計畫開始時間:', startDateStr);
+		console.log('訓練計畫結束時間:', endDateStr);
+
+    	lessonIdForStore = trainingPlan.lessons[0].lessonId;
+        $.ajax({
+			url: lessonStoreUrl + '/LessonMainInfo/api/get/lessonId/' + lessonIdForStore,
+			type: 'GET',
+			dataType: 'json',
+			async: false,
+			success: function(response) {
+				console.log('LessonMainInfo response:', response);
+				lessonMain = response;
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.error('Error with LessonMainInfo:', textStatus, errorThrown);
+				console.error('Response Text:', jqXHR.responseText);
+				swal('載入教案失敗','請聯絡管理員','error');
+			}
+		});
+
+		$('.trainingImg').attr("src", lessonStoreUrl + '/File/api/file/path' + lessonMain.headerImageUrl);
+    	var titleHtml = lessonMain.lessonName + " 訓練計畫 | <span>" + therapistName + " 治療師</span>";
+    	$('.training-title').html(titleHtml);
+    	
+    	$('.trainingPlan-Period').text('訓練期間：' + startDateStr + ' ~ ' + endDateStr );
     		
-    		lessonId = trainingPlan.trainingLessons[0].lessonStoreKeyNo;
-    		lessonKeyNo = trainingPlan.trainingLessons[0].trainingLessonKeyNo;
-        	var result = wg.evalForm.getJson({"lessonId": lessonId}, lessonStoreUrl + '/division/api/Lesson/GetLessonBasic');
-        	if(result.success){
-        		lessonMain = JSON.parse(result.lessonMain);
-        	} else {
-        		swal('載入訓練計畫失敗','請聯絡管理員','error');
-        	}
-        	console.log(lessonMain);
-			$('.trainingImg').attr("src", lessonMain.evalItemAnses['4']);
-    		var titleHtml = lessonMain.evalItemAnses['1'] + " 訓練計畫 | <span>" + therapistName + " 治療師</span>";
-    		$('.training-title').html(titleHtml);
-    		
-    		$('.trainingPlan-Period').text('訓練期間：' + startDateStr + ' ~ ' + endDateStr );
-    		
-    		trainingLessons.forEach( lesson => {
-    			console.log(lesson);
-    		});
-    	} else {
-    		swal('載入訓練計畫失敗','請聯絡管理員','error');
-    	}
+    	trainingLessons.forEach( lesson => {
+    		console.log(lesson);
+    	});
     }
     
-    // 取得訓練紀錄
-	function getTrainingRecord(){
-		console.log(lessonKeyNo);
-		var result = wg.evalForm.getJson({"data": lessonKeyNo}, caseMgntUrl + '/division/api/TrainingData/list');
-		console.log('result', result);
-		if(result.success){
-			var trainingRecord = result.data;
-			trainingRecord.forEach((record, index) => {
-	        	var startTime = new Date(record.startTime).toLocaleString();
-	        	var endTime = new Date(record.endTime).toLocaleString();
-	        	var period = new Date(record.period).toISOString().substr(11, 8); // 轉換 period 為 HH:mm:ss 格式
-				
-				var recordHtml = `
-					<tr>
-						<td>` + (index+1) + `</td>
-						<td>` + startTime + `</td>
-						<td>` + endTime + `</td>
-						<td>` + period + `</td>
-					<tr>
-				`
-				$('#recordList tbody').append(recordHtml);  
-			});
-			
-		} else {
-			swal('載入訓練紀錄失敗','請聯絡管理員','error');
-		}
+	function getTrainingRecord(callback){
+		console.log('lessonId For Store', lessonIdForStore);
+		$.ajax({
+            url: '/Training/api/listData',
+            type: "POST",
+            dataType: 'json',
+            data: JSON.stringify({"planId": String(trainingPlan.planId), "lessonId": lessonIdForStore}), // 訓練教案KeyNo
+            success: function(response){
+                console.log('Training Record:', response);
+                getAchievement(function(achievement) {
+	                renderTrainingRecord(response, achievement);
+	                if (callback && typeof callback === 'function') {
+                        callback(response.data);
+                    }
+            	});
+            },
+            error: function(err){
+                console.log('Error:', err);
+            }
+        });
 	}
+	
+	// 重新渲染訓練紀錄
+	function renderTrainingRecord(res, achievements) {
+		let response = res;
+		console.log('renderTrainingRecord response:', response);
+		response.data.sort(function (a, b) { return b.startTime - a.startTime; });
+
+		const $tbody = $('#recordList tbody');
+    	$tbody.empty();
+		// ❷ 沒資料 → 印提示、隱藏詳細區與圖表
+		if (response.data.length === 0) {
+			$tbody.append(
+				'<tr><td colspan="4" class="text-center text-muted">目前沒有訓練紀錄</td></tr>'
+			);
+			$('.recordTable').hide();   // 詳細區
+			//$('.chart-div').hide();     // 圖表
+			return;                     // 直接結束
+		}
+		let recordHtml = '';
+
+		response.data.forEach(function (record, index) {
+			let startTime = new Date(record.startTime).toLocaleString();
+			let endTime   = new Date(record.endTime).toLocaleString();
+			let period    = formatPeriod(record.period);
+
+			recordHtml +=
+				'<tr data-index="' + index + '">' +
+					'<td>' + (index + 1) + '</td>' +
+					'<td>' + startTime + '</td>' +
+					'<td>' + endTime + '</td>' +
+					'<td>' + period + '</td>' +
+				'</tr>';
+		});
+
+		$('#recordList tbody').append(recordHtml);
+
+		// 點擊顯示詳情
+		$('#recordList tbody tr').on('click', function () {
+			let idx = $(this).data('index');
+			if (idx !== undefined) {
+				showDetails(response.data[idx], achievements);
+				$('.recordTable').show();
+			} else {
+				console.error('無法取得 index');
+			}
+		});
+	}
+
+
     
-    function formatDate(dateStr){
-		var dateObj = new Date(dateStr);
-		var formattedDate = dateObj.getFullYear() + '/' + 
-	    ('0' + (dateObj.getMonth() + 1)).slice(-2) + '/' + 
-	    ('0' + dateObj.getDate()).slice(-2);
-	    
-	    return formattedDate;
+    function formatDate(input){
+        const date = new Date(input);
+		
+		// 使用 toLocaleDateString 格式化
+		const formattedDate = date.toLocaleDateString('zh-TW', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+		}).replace(/\//g, '/'); // 確保分隔符為 "/"
+			
+		console.log(formattedDate);
+		return formattedDate;
+    }
+
+	/* 取得成就資料 */
+	function getAchievement(callback) {
+	    $.ajax({
+	        url: lessonStoreUrl + '/LessonAchievement/api/lesson',
+	        type: "POST",
+	        data: JSON.stringify({"lessonId": lessonIdForStore}),
+	        dataType: 'json',
+	        success: function(response) {
+	            console.log('Achievement:', response);
+	            callback(response);
+	        },
+	            error: function(err) {
+				console.log('Error:', err);
+	        }
+	    });
+	}
+
+	// 格式化 period 為 HH:mm:ss
+	function formatPeriod(milliseconds){
+	    let totalSeconds = Math.floor(milliseconds / 1000);
+	    let hours = Math.floor(totalSeconds / 3600);
+	    let minutes = Math.floor((totalSeconds % 3600) / 60);
+	    let seconds = totalSeconds % 60;
+	
+	    return (
+	        String(hours).padStart(2, '0') + ':' +
+	        String(minutes).padStart(2, '0') + ':' +
+	        String(seconds).padStart(2, '0')
+	    );
 	}
 </script>
 <style>

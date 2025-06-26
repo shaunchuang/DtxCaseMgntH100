@@ -29,6 +29,11 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>itri.sstc.framework</groupId>
+            <artifactId>Framework</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.4.1</version>
