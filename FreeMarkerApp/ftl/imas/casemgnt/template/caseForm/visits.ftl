@@ -55,27 +55,28 @@
 	
 	<script>
 	$(document).ready(function(){
+	
+		$(".timeline li").click(function(e){
+			e.preventDefault();
+			
+			var block = $(this);
+			var keyno = block.attr("data-keyno");
+			
+			if (block.hasClass("selected")) {
+				block.removeClass("selected");
+				wg.template.updateNewPageContent('report-container', 'report-content', {}, '/ftl/imas/diagnosisReport/msg/emptyMessage');
+			}else{
+				$(".timeline li").removeClass("selected");
+				block.toggleClass("selected");
+				console.log("keyno: " + keyno);
+				wg.template.updateNewPageContent('report-container', 'report-content', {}, '/ftl/imas/diagnosisReport?id=' + keyno);
+			}
+		
+		});
+		
 		if($(".timeline li").length > 0){
 			$(".timeline li:eq(0)").trigger('click');
 		}
-	});
-	
-	$(".timeline li").click(function(e){
-		e.preventDefault();
-		
-		var block = $(this);
-		var keyno = block.attr("data-keyno");
-		
-		if (block.hasClass("selected")) {
-			block.removeClass("selected");
-			wg.template.updateNewPageContent('report-container', 'report-content', {}, '/ftl/imas/diagnosisReport/msg/emptyMessage');
-		}else{
-			$(".timeline li").removeClass("selected");
-			block.toggleClass("selected");
-			console.log("keyno: " + keyno);
-			wg.template.updateNewPageContent('report-container', 'report-content', {}, '/ftl/imas/diagnosisReport?id=' + keyno);
-		}
-	
 	});
 	</script>
 	

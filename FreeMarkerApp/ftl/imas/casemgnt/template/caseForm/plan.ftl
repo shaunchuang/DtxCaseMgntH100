@@ -41,7 +41,7 @@
 				trainingPlanList.forEach(trainingPlan => {
 			
 					console.log(trainingPlan);
-			                // 計畫資訊
+			        // 計畫資訊
 	            	let startDateStr = formatDate(trainingPlan.startDate);
 	                let endDateStr = formatDate(trainingPlan.endDate);
 	                let therapistName = trainingPlan.therapistName || "治療師";
@@ -95,15 +95,18 @@
 		}
 		
 		wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/patient/analysis?msg=emptyMessage');
-	}	
-	
-	$("body").on("click", ".lesson-card", function(e) {
-		e.preventDefault();
-		let planId = $(this).data('plan');
-		console.log('Selected Plan ID:', planId);
-		wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/patient/analysis/detail?patientId=' + ${formId!""} + '&planId=' + planId);
 
-	});
+		$("body").on("click", ".lesson-card", function(e) {
+			e.preventDefault();
+			let planId = $(this).data('plan');
+			console.log('Selected Plan ID:', planId);
+			wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/patient/analysis/detail?patientId=' + ${formId!""} + '&planId=' + planId);
+		});
+
+		if($(".lesson-list-group").length > 0){
+			$(".lesson-list-group").children().first().trigger('click');
+		}
+	}
 
     function formatDate(dateStr){
         var dateObj = new Date(dateStr);
