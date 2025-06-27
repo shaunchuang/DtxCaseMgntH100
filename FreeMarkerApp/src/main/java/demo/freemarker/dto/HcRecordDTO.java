@@ -16,21 +16,22 @@ public class HcRecordDTO {
     private String doctorAlias = "";
     private Boolean isFirstDiag = false;
     private int diagTimes;
-    
+    private String syndrome;
 
     public HcRecordDTO() {
     }
 
-    public HcRecordDTO(Long serialNo, Long id, Long patientId, String mainIcdCode, String diagDate, String visitCat) {
+    public HcRecordDTO(Long serialNo, Long id, Long patientId, String mainIcdCode, String diagDate, String visitCat, String syndrome) {
         this.serialno = serialNo;
         this.id = id;
         this.patientId = patientId;
         this.mainIcdCode = mainIcdCode;
         this.diagDate = diagDate;
         this.visitCat = visitCat;
+        this.syndrome = syndrome;
     }
 
-    public HcRecordDTO(Long serialno, Long id, Long patientId, String diagDate, String icdCode, String doctorName, String doctorAlias) {
+    public HcRecordDTO(Long serialno, Long id, Long patientId, String diagDate, String icdCode, String doctorName, String doctorAlias, String syndrome) {
         this.serialno = serialno;
         this.id = id;
         this.patientId = patientId;
@@ -38,10 +39,11 @@ public class HcRecordDTO {
         this.icdCode = icdCode;
         this.doctorName = doctorName;
         this.doctorAlias = doctorAlias;
+        this.syndrome = syndrome;
     }
 
     public HcRecordDTO(Long serialno, Long id, Long patientId, String diagDateTime, Boolean isFirstDiag, int diagTimes, String icdCode,
-            String doctorName, String doctorAlias) {
+            String doctorName, String doctorAlias, String syndrome) {
         this.serialno = serialno;
         this.id = id;
         this.patientId = patientId;
@@ -51,6 +53,7 @@ public class HcRecordDTO {
         this.icdCode = icdCode;
         this.doctorName = doctorName;
         this.doctorAlias = doctorAlias;
+        this.syndrome = syndrome;
     }
 
     public Long getId() {
@@ -165,4 +168,12 @@ public class HcRecordDTO {
         this.diagTimes = diagTimes;
     }
 
+    public String getSyndrome() {
+        return syndrome;
+    }
+
+    public void setSyndrome(String syndrome) {
+        this.syndrome = syndrome;
+    }
+    
 }

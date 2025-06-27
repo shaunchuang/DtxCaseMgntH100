@@ -64,7 +64,7 @@
 							    	<tr>
 					                    <td class="col-xs-2">${hcRecord.diagDate}</td>
 					                    <td class="col-xs-4-5">${hcRecord.doctorName} ${hcRecord.doctorAlias}</td>
-					                    <td class="col-xs-3-5"><span class="badge badge-tag">${hcRecord.mainIcdCode}</span></td>
+					                    <td class="col-xs-3-5"><span class="badge badge-tag">${hcRecord.syndrome}</span></td>
 					                    <td class="col-xs-2"><button class="func-btn-custom f-14">檢視紀錄</button></td>
 					                </tr>
 							    	</#list>

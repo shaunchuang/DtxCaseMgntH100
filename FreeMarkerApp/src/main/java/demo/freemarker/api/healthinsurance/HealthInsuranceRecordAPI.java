@@ -1,13 +1,16 @@
 package demo.freemarker.api.healthinsurance;
 
+import demo.freemarker.api.PatientAPI;
 import demo.freemarker.api.RoleAPI;
 import demo.freemarker.api.UserAPI;
 import demo.freemarker.api.WgIcdCodeAPI;
 import demo.freemarker.api.WgTaskAPI;
+import demo.freemarker.core.CrossPlatformUtil;
 import demo.freemarker.core.StringUtils;
 import demo.freemarker.dao.healthinsurance.HealthInsuranceRecordDAO;
 import demo.freemarker.dto.HcRecordDTO;
 import demo.freemarker.dto.UserRoleDTO;
+import demo.freemarker.model.Patient;
 import demo.freemarker.model.Role;
 import demo.freemarker.model.User;
 import demo.freemarker.model.WgIcdCode;
@@ -256,6 +259,7 @@ public class HealthInsuranceRecordAPI implements API {
 
         Long id = hcForm.getId();
         Long patientId = hcForm.getPatientId();
+        Patient patient = PatientAPI.getInstance().getPatient(patientId);
         String diagDate = sdf.format(hcForm.getCreateTime());
         String diagDateTime = fullDateFormat(hcForm.getCreateTime());
         User doctor = UserAPI.getInstance().getUser(hcForm.getCreator());
@@ -266,6 +270,7 @@ public class HealthInsuranceRecordAPI implements API {
         String doctorAlias = "";
         Boolean isFirstDiag = false;
         int diagTImes = 0;
+        String syndrome = CrossPlatformUtil.getInstance().findSyndromeById(patient.getDiseaseId());
 
         if (doctor != null) {
             List<Role> roles = RoleAPI.getInstance().listRolesByUserId(doctor.getId());
@@ -274,9 +279,9 @@ public class HealthInsuranceRecordAPI implements API {
         }
 
         if (isDetailInfo) {
-            return new HcRecordDTO(serialNo, id, patientId, diagDateTime, isFirstDiag, diagTImes, diagnosois, doctorName, doctorAlias);
+            return new HcRecordDTO(serialNo, id, patientId, diagDateTime, isFirstDiag, diagTImes, diagnosois, doctorName, doctorAlias, syndrome);
         } else {
-            return new HcRecordDTO(serialNo, id, patientId, diagDate, diagnosois, doctorName, doctorAlias);
+            return new HcRecordDTO(serialNo, id, patientId, diagDate, diagnosois, doctorName, doctorAlias, syndrome);
         }
     }
 
