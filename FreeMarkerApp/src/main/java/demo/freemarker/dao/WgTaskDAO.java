@@ -123,4 +123,18 @@ public class WgTaskDAO extends IntIdBaseDAO {
             em.close();
         }
     }
+
+    public List<WgTask> checkIsFirstDiag(Long caseNo, Long therapist) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("WgTask.checkIsFirstDiag");
+            q.setParameter("caseNo", caseNo);
+            q.setParameter("therapist", therapist);
+            return q.getResultList();
+        } catch (Exception ex) {
+            return new ArrayList<WgTask>();
+        } finally {
+            em.close();
+        }
+    }
 }

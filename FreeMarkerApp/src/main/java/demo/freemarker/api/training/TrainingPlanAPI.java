@@ -108,10 +108,8 @@ public class TrainingPlanAPI implements API {
         TrainingPlanDTO planDTO = new TrainingPlanDTO();
         List<PlanLessonMapping> mappings = PlanLessonMappingAPI.getInstance().listByPlanId(trainingPlan.getId());
         List<LessonDTO> lessonDTOs = new ArrayList<>();
-        System.out.println("mappings size: " + mappings.size());
         for (PlanLessonMapping mapping : mappings) {
             LessonDTO lessonDTO = new LessonDTO();
-            System.out.println("lessonId:" + mapping.getLessonId());
             lessonDTO.setLessonId(mapping.getLessonId());
             List<AchievementGoal> achievementGoals = AchievementGoalAPI.getInstance().listByMappingId(mapping.getId());
             List<AchievementDTO> achievements = achievementGoals.stream()
@@ -140,7 +138,6 @@ public class TrainingPlanAPI implements API {
         planDTO.setPlanId(trainingPlan.getId());
         planDTO.setTherapistId(trainingPlan.getTherapist());
         String therapistName = UserAPI.getInstance().getUser(trainingPlan.getTherapist()).getUsername();
-        System.out.println("therapistName: "+therapistName);
         planDTO.setTherapistName(therapistName != null ? therapistName : null);
         planDTO.setPatientId(String.valueOf(trainingPlan.getPatientId()));
         Patient patient = PatientAPI.getInstance().getPatient(trainingPlan.getPatientId());

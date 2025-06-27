@@ -28,7 +28,7 @@
 					                    		<div class="appo-time">${appoEvent.appoDate} ${appoEvent.appoTime}</div>
 					                    		<div class="appo-target"><#if appoEvent.division??>${appoEvent.division} </#if>${appoEvent.doctorName} ${appoEvent.doctorAlias}</div>
 					                    	</div>
-					                    	<div class="appo-sub"><#if appoEvent.isFirstDiag >初診<#else>複診</#if>/顯示副標題</div>
+					                    	<div class="appo-sub"><#if appoEvent.isFirstDiag >初診<#else>複診</#if> / 顯示副標題</div>
 					                    </td>
 					                    <td class="col-xs-2-5 right-align">
 					                    	<button class="func-btn-custom f-14 mg-right-5" data-keyno="${appoEvent.caseno}" data-slot="${appoEvent.slotId}">更改預約</button>
