@@ -30,7 +30,7 @@ jobs:
         port: ${{ secrets.SERVER_PORT || 22 }}
         script: |
           # 切換到專案目錄
-          cd ${{ secrets.PROJECT_PATH || '/home/ubuntu/DtxCaseMgnt' }}
+          cd ${{ secrets.PROJECT_PATH || '/home/ubuntu/dtx/DtxCaseMgntH100' }}
           
           # 確保腳本有執行權限
           chmod +x FreeMarkerApp/redeploy-docker.sh
