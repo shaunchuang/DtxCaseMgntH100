@@ -1165,3 +1165,447 @@
   <thread>77</thread>
   <message>"/Training/api/" Call API listPlan</message>
 </record>
+<record>
+  <date>2025-06-27T07:44:14.635636100Z</date>
+  <millis>1751010254635</millis>
+  <nanos>636100</nanos>
+  <sequence>97</sequence>
+  <logger>itri.sstc.freemarker.core.RequestHandler</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.RequestHandler</class>
+  <method>getTemplateData</method>
+  <thread>48</thread>
+  <message>[imas/logout]</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.636609900Z</date>
+  <millis>1751010254636</millis>
+  <nanos>609900</nanos>
+  <sequence>98</sequence>
+  <logger>itri.sstc.freemarker.core.RequestHandler</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.RequestHandler</class>
+  <method>getTemplateData</method>
+  <thread>48</thread>
+  <message>加入全域變數</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.636609900Z</date>
+  <millis>1751010254636</millis>
+  <nanos>609900</nanos>
+  <sequence>99</sequence>
+  <logger>itri.sstc.framework.core.httpd.session.HttpSessionManager</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.session.HttpSessionManager</class>
+  <method>removeSession</method>
+  <thread>48</thread>
+  <message>Try to remove session SESSION_c1f3d993-e8e4-49ff-9eb8-2a166e68c419</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.638015Z</date>
+  <millis>1751010254638</millis>
+  <nanos>15000</nanos>
+  <sequence>100</sequence>
+  <logger>itri.sstc.freemarker.core.RequestHandler</logger>
+  <level>WARNING</level>
+  <class>itri.sstc.freemarker.core.RequestHandler</class>
+  <method>render</method>
+  <thread>48</thread>
+  <message>File not found: Template not found for URL: imas/logout</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.638015Z</date>
+  <millis>1751010254638</millis>
+  <nanos>15000</nanos>
+  <sequence>101</sequence>
+  <logger>itri.sstc.framework.core.api.RESTfulAPI</logger>
+  <level>SEVERE</level>
+  <class>itri.sstc.freemarker.httpd.FreemarkerAPI</class>
+  <method>handle</method>
+  <thread>48</thread>
+  <message>headers already sent</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.642084100Z</date>
+  <millis>1751010254642</millis>
+  <nanos>84100</nanos>
+  <sequence>102</sequence>
+  <logger>itri.sstc.framework.core.httpd.session.HttpSessionManager</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.session.HttpSessionManager</class>
+  <method>createSession</method>
+  <thread>48</thread>
+  <message>Create session SESSION_a9b7e541-c13e-457a-bb3a-f2d00c6da23b for /ftl/imas/login</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.643056700Z</date>
+  <millis>1751010254643</millis>
+  <nanos>56700</nanos>
+  <sequence>103</sequence>
+  <logger>itri.sstc.framework.core.httpd.HttpService</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.HttpService</class>
+  <method>log</method>
+  <thread>48</thread>
+  <message>Create new Session: SESSION_a9b7e541-c13e-457a-bb3a-f2d00c6da23b</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.643056700Z</date>
+  <millis>1751010254643</millis>
+  <nanos>56700</nanos>
+  <sequence>104</sequence>
+  <logger>itri.sstc.freemarker.core.RequestHandler</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.RequestHandler</class>
+  <method>getTemplateData</method>
+  <thread>48</thread>
+  <message>[imas/login]</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.643056700Z</date>
+  <millis>1751010254643</millis>
+  <nanos>56700</nanos>
+  <sequence>105</sequence>
+  <logger>itri.sstc.freemarker.core.RequestHandler</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.RequestHandler</class>
+  <method>getTemplateData</method>
+  <thread>48</thread>
+  <message>加入全域變數</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.662750900Z</date>
+  <millis>1751010254662</millis>
+  <nanos>750900</nanos>
+  <sequence>106</sequence>
+  <logger>itri.sstc.freemarker.core.RequestHandler</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.RequestHandler</class>
+  <method>render</method>
+  <thread>48</thread>
+  <message>FTL Process time: 19ms</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.736777800Z</date>
+  <millis>1751010254736</millis>
+  <nanos>777800</nanos>
+  <sequence>107</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>78</thread>
+  <message>Thread[78] GET /html/script/fullcalendar/fullcalendar.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.739695500Z</date>
+  <millis>1751010254739</millis>
+  <nanos>695500</nanos>
+  <sequence>108</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>79</thread>
+  <message>Thread[79] GET /html/style/employee.css</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.745967700Z</date>
+  <millis>1751010254745</millis>
+  <nanos>967700</nanos>
+  <sequence>109</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>81</thread>
+  <message>Thread[81] GET /html/script/mlog.autocomplete.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.746940800Z</date>
+  <millis>1751010254746</millis>
+  <nanos>940800</nanos>
+  <sequence>110</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>82</thread>
+  <message>Thread[82] GET /html/script/mlog.calendar.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.773256200Z</date>
+  <millis>1751010254773</millis>
+  <nanos>256200</nanos>
+  <sequence>111</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>80</thread>
+  <message>Thread[80] GET /html/script/cityArea/cityArea.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.777149900Z</date>
+  <millis>1751010254777</millis>
+  <nanos>149900</nanos>
+  <sequence>112</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>83</thread>
+  <message>Thread[83] GET /html/script/mlog.datatable.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.781043200Z</date>
+  <millis>1751010254781</millis>
+  <nanos>43200</nanos>
+  <sequence>113</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>84</thread>
+  <message>Thread[84] GET /html/script/jquery-timepicker/jquery.timepicker.min.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.789803300Z</date>
+  <millis>1751010254789</millis>
+  <nanos>803300</nanos>
+  <sequence>115</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>86</thread>
+  <message>Thread[86] GET /html/script/wg.template.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.789803300Z</date>
+  <millis>1751010254789</millis>
+  <nanos>803300</nanos>
+  <sequence>114</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>85</thread>
+  <message>Thread[85] GET /html/script/employee.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.797590400Z</date>
+  <millis>1751010254797</millis>
+  <nanos>590400</nanos>
+  <sequence>116</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>87</thread>
+  <message>Thread[87] GET /html/script/wg.evalForm.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:14.806959800Z</date>
+  <millis>1751010254806</millis>
+  <nanos>959800</nanos>
+  <sequence>117</sequence>
+  <logger>itri.sstc.framework.core.api.RESTfulAPI</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.api.RESTfulAPI</class>
+  <method>log</method>
+  <thread>88</thread>
+  <message>"/security/api/" Call API captcha</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:27.468615100Z</date>
+  <millis>1751010267468</millis>
+  <nanos>615100</nanos>
+  <sequence>118</sequence>
+  <logger>itri.sstc.framework.core.api.RESTfulAPI</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.api.RESTfulAPI</class>
+  <method>log</method>
+  <thread>89</thread>
+  <message>"/security/api/" Call API login</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:29.318566900Z</date>
+  <millis>1751010269318</millis>
+  <nanos>566900</nanos>
+  <sequence>119</sequence>
+  <logger>itri.sstc.freemarker.core.RequestHandler</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.RequestHandler</class>
+  <method>getTemplateData</method>
+  <thread>48</thread>
+  <message>[imas/dashboard]</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:29.318566900Z</date>
+  <millis>1751010269318</millis>
+  <nanos>566900</nanos>
+  <sequence>120</sequence>
+  <logger>itri.sstc.freemarker.core.RequestHandler</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.RequestHandler</class>
+  <method>getTemplateData</method>
+  <thread>48</thread>
+  <message>加入全域變數</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.397971200Z</date>
+  <millis>1751010293397</millis>
+  <nanos>971200</nanos>
+  <sequence>121</sequence>
+  <logger>itri.sstc.freemarker.core.RequestHandler</logger>
+  <level>INFO</level>
+  <class>itri.sstc.freemarker.core.RequestHandler</class>
+  <method>render</method>
+  <thread>48</thread>
+  <message>FTL Process time: 24079ms</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.412353500Z</date>
+  <millis>1751010293412</millis>
+  <nanos>353500</nanos>
+  <sequence>122</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>90</thread>
+  <message>Thread[90] GET /html/script/imas/utility.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.417854Z</date>
+  <millis>1751010293417</millis>
+  <nanos>854000</nanos>
+  <sequence>123</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>92</thread>
+  <message>Thread[92] GET /html/script/wg.evalForm.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.417854Z</date>
+  <millis>1751010293417</millis>
+  <nanos>854000</nanos>
+  <sequence>124</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>91</thread>
+  <message>Thread[91] GET /html/script/wg.template.js</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.627665Z</date>
+  <millis>1751010293627</millis>
+  <nanos>665000</nanos>
+  <sequence>125</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>93</thread>
+  <message>Thread[93] GET /html/script/imas/moment.min.js.map</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.653217700Z</date>
+  <millis>1751010293653</millis>
+  <nanos>217700</nanos>
+  <sequence>126</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>94</thread>
+  <message>Thread[94] GET /html/script/imas/jquery.timepicker.min.js.map</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.654351Z</date>
+  <millis>1751010293654</millis>
+  <nanos>351000</nanos>
+  <sequence>127</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>95</thread>
+  <message>Thread[95] GET /html/script/imas/bootstrap-tagsinput.min.js.map</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.657756300Z</date>
+  <millis>1751010293657</millis>
+  <nanos>756300</nanos>
+  <sequence>128</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>96</thread>
+  <message>Thread[96] GET /html/script/imas/widget/FileSaver.min.js.map</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.695983600Z</date>
+  <millis>1751010293695</millis>
+  <nanos>983600</nanos>
+  <sequence>129</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>97</thread>
+  <message>Thread[97] GET /html/style/woundInfo/bootstrap-datepicker3.min.css.map</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.717345200Z</date>
+  <millis>1751010293717</millis>
+  <nanos>345200</nanos>
+  <sequence>130</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>98</thread>
+  <message>Thread[98] GET /html/script/imas/jquery.contextMenu.min.js.map</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.724021100Z</date>
+  <millis>1751010293724</millis>
+  <nanos>21100</nanos>
+  <sequence>131</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>99</thread>
+  <message>Thread[99] GET /html/images/dccs/time-bk.png</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.772194900Z</date>
+  <millis>1751010293772</millis>
+  <nanos>194900</nanos>
+  <sequence>132</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>100</thread>
+  <message>Thread[100] GET /html/style/imas/jquery.contextMenu.min.css.map</message>
+</record>
+<record>
+  <date>2025-06-27T07:44:53.777113100Z</date>
+  <millis>1751010293777</millis>
+  <nanos>113100</nanos>
+  <sequence>133</sequence>
+  <logger>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</logger>
+  <level>INFO</level>
+  <class>itri.sstc.framework.core.httpd.file.FileRequestHandleTask</class>
+  <method>run</method>
+  <thread>101</thread>
+  <message>Thread[101] GET /html/style/fonts-6.1.1/fa-brands-400.woff2</message>
+</record>
