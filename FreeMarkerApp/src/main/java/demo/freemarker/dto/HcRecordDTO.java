@@ -16,6 +16,7 @@ public class HcRecordDTO {
     private String doctorAlias = "";
     private Boolean isFirstDiag = false;
     private int diagTimes;
+    
 
     public HcRecordDTO() {
     }

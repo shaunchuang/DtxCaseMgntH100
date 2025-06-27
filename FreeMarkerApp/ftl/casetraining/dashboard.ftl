@@ -23,14 +23,14 @@
 	            					<#assign appoEvents = todayReviewInfo.appoEvents>
 							    	<#list appoEvents as appoEvent>
 							    	<tr>
-					                    <td class="col-xs-9-5">
-					                    	<div class="appo-main">
+					                    <td class="col-md-9">
+					                    	<div class="appo-main col-md-7">
 					                    		<div class="appo-time">${appoEvent.appoDate} ${appoEvent.appoTime}</div>
 					                    		<div class="appo-target"><#if appoEvent.division??>${appoEvent.division} </#if>${appoEvent.doctorName} ${appoEvent.doctorAlias}</div>
 					                    	</div>
-					                    	<div class="appo-sub"><#if appoEvent.isFirstDiag >初診<#else>複診</#if> / 顯示副標題</div>
+					                    	<div class="appo-sub col-md-5"><#if appoEvent.isFirstDiag >初診<#else>複診</#if> / 顯示副標題</div>
 					                    </td>
-					                    <td class="col-xs-2-5 right-align">
+					                    <td class="col-md-3 change-appo-blk">
 					                    	<button class="func-btn-custom f-14 mg-right-5" data-keyno="${appoEvent.caseno}" data-slot="${appoEvent.slotId}">更改預約</button>
 				                    	</td>
 					                </tr>
@@ -64,7 +64,7 @@
 							    	<tr>
 					                    <td class="col-xs-2">${hcRecord.diagDate}</td>
 					                    <td class="col-xs-4-5">${hcRecord.doctorName} ${hcRecord.doctorAlias}</td>
-					                    <td class="col-xs-3-5"><span class="badge badge-tag">${hcRecord.indication}</span></td>
+					                    <td class="col-xs-3-5"><span class="badge badge-tag">${hcRecord.mainIcdCode}</span></td>
 					                    <td class="col-xs-2"><button class="func-btn-custom f-14">檢視紀錄</button></td>
 					                </tr>
 							    	</#list>
@@ -292,34 +292,31 @@ function formatDate(dateStr){
 
 .appointment-events tr td,
 .track-events tr td{
-	display: block;
+	display: flex;
 	align-items: center;
 	/*padding: 10px 0 !important;*/
 	padding-left: 0 !important;
 	padding-right: 0 !important;
 }
 
-.appointment-events tr td(:last-child){
-	
+/* 預約回診表格的 td 均分寬度 */
+.appointment-events tr td {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: left;
 }
 
-.appo-main, .appo-sub{	
-	display: block;
+.appointment-events tr td:last-child {
+	text-align: right;
 }
 
-.appo-sub{
-	color: #8c8c8c;
-}
-
-.appo-main .appo-time{
-	border-right: 1.5px solid #000000;
-	padding-right: 5px;
-}
-
-.appo-main .appo-time,
-.appo-main .appo-target{
+.appo-main {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 4px;
 	font-weight: 600;
-	display: inline;
 }
 
 .history-list-blk, .lesson-blk{
@@ -463,6 +460,16 @@ function formatDate(dateStr){
 	background: #8c8c8c;
 	color: #ffffff;
 	border: 1px solid #8c8c8c;
+}
+
+tbody.appointment-events tr {
+	justify-content: space-between;
+	border-bottom: 1px solid #8c8c8c;
+}
+
+.change-appo-blk {
+	display: flex;
+	justify-content: flex-end;
 }
 
 </style>	
