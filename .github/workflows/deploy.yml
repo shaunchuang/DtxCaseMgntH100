@@ -15,6 +15,11 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0  # 獲取完整的 git 歷史記錄，用於版本號生成
+
+    - run: echo "KEY length=${#SERVER_SSH_KEY}"
+      shell: bash
+      env:
+        SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
     
     - name: Deploy to remote server
       uses: appleboy/ssh-action@v1.0.3
