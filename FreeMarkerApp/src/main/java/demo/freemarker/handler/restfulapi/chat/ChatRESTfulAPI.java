@@ -9,6 +9,7 @@ import demo.freemarker.model.chat.ChatRoom;
 import demo.freemarker.model.chat.ChatMessage;
 import demo.freemarker.model.chat.ChatRoomUser;
 import itri.sstc.framework.core.api.RESTfulAPI;
+import itri.sstc.framework.core.api.RESTfulAPI.RESTfulAPIDefine;
 import itri.sstc.framework.core.database.EntityUtility;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -151,11 +152,41 @@ public class ChatRESTfulAPI extends RESTfulAPI {
             }
 
             String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-            JSONObject requestJson = new JSONObject(requestBody);
+            
+            // 解析請求參數 - 支援兩種格式：直接JSON或data字段包裝
+            JSONObject requestData;
+            try {
+                JSONObject fullRequest = new JSONObject(requestBody);
+                if (fullRequest.has("data")) {
+                    // 如果有data字段，解析其中的JSON字符串
+                    String dataStr = fullRequest.getString("data");
+                    requestData = new JSONObject(dataStr);
+                } else {
+                    // 直接使用根層級的JSON
+                    requestData = fullRequest;
+                }
+            } catch (Exception e) {
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                responseJson.put("success", false);
+                responseJson.put("message", "請求格式錯誤");
+                return responseJson.toString();
+            }
 
-            Long roomId = requestJson.getLong("roomId");
-            String content = requestJson.getString("content");
-            String messageType = requestJson.optString("messageType", "TEXT");
+            // 支援兩種參數格式
+            Long roomId;
+            String content;
+            String messageType = "TEXT";
+            
+            if (requestData.has("chatGroupId")) {
+                // trainingQuestion.ftl 格式
+                roomId = requestData.getLong("chatGroupId");
+                content = requestData.getString("message");
+            } else {
+                // 標準格式
+                roomId = requestData.getLong("roomId");
+                content = requestData.getString("content");
+                messageType = requestData.optString("messageType", "TEXT");
+            }
             
             // 使用 ChatAPI 發送訊息
             ChatMessage message = ChatAPI.getInstance().sendMessage(
@@ -295,6 +326,76 @@ public class ChatRESTfulAPI extends RESTfulAPI {
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "標記訊息為已讀失敗", e);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
+            responseJson.put("success", false);
+            responseJson.put("message", "伺服器內部錯誤: " + e.getMessage());
+            return responseJson.toString();
+        }
+    }
+
+    /**
+     * 載入或建立聊天室（主要用於個案與治療師的私聊）
+     */
+    @RESTfulAPIDefine(url = "loadChatRoom", methods = "post", description = "載入或建立聊天室")
+    private String loadChatRoom(HttpExchange exchange) throws IOException {
+        JSONObject responseJson = new JSONObject();
+        try {
+            User currentUser = SecurityUtils.getCurrentUser(exchange);
+            if (currentUser == null) {
+                LOGGER.log(Level.WARNING, "未授權的聊天室存取請求");
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
+                responseJson.put("success", false);
+                responseJson.put("message", "未授權");
+                return responseJson.toString();
+            }
+
+            String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+            LOGGER.log(Level.INFO, "loadChatRoom請求內容: " + requestBody);
+            
+            // 解析請求參數 - 直接解析JSON
+            JSONObject requestData;
+            try {
+                requestData = new JSONObject(requestBody);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "請求格式錯誤: " + requestBody, e);
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                responseJson.put("success", false);
+                responseJson.put("message", "請求格式錯誤");
+                return responseJson.toString();
+            }
+
+            Long currentUserId = requestData.getLong("currentUserId");
+            Long careUserId = requestData.getLong("careUserId");
+            
+            // 建立或取得私人聊天室
+            ChatRoom chatRoom = ChatAPI.getInstance().getOrCreatePrivateChat(currentUserId, careUserId);
+            
+            // 載入聊天室訊息
+            List<ChatMessage> messages = ChatAPI.getInstance().getRoomMessages(chatRoom.getId(), currentUserId);
+
+            // 組裝回應
+            responseJson.put("success", true);
+            responseJson.put("ChatGroupId", chatRoom.getId());
+            responseJson.put("roomName", chatRoom.getName());
+            responseJson.put("roomType", "PRIVATE");
+            
+            JSONArray messagesArray = new JSONArray();
+            for (ChatMessage message : messages) {
+                JSONObject messageObj = new JSONObject();
+                messageObj.put("id", message.getId());
+                messageObj.put("userId", message.getSenderId());
+                messageObj.put("content", message.getContent());
+                messageObj.put("createTime", message.getCreatedAt().getTime());
+                messageObj.put("messageType", "TEXT");
+                messagesArray.put(messageObj);
+            }
+            responseJson.put("ChatMessages", messagesArray);
+            
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+            return responseJson.toString();
+
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "載入聊天室失敗", e);
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
             responseJson.put("success", false);
             responseJson.put("message", "伺服器內部錯誤: " + e.getMessage());

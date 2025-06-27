@@ -34,6 +34,10 @@
     <class>demo.freemarker.model.scale.ScaleItemOption</class>
     <class>demo.freemarker.model.scale.ScaleLevel</class>
     <class>demo.freemarker.model.scale.ScaleSection</class>
+    <class>demo.freemarker.model.chat.ChatRoom</class>
+    <class>demo.freemarker.model.chat.ChatRoomUser</class>
+    <class>demo.freemarker.model.chat.ChatMessage</class>
+    <class>demo.freemarker.model.chat.ChatMessageRead</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create-or-extend-tables"/>

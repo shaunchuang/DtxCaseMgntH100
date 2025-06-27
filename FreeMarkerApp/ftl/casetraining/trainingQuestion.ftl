@@ -9,7 +9,7 @@
 			<!-- 各功能模組內容放置區 -->
 			<div class="clearfix"></div>
 			<div class="main-content">
-	            <div class="default-blks">
+	            <div class="default-blks whole-blk">
 	            	<div class="col-5">
 	            	    <div class="default-blk plan-area">
 		            		<div class="default-blks">
@@ -46,6 +46,12 @@
 	                	</div>
                 	</div>
                 	<div class="col-7 default-blk">
+                		<div class="chat-header">
+                		    <h5>與治療師對話</h5>
+                		    <button class="btn btn-sm btn-outline-primary" onclick="loadRoom()" title="重新載入訊息">
+                		        <i class="fa-solid fa-refresh"></i> 刷新
+                		    </button>
+                		</div>
                 		<div class="default-blk chat-messages" id="chatRoom" data-group="">
                 			<div class="chat-message right">
 							    <div class="chat-avatar">
@@ -98,18 +104,41 @@
 	let lessonStoreUrl = '${lessonStoreUrl!""}';
 	let lessonId = '';
 	let lessonMain;
+	// 當前使用者資訊
+	let currentUser = ${cUser!""};
+	let currentUserName = '${currentUser.name!""}';
 	// 從 trainingPlan 中取得治療師資訊
 	let therapistId = '';
 	let therapistName = '';
 	if (trainingPlan && trainingPlan.therapistId) {
 		therapistId = trainingPlan.therapistId;
 		therapistName = trainingPlan.therapistName || '治療師';
+		console.log('載入治療師資訊:', {therapistId: therapistId, therapistName: therapistName});
+	} else {
+	    console.warn('trainingPlan或therapistId未定義:', trainingPlan);
 	}
 
 	$(document).ready(function() {
         // 聊天室訊息區塊滾動至最底部
         $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
-        loadRoom();
+        
+        // 確保trainingPlan載入完成後再載入聊天室
+        if (trainingPlan && trainingPlan.therapistId) {
+            loadRoom();
+        } else {
+            // 如果trainingPlan尚未載入，等待一下再嘗試
+            setTimeout(function() {
+                if (trainingPlan && trainingPlan.therapistId) {
+                    therapistId = trainingPlan.therapistId;
+                    therapistName = trainingPlan.therapistName || '治療師';
+                    console.log('延遲載入治療師資訊:', {therapistId: therapistId, therapistName: therapistName});
+                    loadRoom();
+                } else {
+                    console.error('trainingPlan載入失敗，無法初始化聊天室');
+                }
+            }, 1000);
+        }
+        
         enterEvent();
         
         // 設定每10秒重新載入一次聊天室
@@ -135,19 +164,38 @@
     
 	// 建立聊天室 聊天室姓名待更新
 	function loadRoom() {
+	    // 確保therapistId有值
+	    if (!therapistId) {
+	        console.error('therapistId未定義，無法載入聊天室');
+	        alert('治療師資訊未載入，請重新整理頁面');
+	        return;
+	    }
+	    
 	    $.ajax({
 	        url: "/Chat/api/loadChatRoom",
 	        type: "POST",
-	        data: {data: JSON.stringify({'currentUserId': ${currentUser.id!""}, 'careUserId': therapistId})},
+	        contentType: "application/json",
+	        data: JSON.stringify({'currentUserId': ${currentUser.id!""}, 'careUserId': therapistId}),
 			async: false,
 	        success: function(data) {
 	            console.log(data);
-	            let chatInfo = JSON.parse(data);
+	            let chatInfo = typeof data === 'string' ? JSON.parse(data) : data;
 	            console.log(chatInfo);
+	            
+	            if (!chatInfo.success) {
+	                console.error('載入聊天室失敗:', chatInfo.message);
+	                return;
+	            }
 	            
 	            let messages = chatInfo.ChatMessages;
 	            if(messages){
 	            	$(".chat-messages").empty();
+	            	
+	            	// 按時間排序訊息（從舊到新）
+	            	messages.sort(function(a, b) {
+	            	    return a.createTime - b.createTime;
+	            	});
+	            	
 		            for (let i = 0; i < messages.length; i++) {
 		                let message = messages[i];
 		                
@@ -158,7 +206,7 @@
 		                    messageHtml = 
 		                        '<div class="chat-message right">' +
 		                            '<div class="chat-avatar">' +
-		                                '<img src="${base}/images/dccs/avatar2.png" alt="Avatar">' +
+		                                '<img src="/File/api/file/path/avatar/avatar2.png" alt="Avatar">' +
 		                            '</div>' +
 		                            '<div class="chat-text">' +
 		                                '<div class="chat-message-content">' + message.content + '</div>' +
@@ -172,7 +220,7 @@
 		                    messageHtml = 
 		                        '<div class="chat-message">' +
 		                            '<div class="chat-avatar">' +
-		                                '<img src="${base}/images/dccs/avatar1.png" alt="Avatar">' +
+		                                '<img src="/File/api/file/path/avatar/avatar1.png" alt="Avatar">' +
 		                            '</div>' +
 		                            '<div class="chat-text">' +
 		                                '<div class="chat-message-content">' + message.content + '</div>' +
@@ -188,9 +236,16 @@
 	            }
 	            $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
 	            $('#chatRoom').attr('data-group', chatInfo.ChatGroupId);
+	            
+	            // 設置聊天室標題
+	            if (chatInfo.roomName) {
+	                console.log('聊天室名稱:', chatInfo.roomName);
+	            }
 	        },
-	        error: function(data) {
-	            console.log(data);
+	        error: function(xhr, status, error) {
+	            console.error('載入聊天室失敗:', error);
+	            console.error('Response:', xhr.responseText);
+	            alert('載入聊天室失敗，請重新整理頁面');
 	        }
 	    });
 	}
@@ -203,38 +258,43 @@
 	    if (message.trim() === "") {
 	        return;
 	    }
+	    
 	    let groupId = $('#chatRoom').attr('data-group');
+	    if (!groupId) {
+	        console.error('聊天室ID未載入');
+	        alert('聊天室未載入，請重新整理頁面');
+	        return;
+	    }
+	    
 	    /* 發送訊息至API */
 	    $.ajax({
 	        url: "/Chat/api/sendMessage",
 	        type: "POST",
-	        data: {data: JSON.stringify({'chatGroupId': groupId, 'careUserId': therapistId, 'currentUserId': ${currentUser.id!""}, 'message': message})},
+	        contentType: "application/json",
+	        data: JSON.stringify({'chatGroupId': groupId, 'careUserId': therapistId, 'currentUserId': ${currentUser.id!""}, 'message': message}),
 	        success: function(data) {
 	            console.log(data);
+	            let response = typeof data === 'string' ? JSON.parse(data) : data;
+	            if (response.success) {
+	                console.log('訊息發送成功');
+	                // 發送成功後重新載入訊息
+	                setTimeout(function() {
+	                    loadRoom();
+	                }, 100); // 稍微延遲以確保伺服器已處理
+	            } else {
+	                console.error('發送訊息失敗:', response.message);
+	                alert('發送訊息失敗: ' + response.message);
+	            }
 	        },
-	        error: function(data) {
-	            console.log(data);
+	        error: function(xhr, status, error) {
+	            console.error('發送訊息失敗:', error);
+	            console.error('Response:', xhr.responseText);
+	            alert('發送訊息失敗，請重試');
 	        }
 	    });
 	    
-	    let formattedTime = formatTime(new Date());
-	    let messageHtml = 
-	        '<div class="chat-message right">' +
-	            '<div class="chat-avatar">' +
-	                '<img src="${base}/images/dccs/avatar2.png" alt="Avatar">' +
-	            '</div>' +
-	            '<div class="chat-text">' +
-	                '<div class="chat-message-content">' + message + '</div>' +
-	                '<div class="chat-username-timestamp">' +
-	                    '<div class="chat-username">' + currentUserName + '</div>' +
-	                    '<div class="chat-timestamp">' + formattedTime + '</div>' +
-	                '</div>' +
-	            '</div>' +
-	        '</div>';
-	    
-	    $(".chat-messages").append(messageHtml);
+	    // 清空輸入框
 	    $("#chatInput").val("");
-	    $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
 	}
 
     // 格式化聊天室日期
@@ -410,6 +470,10 @@
 </script>
 <style>
 
+	.whole-blk{
+		height: 86%;
+		max-height: 55rem;
+	}
 
     /* 訓練計畫樣式 */
 	.plan-area{
@@ -465,6 +529,20 @@
     
     
 	/* 聊天室樣式 */
+	.chat-header {
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    padding: 10px 15px;
+	    border-bottom: 1px solid #ddd;
+	    background-color: #f8f9fa;
+	}
+	
+	.chat-header h5 {
+	    margin: 0;
+	    color: #333;
+	}
+	
 	.chat-messages {
 	    height: 80%;
 	    max-height: 300px;

@@ -346,19 +346,6 @@ public class DtxCaseMgntPage extends RequestHandler {
         return "/casemgnt/caseList";
     }
 
-    // http://127.0.0.1:7001/ftl/imas/chatroom
-    @RequestMapping(pattern = "/chatroom", description = "協作溝通")
-    public String chatroom(RequestData request, Model model) {
-        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
-        if (currentUser == null) {
-            return "redirect:/ftl/imas/login";
-        }
-        String blogname = Config.get("blogname", "測試平台");
-        model.addAttribute("blogname", blogname);
-
-        return "/chatroom/chatroom";
-    }
-
     // http://127.0.0.1:7001/ftl/imas
     @RequestMapping(pattern = "/test", description = "測試")
     public String test(RequestData request, Model model) {
@@ -980,6 +967,20 @@ public class DtxCaseMgntPage extends RequestHandler {
         model.addAttribute("ptInfo", ptInfo);
         return "/casemgnt/template/caseForm/analysis";
     }
+
+    @RequestMapping(pattern = "/communication/chatroom", description = "聊天介面")
+    public String chatroom(RequestData request, Model model) {
+        UserRoleDTO currentUser = SecurityUtils.getCurrentUser(request);
+        if (currentUser == null) {
+            return "redirect:/ftl/imas/login";
+        }
+        String blogname = Config.get("blogname", "測試平台");
+        model.addAttribute("blogname", blogname);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("field_abbrev_ename", "ITRI");
+        model.addAttribute("menuNum", 3);
+        return "/communication/chatroom";
+    }   
 
     public TodayReviewInfo qryTodayReview(UserRoleDTO currentUser) {
         try {

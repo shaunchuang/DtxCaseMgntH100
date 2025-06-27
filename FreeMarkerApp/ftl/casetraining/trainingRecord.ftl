@@ -647,6 +647,7 @@ let lessonIdForStore = trainingPlan.lessons[0].lessonId; // 教案市集Id
         display: flex;
     	justify-content: center;
     	margin-top: 1rem;
+		height: 90%;
     }
     
     .chart-area{

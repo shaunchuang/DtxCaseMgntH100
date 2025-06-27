@@ -2036,7 +2036,7 @@ $(document).ready(function() {
 							<i class="fa fa-caret-down<#if menuNum == 3> arrow-rotate</#if>" ></i>
 						</a>
 						<ul class="sub-menu<#if menuNum == 3> show</#if>">
-					        <li><a href="${base}/${__lang}/division/web/communication/chatroom"><@spring.message "leftnav.submenu.group.meeting"/></a></li>
+					        <li><a href="/ftl/imas/communication/chatroom"><@spring.message "leftnav.submenu.group.meeting"/></a></li>
 				      	</ul>
 					</li>	
 					<li>	
