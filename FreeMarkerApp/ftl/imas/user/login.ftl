@@ -351,6 +351,15 @@ form{
 	
 	$("#account").focus();
 
+	// 添加鍵盤事件監聽器，讓使用者可以按 Enter 鍵登入
+	$("#login-form").on("keypress", function(e) {
+		if (e.which == 13 || e.keyCode == 13) { // Enter 鍵
+			e.preventDefault();
+			$("#login-btn").click();
+		}
+	});
+
+
 
 	$("#login-btn").on("click", function() {
 		
@@ -392,7 +401,7 @@ form{
 							timer: 1500,
 							showConfirmButton: false
 						}, function() {
-							window.location.href = "/ftl/casetraining/caseDashboard";
+						 window.location.href = "/ftl/casetraining/caseDashboard";
 						});
 					} else {
 						swal({
