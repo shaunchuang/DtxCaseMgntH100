@@ -58,25 +58,7 @@ public class ChatAPI implements API {
         }
     }
 
-    /**
-     * 創建聊天室並添加創建者
-     * @param name 聊天室名稱
-     * @param creatorId 創建者ID
-     * @return 創建的聊天室
-     */
-    public ChatRoom createChatRoom(String name, Long creatorId) {
-        try {
-            ChatRoom chatRoom = new ChatRoom(name);
-            ChatRoomDAO.getInstance().save(chatRoom);
-            
-            // 將創建者加入聊天室
-            addUserToChatRoom(chatRoom.getId(), creatorId);
-            
-            return chatRoom;
-        } catch (Exception ex) {
-            throw new RuntimeException("Failed to create chat room: " + ex.getMessage());
-        }
-    }
+
 
     /**
      * 創建聊天室並添加成員

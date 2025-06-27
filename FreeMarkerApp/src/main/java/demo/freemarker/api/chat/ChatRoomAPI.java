@@ -112,6 +112,39 @@ public class ChatRoomAPI implements API {
     }
 
     /**
+     * 創建聊天室
+     * @param name 聊天室名稱
+     * @param creatorId 創建者ID
+     * @return 創建的聊天室
+     */
+    public ChatRoom createChatRoom(String name, Long creatorId) {
+        try {
+            ChatRoom chatRoom = new ChatRoom(name, creatorId);
+            ChatRoomDAO.getInstance().create(chatRoom);
+            return chatRoom;
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to create chat room: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * 創建聊天室
+     * @param name 聊天室名稱
+     * @param photoUrl 聊天室圖片URL
+     * @param creatorId 創建者ID
+     * @return 創建的聊天室
+     */
+    public ChatRoom createChatRoom(String name, String photoUrl, Long creatorId) {
+        try {
+            ChatRoom chatRoom = new ChatRoom(name, photoUrl, creatorId);
+            ChatRoomDAO.getInstance().create(chatRoom);
+            return chatRoom;
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to create chat room: " + ex.getMessage());
+        }
+    }
+
+    /**
      * 更新聊天室
      * @param chatRoom 聊天室實體
      */
@@ -171,6 +204,19 @@ public class ChatRoomAPI implements API {
             return ChatRoomDAO.getInstance().findByUserId(userId);
         } catch (Exception ex) {
             throw new RuntimeException("Failed to get chat rooms by user ID: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * 根據創建者ID獲取聊天室
+     * @param creatorId 創建者ID
+     * @return 聊天室清單
+     */
+    public List<ChatRoom> getChatRoomsByCreatorId(Long creatorId) {
+        try {
+            return ChatRoomDAO.getInstance().findByCreatorId(creatorId);
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to get chat rooms by creator ID: " + ex.getMessage());
         }
     }
 }

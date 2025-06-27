@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ChatRoom.findAll", query = "SELECT c FROM ChatRoom c WHERE c.deletedAt IS NULL ORDER BY c.createdAt DESC"),
     @NamedQuery(name = "ChatRoom.findByName", query = "SELECT c FROM ChatRoom c WHERE c.name LIKE :name AND c.deletedAt IS NULL"),
-    @NamedQuery(name = "ChatRoom.findByUser", query = "SELECT DISTINCT cr FROM ChatRoom cr JOIN ChatRoomUser cru ON cr.id = cru.roomId WHERE cru.userId = :userId AND cr.deletedAt IS NULL ORDER BY cr.updatedAt DESC")
+    @NamedQuery(name = "ChatRoom.findByUser", query = "SELECT DISTINCT cr FROM ChatRoom cr JOIN ChatRoomUser cru ON cr.id = cru.roomId WHERE cru.userId = :userId AND cr.deletedAt IS NULL ORDER BY cr.updatedAt DESC"),
 })
 public class ChatRoom implements IntIdDataEntity, Serializable {
 
@@ -63,7 +63,18 @@ public class ChatRoom implements IntIdDataEntity, Serializable {
         this.createdAt = new Date();
     }
 
+    public ChatRoom(String name, Long creatorId) {
+        this.name = name;
+        this.createdAt = new Date();
+    }
+
     public ChatRoom(String name, String photoUrl) {
+        this.name = name;
+        this.photoUrl = photoUrl;
+        this.createdAt = new Date();
+    }
+
+    public ChatRoom(String name, String photoUrl, Long creatorId) {
         this.name = name;
         this.photoUrl = photoUrl;
         this.createdAt = new Date();
@@ -93,6 +104,14 @@ public class ChatRoom implements IntIdDataEntity, Serializable {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
     }
 
     public Date getCreatedAt() {
@@ -140,6 +159,6 @@ public class ChatRoom implements IntIdDataEntity, Serializable {
 
     @Override
     public String toString() {
-        return "ChatRoom[ id=" + id + ", name=" + name + " ]";
+        return "ChatRoom[ id=" + id + ", name=" + name + ", creatorId=" + creatorId + " ]";
     }
 }

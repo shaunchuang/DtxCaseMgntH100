@@ -66,6 +66,24 @@ public class ChatRoomDAO extends IntIdBaseDAO {
     }
 
     /**
+     * 根據創建者ID查詢聊天室
+     * @param creatorId 創建者ID
+     * @return 聊天室清單
+     */
+    public List<ChatRoom> findByCreatorId(Long creatorId) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("ChatRoom.findByCreator");
+            q.setParameter("creatorId", creatorId);
+            return q.getResultList();
+        } catch (Exception ex) {
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
      * 查詢所有有效的聊天室
      * @return 聊天室清單
      */
