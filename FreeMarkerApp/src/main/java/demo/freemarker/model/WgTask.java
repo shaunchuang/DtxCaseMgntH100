@@ -23,7 +23,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "WgTask.findByCaseNoAndCreator", query = "SELECT task FROM WgTask task WHERE task.caseNo = :caseNo AND task.creator = :creator"),
     @NamedQuery(name = "WgTask.findByCaseNoAndCreatorAndisChecked", query = "SELECT task FROM WgTask task WHERE task.caseNo = :caseNo AND task.creator = :creator AND task.checkinTime IS NOT NULL"),
     @NamedQuery(name = "WgTask.findBySlotId", query = "SELECT task FROM WgTask task WHERE task.availableSlotId = :availableSlotId"),
-    @NamedQuery(name = "WgTask.findByUserAndCat", query = "SELECT task FROM WgTask task WHERE task.cat = :cat AND task.creator = :creator")
+    @NamedQuery(name = "WgTask.findByUserAndCat", query = "SELECT task FROM WgTask task WHERE task.cat = :cat AND task.creator = :creator"),
+    @NamedQuery(name = "WgTask.findByCaseNo", query = "SELECT task FROM WgTask task WHERE task.caseNo = :caseNo")
 })
 public class WgTask implements IntIdDataEntity, Serializable {
     private static final long serialVersionUID = 6895651421520312351L;

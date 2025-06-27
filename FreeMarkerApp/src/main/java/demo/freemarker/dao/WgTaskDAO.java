@@ -109,5 +109,18 @@ public class WgTaskDAO extends IntIdBaseDAO {
         } finally {
             em.close();
         }
-    }   
+    }
+
+    public List<WgTask> listWgTaskByCaseNo(Long caseNo) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createNamedQuery("WgTask.findByCaseNo");
+            q.setParameter("caseNo", caseNo);
+            return q.getResultList();
+        } catch (Exception ex) {
+            return new ArrayList<WgTask>();
+        } finally {
+            em.close();
+        }
+    }
 }

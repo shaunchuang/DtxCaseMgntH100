@@ -16,6 +16,7 @@ import demo.freemarker.core.CrossPlatformUtil;
 import demo.freemarker.core.GsonUtil;
 import demo.freemarker.core.SecurityUtils;
 import demo.freemarker.dto.SyndromeDTO;
+import demo.freemarker.dto.TodayReviewInfo;
 import demo.freemarker.dto.TrainingPlanDTO;
 import demo.freemarker.dto.UserRoleDTO;
 import demo.freemarker.model.DiseaseCategory;
@@ -74,6 +75,7 @@ public class DtxCaseTrainingPage extends RequestHandler {
             return "redirect:/ftl/imas/login";
         }
         String blogname = Config.get("blogname", "測試平台");
+        TodayReviewInfo reviewResp = DtxCaseMgntPage.qryTodayReview(currentUser);
         model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         model.addAttribute("__field", "field");
         model.addAttribute("menuNum", 1);

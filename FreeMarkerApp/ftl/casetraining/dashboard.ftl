@@ -43,43 +43,8 @@
 			  			</div>
 			  		</div>
 				    <div class="col-7">
-				    	
 				    	<div class="default-blk lesson-blk">
 					      	<div class="title mg-b-5">訓練計畫</div>
-					      	<!--<div class="default-blk lesson-card">
-					      		<img src="${base}/images/imas/lesson/lesson3.jpg" alt="Minecraft Dungeons">
-							    <div class="card-content">
-							        <div class="card-header">
-							            <h3>Minecraft 訓練計畫</h3>
-							            <span class="status-red">今日訓練未完成</span>
-							        </div>
-							        <div class="card-details">
-							            <p>2024/05/26~2024/06/15 | 程靜雯 治療師 開立</p>
-							        </div>
-							        <div class="card-buttons">
-							            <button class="func-btn-custom">提問與回覆</button>
-							            <button class="func-btn-custom">檢視紀錄</button>
-							            <button class="func-btn-custom btn-primary">教案使用</button>
-							        </div>
-							    </div>
-					      	</div>
-					      	<div class="default-blk lesson-card">
-					      		<img src="${base}/images/imas/lesson/lesson2.jpg" alt="Minecraft Dungeons">
-							    <div class="card-content">
-							        <div class="card-header">
-							            <h3>theBlu 訓練計畫</h3>
-							            <span class="status-green">今日訓練已完成</span>
-							        </div>
-							        <div class="card-details">
-							            <p>2024/05/26~2024/06/15 | 程靜雯 治療師 開立</p>
-							        </div>
-							        <div class="card-buttons">
-							            <button class="func-btn-custom">提問與回覆</button>
-							            <button class="func-btn-custom">檢視紀錄</button>
-							            <button class="func-btn-custom btn-primary">教案使用</button>
-							        </div>
-							    </div>
-					      	</div>-->
 						</div>
 						<div class="default-blk history-list-blk mg-b-10">
 				    		<div class="title">就診歷程(僅列近期五筆紀錄)</div>

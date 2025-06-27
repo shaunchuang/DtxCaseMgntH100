@@ -59,17 +59,14 @@ public class ChatAPI implements API {
     }
 
     /**
-     * 創建聊天室（擴展版本）
+     * 創建聊天室並添加創建者
      * @param name 聊天室名稱
-     * @param roomType 聊天室類型
-     * @param description 描述
      * @param creatorId 創建者ID
      * @return 創建的聊天室
      */
-    public ChatRoom createChatRoom(String name, String roomType, String description, Long creatorId) {
+    public ChatRoom createChatRoom(String name, Long creatorId) {
         try {
             ChatRoom chatRoom = new ChatRoom(name);
-            // 設置其他屬性（如果模型支持）
             ChatRoomDAO.getInstance().save(chatRoom);
             
             // 將創建者加入聊天室

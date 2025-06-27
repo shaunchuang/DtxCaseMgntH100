@@ -982,7 +982,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         return "/communication/chatroom";
     }   
 
-    public TodayReviewInfo qryTodayReview(UserRoleDTO currentUser) {
+    public static TodayReviewInfo qryTodayReview(UserRoleDTO currentUser) {
         try {
             TodayReviewInfo info = new TodayReviewInfo();
 
@@ -990,14 +990,17 @@ public class DtxCaseMgntPage extends RequestHandler {
             List<TrainingEvent> trainingEvents = getTrainingEvents(currentUser);
             // 取得今天的預約資料
             List<WgTask> tasks = WgTaskAPI.getInstance().listWgTaskByCreatorAndDate(currentUser.getId(), new Date());
-            if (tasks.size() > 0) {
-                // 如果預約資料不為空，則轉換成 CaseAppoEvent
+            if ((currentUser.getRoleAlias().equals("DOCTOR") || currentUser.getRoleAlias().contains("DTX")) && tasks.size() > 0) {
                 appoEvents = WgTaskAPI.getInstance().convertToCaseAppoEventList(tasks);
                 info.setAppoEvents(appoEvents);
                 int waitCheckinCount = (int) appoEvents.stream()
                         .filter(event -> event.getCheckinTime() == null || event.getCheckinTime().isBlank())
                         .count();
                 info.setWaitCheckinNum(waitCheckinCount);
+            } else if (currentUser.getRoleAlias().equals("CASE")){
+                List<WgTask> caseTasks = WgTaskAPI.getInstance().listWgTaskByCaseNo(currentUser.getId());
+                appoEvents = WgTaskAPI.getInstance().convertToCaseAppoEventList(caseTasks);
+                info.setAppoEvents(appoEvents);
             }
             info.setTrainingEvents(trainingEvents);
             return info;
@@ -1007,7 +1010,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         return null;
     }
 
-    public List<TrainingEvent> getTrainingEvents(UserRoleDTO currentUser) {
+    public static List<TrainingEvent> getTrainingEvents(UserRoleDTO currentUser) {
         Instant now = Instant.now();
         List<TrainingEvent> trainingEvents = new ArrayList<TrainingEvent>();
         List<Role> roles = currentUser.getRoles();
@@ -1154,7 +1157,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         return trainingEvents;
     }
 
-    private String convertToTherapyFieldName(User therapist) {
+    public static String convertToTherapyFieldName(User therapist) {
         List<Role> roles = RoleAPI.getInstance().listRolesByUserId(therapist.getId());
 
         // Use find first matching role instead of forEach

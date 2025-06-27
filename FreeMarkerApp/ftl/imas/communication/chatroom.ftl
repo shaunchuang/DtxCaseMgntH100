@@ -21,57 +21,10 @@
 				        	<input type="text" id="search-input" placeholder="搜尋群組名稱">
 				        	<button class="search-group-btn" id="search-group-btn"><i class="fa-solid fa-search"></i></button>
 						</div>
-				    	<ul class="group-list-custom">
-				        	<li class="group-item-custom active">
-				        		<div class="chatgroup-hint">
-				        			<div class="name-avatar">謝</div>
-				        			<div class="message-hint-text">
-				          				<div class="chatgroup-title">謝O易/34/M (4)</div>
-				          				<div class="chatgroup-text">化千登免蛙由別光平，他愣保不「根想眼以</div>
-				        			</div>
-				        		</div>
-				        		<div class="message-hint-info">
-				        			<div>
-				        				<div class="message-time">晚上11:30</div>
-				          			</div>
-				          			<div>
-				          				<div class="badge-custom">3</div>
-				          			</div>
-				          		</div>
-				        	</li>
-				        	<li class="group-item-custom">
-				        		<div class="chatgroup-hint">
-				        			<div class="name-avatar">謝</div>
-				        			<div class="message-hint-text">
-				          				<div class="chatgroup-title">謝O易/34/M (4)</div>
-				          				<div class="chatgroup-text">化千登免蛙由別光平，他愣保不「根想眼以</div>
-				        			</div>
-				        		</div>
-				        		<div class="message-hint-info">
-				        			<div>
-				        				<div class="message-time">晚上11:30</div>
-				          			</div>
-				          			<div>
-				          				<div class="badge-custom">3</div>
-				          			</div>
-				          		</div>
-				        	</li>
-				        	<li class="group-item-custom">
-				        		<div class="chatgroup-hint">
-				        			<div class="name-avatar">謝</div>
-				        			<div class="message-hint-text">
-				          				<div class="chatgroup-title">謝O易/34/M (4)</div>
-				          				<div class="chatgroup-text">化千登免蛙由別光平，他愣保不「根想眼以</div>
-				        			</div>
-				        		</div>
-				        		<div class="message-hint-info">
-				        			<div>
-				        				<div class="message-time">晚上11:30</div>
-				          			</div>
-				          			<div>
-				          				<div class="badge-custom">3</div>
-				          			</div>
-				          		</div>
+				    	<ul class="group-list-custom" id="group-list">
+				        	<!-- 動態載入的聊天室列表將在這裡顯示 -->
+				        	<li class="no-group-message" id="no-groups-message" style="display: none;">
+				        		<div>暫無聊天群組</div>
 				        	</li>
 				      	</ul>
 				    </div>
@@ -79,19 +32,17 @@
 				    <!-- 右側聊天區域 -->
 					<div class="col-md-8 chat-container-custom">
 				    	<div class="chat-blk">
-					    	<div class="chat-header-custom">
+					    	<div class="chat-header-custom" id="chat-header" style="display: none;">
 					    		<div class="chat-left-title">
-					    			<div class="name-avatar chat-header-avatar">謝</div>
-					    			<h5 class="chat-header-title"> 謝O易/34/M (4) </h5>
-					    			<button class="medical-record-btn" data-medical=""><i class="fa-solid fa-clipboard-user" title="個案病歷"></i></button>
+					    			<div class="name-avatar chat-header-avatar" id="chat-avatar"></div>
+					    			<h5 class="chat-header-title" id="chat-title"></h5>
+					    			<button class="medical-record-btn" data-medical="" id="medical-record-btn"><i class="fa-solid fa-clipboard-user" title="個案病歷"></i></button>
 					    		</div>
 					    		<div class="chat-actions-custom">
-					    			<img src="${base}/images/avatar/avatar.png" class="avatar-custom">
-									<img src="${base}/images/avatar/avatar2.png" class="avatar-custom">
-									<img src="${base}/images/avatar/avatar3.png" class="avatar-custom">
-									<div class="extra-avatar" style="display: none;">+1</div>
-					        		<button class="search-message-btn"><i class="fa-solid fa-search"></i></button>
-					        		<button class="other-func-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+					    			<!-- 動態載入的群組成員頭像將在這裡顯示 -->
+									<div id="member-avatars"></div>
+					        		<button class="search-message-btn" id="search-message-btn"><i class="fa-solid fa-search"></i></button>
+					        		<button class="other-func-btn" id="other-func-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
 					    		</div>
 							</div>
 							<!-- 原本直接放 input 的地方，改為整個容器 -->
@@ -116,40 +67,13 @@
 					    		<div id="no-search-result" style="display: none; text-align:center; color:#888; margin-top:10px;">
 								    找不到符合的訊息
 								</div>
-
-	                			<div class="chat-message right">
-								    <div class="chat-avatar">
-								        <img src="${base}/images/avatar/avatar.png" alt="Avatar">
-								    </div>
-								    <div class="chat-text">
-								        <div class="chat-message-content">您好，請問要如何讓小明達成追蹤的指標?</div>
-								        <div class="chat-username-timestamp">
-								            <div class="chat-username">陳建倫</div>
-								            <div class="chat-timestamp">今天, 晚上11:30</div>
-								        </div>
-								    </div>
+								<div class="no-message" id="no-chat-selected">
+									<div>請選擇一個聊天群組開始對話</div>
 								</div>
-								
-								<div class="unread-divider">
-	                    			<span>未讀訊息</span>
-	                			</div>
-	                			
-		                		<div class="chat-message">
-		                            <div class="chat-avatar">
-		                                <img src="${base}/images/avatar/avatar2.png" alt="Avatar">
-		                            </div>
-		                            <div class="chat-text">
-		                                <div class="chat-message-content">讓小明適度休息後，重新鼓勵他進行訓練，會達成目標的。</div>
-		                                <div class="chat-username-timestamp">
-			                                <div class="chat-username">程靜雯治療師</div>
-			                                <div class="chat-timestamp">今天, 晚上11:30</div>
-		                                </div>
-		                            </div>
-		                            
-		                        </div>
+								<!-- 聊天訊息將在這裡動態載入 -->
 							</div>
 						</div> <!-- chat-blk -->
-						<div class="chat-input-container default-blk">
+						<div class="chat-input-container default-blk" id="chat-input-container" style="display: none;">
 							<div class="input-container">
 								<div class="input-textarea">
 									<div id="preview-container" class="preview-container"></div> <!-- 圖片預覽區域 -->
@@ -161,7 +85,7 @@
 									<input type="file" id="image-upload" accept="image/*" style="display: none;">
 									<div id="emoji-picker-container"></div>
 									<button class="btn btn-primary" id="emoticons"><i class="fa-regular fa-face-smile"></i></button>
-									<button id="send-btn" class="btn btn-primary" onclick=""><i class="fa-regular fa-paper-plane"></i> 送出</button>
+									<button id="send-btn" class="btn btn-primary"><i class="fa-regular fa-paper-plane"></i> 送出</button>
 								</div>
 							</div>
 						</div>
@@ -223,7 +147,529 @@
 	});
 </script>
 <script>
+// 全域變數
+let currentChatRoom = null;
+let currentUser = null;
+let messages = [];
+let chatRooms = [];
 
+// API 基礎路徑
+const API_BASE = '/Chat/api/';
+
+// 初始化頁面
+$(document).ready(function() {
+    // 獲取當前用戶信息
+    getCurrentUserInfo();
+    
+    // 初始化表情符號功能
+    initEmojiPicker();
+    
+    // 初始化聊天功能
+    initChatFeatures();
+    
+    // 載入聊天室列表
+    loadChatRooms();
+    
+    // 設定定時器，定期更新訊息
+    setInterval(refreshCurrentChat, 5000); // 每5秒更新一次
+});
+
+// 獲取當前用戶信息
+function getCurrentUserInfo() {
+    $.ajax({
+        url: API_BASE + 'getCurrentUser',
+        method: 'GET',
+        success: function(response) {
+            if (response.success) {
+                currentUser = response.user;
+            } else {
+                console.error('獲取用戶信息失敗:', response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('獲取用戶信息請求失敗:', error);
+        }
+    });
+}
+
+// 初始化表情符號功能
+function initEmojiPicker() {
+    const textarea = document.getElementById('input-box');
+    const emojiButton = document.getElementById('emoticons');
+    const pickerContainer = document.getElementById('emoji-picker-container');
+
+    // 初始化 Emoji Picker
+    const picker = new EmojiMart.Picker({
+        data: window.EmojiMartData,
+        theme: 'light',
+        onEmojiSelect: (emoji) => {
+            textarea.value += emoji.native;
+        },
+    });
+
+    pickerContainer.appendChild(picker);
+
+    // 點擊按鈕顯示/隱藏 Picker
+    emojiButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isPickerVisible = pickerContainer.style.display === 'block';
+        if (!isPickerVisible) {
+            const rect = emojiButton.getBoundingClientRect();
+            pickerContainer.style.top = (rect.top + window.scrollY - 50) + 'px';
+            pickerContainer.style.left = (rect.left + window.scrollX - 500) + 'px';
+            pickerContainer.style.display = 'block';
+        } else {
+            pickerContainer.style.display = 'none';
+        }
+    });
+
+    // 點擊其他區域隱藏 Picker
+    document.addEventListener('click', (event) => {
+        if (!pickerContainer.contains(event.target) && event.target !== emojiButton) {
+            pickerContainer.style.display = 'none';
+        }
+    });
+}
+
+// 初始化聊天功能
+function initChatFeatures() {
+    // 發送訊息按鈕事件
+    $('#send-btn').click(function() {
+        sendMessage();
+    });
+    
+    // 輸入框 Enter 鍵發送訊息
+    $('#input-box').keypress(function(e) {
+        if (e.which === 13 && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    // 搜尋群組功能
+    $('#search-group-btn').click(function() {
+        searchGroups();
+    });
+    
+    $('#search-input').keypress(function(e) {
+        if (e.which === 13) {
+            searchGroups();
+        }
+    });
+    
+    // 搜尋訊息功能
+    $('#search-message-btn').click(function() {
+        toggleMessageSearch();
+    });
+    
+    // 圖片上傳功能
+    $('#attach-btn').click(function() {
+        $('#image-upload').click();
+    });
+    
+    $('#image-upload').change(function() {
+        handleImageUpload(this);
+    });
+}
+
+// 載入聊天室列表
+function loadChatRooms() {
+    $.ajax({
+        url: API_BASE + 'loadChatRooms',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({}),
+        success: function(response) {
+            if (response.success) {
+                chatRooms = response.chatRooms || [];
+                
+                // 為每個聊天室加載額外資訊
+                Promise.all(chatRooms.map(room => loadChatRoomExtraInfo(room)))
+                    .then(() => {
+                        renderChatRoomList(chatRooms);
+                    });
+            } else {
+                console.error('載入聊天室失敗:', response.message);
+                showNoGroups();
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('載入聊天室請求失敗:', error);
+            showNoGroups();
+        }
+    });
+}
+
+// 載入聊天室額外資訊
+function loadChatRoomExtraInfo(room) {
+    return new Promise((resolve) => {
+        $.ajax({
+            url: API_BASE + 'getChatRoomDetails',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ roomId: room.id }),
+            success: function(response) {
+                if (response.success) {
+                    room.lastMessage = response.chatRoom.lastMessage;
+                    room.lastMessageTime = response.chatRoom.lastMessageTime;
+                    room.unreadCount = response.chatRoom.unreadCount;
+                }
+                resolve();
+            },
+            error: function() {
+                resolve(); // 即使失敗也繼續
+            }
+        });
+    });
+}
+
+// 渲染聊天室列表
+function renderChatRoomList(rooms) {
+    const groupList = $('#group-list');
+    groupList.empty();
+    
+    if (rooms.length === 0) {
+        showNoGroups();
+        return;
+    }
+    
+    rooms.forEach(function(room, index) {
+        const listItem = createChatRoomListItem(room, index === 0);
+        groupList.append(listItem);
+    });
+    
+    // 自動選擇第一個聊天室
+    if (rooms.length > 0) {
+        selectChatRoom(rooms[0]);
+    }
+}
+
+// 創建聊天室列表項目
+function createChatRoomListItem(room, isActive) {
+    const avatarText = room.name ? room.name.charAt(0) : '?';
+    const lastMessage = room.lastMessage || '暫無訊息';
+    const lastTime = room.lastMessageTime ? formatTime(new Date(room.lastMessageTime)) : '';
+    const unreadCount = room.unreadCount || 0;
+    
+    return `
+        <li class="group-item-custom ${isActive ? 'active' : ''}" data-room-id="${room.id}">
+            <div class="chatgroup-hint">
+                <div class="name-avatar">${avatarText}</div>
+                <div class="message-hint-text">
+                    <div class="chatgroup-title">${room.name}</div>
+                    <div class="chatgroup-text">${lastMessage}</div>
+                </div>
+            </div>
+            <div class="message-hint-info">
+                <div>
+                    <div class="message-time">${lastTime}</div>
+                </div>
+                <div>
+                    ${unreadCount > 0 ? `<div class="badge-custom">${unreadCount}</div>` : ''}
+                </div>
+            </div>
+        </li>
+    `;
+}
+
+// 顯示無群組訊息
+function showNoGroups() {
+    const groupList = $('#group-list');
+    groupList.empty();
+    $('#no-groups-message').show();
+}
+
+// 選擇聊天室
+function selectChatRoom(room) {
+    currentChatRoom = room;
+    
+    // 更新UI選中狀態
+    $('.group-item-custom').removeClass('active');
+    $(`.group-item-custom[data-room-id="${room.id}"]`).addClass('active');
+    
+    // 顯示聊天標題
+    updateChatHeader(room);
+    
+    // 載入聊天訊息
+    loadChatMessages(room.id);
+    
+    // 顯示聊天輸入區
+    $('#chat-input-container').show();
+    $('#no-chat-selected').hide();
+}
+
+// 更新聊天標題
+function updateChatHeader(room) {
+    const avatarText = room.name ? room.name.charAt(0) : '?';
+    $('#chat-avatar').text(avatarText);
+    $('#chat-title').text(room.name);
+    $('#chat-header').show();
+    
+    // 載入群組成員頭像
+    loadRoomMembers(room.id);
+}
+
+// 載入聊天訊息
+function loadChatMessages(roomId) {
+    $.ajax({
+        url: API_BASE + 'loadMessages',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            roomId: roomId,
+            limit: 50
+        }),
+        success: function(response) {
+            if (response.success) {
+                messages = response.messages;
+                renderMessages(messages);
+                scrollToBottom();
+            } else {
+                console.error('載入訊息失敗:', response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('載入訊息請求失敗:', error);
+        }
+    });
+}
+
+// 渲染訊息列表
+function renderMessages(messages) {
+    const chatBox = $('#chat-box');
+    chatBox.empty();
+    
+    if (messages.length === 0) {
+        chatBox.append('<div class="no-message"><div>暫無訊息</div></div>');
+        return;
+    }
+    
+    messages.forEach(function(message) {
+        const messageElement = createMessageElement(message);
+        chatBox.append(messageElement);
+    });
+}
+
+// 創建訊息元素
+function createMessageElement(message) {
+    const isCurrentUser = message.senderId === getCurrentUserId();
+    const messageClass = isCurrentUser ? 'chat-message right' : 'chat-message';
+    const timestamp = formatTimestamp(new Date(message.createdAt));
+    
+    return `
+        <div class="${messageClass}" data-message-id="${message.id}">
+            <div class="chat-avatar">
+                <img src="${getAvatarUrl(message.senderId)}" alt="Avatar">
+            </div>
+            <div class="chat-text">
+                <div class="chat-message-content">${escapeHtml(message.content)}</div>
+                <div class="chat-username-timestamp">
+                    <div class="chat-username">${message.senderName || '未知用戶'}</div>
+                    <div class="chat-timestamp">${timestamp}</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// 發送訊息
+function sendMessage() {
+    const messageContent = $('#input-box').val().trim();
+    if (!messageContent || !currentChatRoom) {
+        return;
+    }
+    
+    $.ajax({
+        url: API_BASE + 'sendMessage',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            roomId: currentChatRoom.id,
+            content: messageContent,
+            messageType: 'TEXT'
+        }),
+        success: function(response) {
+            if (response.success) {
+                $('#input-box').val(''); // 清空輸入框
+                addMessageToChat(response.message);
+                scrollToBottom();
+            } else {
+                alert('發送訊息失敗: ' + response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('發送訊息請求失敗:', error);
+            alert('發送訊息失敗，請稍後再試');
+        }
+    });
+}
+
+// 添加訊息到聊天區域
+function addMessageToChat(message) {
+    const chatBox = $('#chat-box');
+    const noMessage = chatBox.find('.no-message');
+    if (noMessage.length > 0) {
+        noMessage.remove();
+    }
+    
+    const messageElement = createMessageElement(message);
+    chatBox.append(messageElement);
+}
+
+// 搜尋群組
+function searchGroups() {
+    const searchTerm = $('#search-input').val().trim().toLowerCase();
+    if (!searchTerm) {
+        renderChatRoomList(chatRooms);
+        return;
+    }
+    
+    const filteredRooms = chatRooms.filter(room => 
+        room.name.toLowerCase().includes(searchTerm)
+    );
+    renderChatRoomList(filteredRooms);
+}
+
+// 切換訊息搜尋
+function toggleMessageSearch() {
+    const searchContainer = $('#search-container');
+    const isVisible = searchContainer.is(':visible');
+    
+    if (isVisible) {
+        searchContainer.hide();
+        $('#chat-message-search').val('');
+        // 清除搜尋高亮
+        clearMessageHighlight();
+    } else {
+        searchContainer.show();
+        $('#chat-message-search').focus();
+    }
+}
+
+// 載入群組成員
+function loadRoomMembers(roomId) {
+    $.ajax({
+        url: API_BASE + 'getRoomMembers',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            roomId: roomId
+        }),
+        success: function(response) {
+            if (response.success) {
+                renderMemberAvatars(response.members);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('載入群組成員失敗:', error);
+        }
+    });
+}
+
+// 渲染成員頭像
+function renderMemberAvatars(members) {
+    const memberAvatars = $('#member-avatars');
+    memberAvatars.empty();
+    
+    const maxShow = 3;
+    members.slice(0, maxShow).forEach(function(member) {
+        const avatar = `<img src="${getAvatarUrl(member.userId)}" class="avatar-custom" alt="${member.userName}">`;
+        memberAvatars.append(avatar);
+    });
+    
+    if (members.length > maxShow) {
+        const extraCount = members.length - maxShow;
+        memberAvatars.append(`<div class="extra-avatar">+${extraCount}</div>`);
+    }
+}
+
+// 刷新當前聊天
+function refreshCurrentChat() {
+    if (currentChatRoom) {
+        loadChatMessages(currentChatRoom.id);
+    }
+}
+
+// 工具函數
+function formatTime(date) {
+    const now = new Date();
+    const diff = now - date;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    
+    if (hours < 24) {
+        return date.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+    } else {
+        return date.toLocaleDateString('zh-TW');
+    }
+}
+
+function formatTimestamp(date) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const messageDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    
+    if (messageDate.getTime() === today.getTime()) {
+        return '今天, ' + date.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+    } else {
+        return date.toLocaleDateString('zh-TW') + ', ' + date.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+    }
+}
+
+function scrollToBottom() {
+    const chatBox = $('#chat-box');
+    chatBox.scrollTop(chatBox[0].scrollHeight);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function getAvatarUrl(userId) {
+    // 這裡可以根據實際需求修改頭像路徑
+    return '${base}/images/avatar/avatar.png';
+}
+
+function getCurrentUserId() {
+    return currentUser ? currentUser.id : null;
+}
+
+function clearMessageHighlight() {
+    $('.chat-message-content').removeClass('highlight');
+}
+
+function handleImageUpload(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const previewContainer = $('#preview-container');
+            const wrapper = $('<div class="preview-wrapper"></div>');
+            const img = $('<img class="preview-image">').attr('src', e.target.result);
+            const removeBtn = $('<button class="remove-image-btn">×</button>');
+            
+            removeBtn.click(function() {
+                wrapper.remove();
+            });
+            
+            wrapper.append(img).append(removeBtn);
+            previewContainer.append(wrapper);
+        };
+        
+        reader.readAsDataURL(file);
+    }
+}
+
+// 群組列表點擊事件
+$(document).on('click', '.group-item-custom', function() {
+    const roomId = $(this).data('room-id');
+    const room = chatRooms.find(r => r.id === roomId);
+    if (room) {
+        selectChatRoom(room);
+    }
+});
 </script>
 <style>
 
@@ -551,6 +997,11 @@
 	    width: fit-content;
 	}
 	
+	.chat-message-content.highlight {
+		background-color: #fff3cd !important;
+		border: 1px solid #ffeaa7;
+	}
+	
 	.chat-username {
 	    font-weight: bold;
 	}
@@ -665,104 +1116,50 @@
 	}
 
 
+	/* 成員頭像樣式 */
 	.avatar-custom {
-		width: 3rem;
-		height: 3rem;
+		width: 2rem;
+		height: 2rem;
 		border-radius: 50%;
-		margin-right: 0.3rem;
+		margin-left: 5px;
+		object-fit: cover;
 	}
 	
 	.extra-avatar {
-		width: 2.5rem;
-		height: 2.5rem;
-		background-color: #d9d9d9;
-		color: #333;
-		font-size: 14px;
-		font-weight: bold;
+		width: 2rem;
+		height: 2rem;
+		background-color: #666;
+		color: white;
 		border-radius: 50%;
 		display: flex;
-		justify-content: center;
 		align-items: center;
-		border: 2px solid #fff;
-		z-index: 0;
+		justify-content: center;
+		font-size: 0.8rem;
+		margin-left: 5px;
 	}
 	
-	.message-content-custom {
-		background-color: #fff;
-		padding: 10px;
-		border-radius: 4px;
-		border: 1px solid #ddd;
-	}
-	
-	.message-content-custom p {
-		margin: 0;
-	}
-	
-	.message-time-custom {
-		display: block;
-		margin-top: 5px;
-		font-size: 12px;
+	/* 載入狀態樣式 */
+	.loading {
+		text-align: center;
+		padding: 20px;
 		color: #888;
 	}
 	
-	.chat-input-container {
-		width: 100%;
-		display: flex;
-		border-radius: 4px; /* 整體圓角效果 */
+	.loading:before {
+		content: '';
+		display: inline-block;
+		width: 20px;
+		height: 20px;
+		border: 2px solid #f3f3f3;
+		border-top: 2px solid #009E75;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin-right: 10px;
 	}
 	
-	.input-container {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		border-radius: 4px; /* 輸入框圓角效果 */
-	}
-	
-	.input-container .icon {
-		color: #fff; /* 圖示顏色 */
-		font-size: 20px; /* 圖示大小 */
-		margin: 0 10px;
-		cursor: pointer;
-	}
-	
-	.input-container .icon:hover {
-		color: #00cc96; /* 懸停時顏色變化 */
-	}
-	
-	.input-textarea {
-		width: 70%;
-	}
-	
-	.input-box {
-		flex: 1;
-		background-color: transparent;
-		border: none;
-		font-size: 16px;
-		padding: 0 10px;
-		outline: none; /* 去除邊框高亮 */
-		width: 100%;
-	}
-	
-	.input-box::placeholder {
-		color: #a8a8a8; /* 提示文字顏色 */
-		font-style: italic; /* 提示文字樣式 */
-	}
-	
-	#send-btn {
-		background-color: #009E75;
-	}
-	
-	#attach-btn {
-		background-color: white;
-		border: none;
-		color: grey;
-	}
-	
-	#emoticons {
-		background-color: white;
-		border: none;
-		color: grey;
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
 	}
 
 	#emoji-picker-container {

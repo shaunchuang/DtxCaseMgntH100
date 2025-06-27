@@ -139,6 +139,26 @@ public class WgTaskAPI implements API {
         return true;
     }
 
+    public List<WgTask> listWgTaskByUserAndCat(Long creator, int cat) {
+        List<WgTask> taskList = new ArrayList<>();
+        try {
+            taskList = WgTaskDAO.getInstance().listWgTaskByUserAndCat(creator, cat);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+        return taskList;
+    }
+
+    public List<WgTask> listWgTaskByCaseNo(Long caseNo) {
+        List<WgTask> taskList = new ArrayList<>();
+        try {
+            taskList = WgTaskDAO.getInstance().listWgTaskByCaseNo(caseNo);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+        return taskList;
+    }
+
     @APIDefine(description = "轉換任務為 CaseAppoEvent")
     public CaseAppoEvent convertToCaseAppoEvent(WgTask task) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -167,16 +187,6 @@ public class WgTaskAPI implements API {
         return new CaseAppoEvent(serialno, patient.getId(), slotId, name, gender, age, indication, appoTimeStr, checkinTime, isFirstDiag);
     }
 
-    public List<WgTask> listWgTaskByUserAndCat(Long creator, int cat) {
-        List<WgTask> taskList = new ArrayList<>();
-        try {
-            taskList = WgTaskDAO.getInstance().listWgTaskByUserAndCat(creator, cat);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
-        return taskList;
-    }
-
     @APIDefine(description = "轉換任務清單為 CaseAppoEvent 清單")
     public List<CaseAppoEvent> convertToCaseAppoEventList(List<WgTask> tasks) {
         List<CaseAppoEvent> appoEvents = new ArrayList<>();
@@ -187,7 +197,7 @@ public class WgTaskAPI implements API {
         return appoEvents;
     }
 
-    
+ 
     private static Date truncateTime(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
