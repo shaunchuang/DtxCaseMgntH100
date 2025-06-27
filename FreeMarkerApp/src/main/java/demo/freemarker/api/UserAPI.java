@@ -5,6 +5,8 @@
 package demo.freemarker.api;
 
 import demo.freemarker.dao.UserDAO;
+import demo.freemarker.dto.UserRoleDTO;
+import demo.freemarker.model.Role;
 import demo.freemarker.model.User;
 import itri.sstc.framework.core.api.API;
 import itri.sstc.framework.core.database.IntIdDataEntity;
@@ -167,5 +169,16 @@ public class UserAPI implements API {
         } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage());
         }
+    }
+    
+    public UserRoleDTO getUserRoleDTO(User user) {
+         List<Role> roles = RoleAPI.getInstance().listRolesByUserId(user.getId());
+         return new UserRoleDTO(user, roles);
+    }
+    
+    public UserRoleDTO getUserROleDTO(Long userId) {
+        User user = UserAPI.getInstance().getUser(userId);
+        List<Role> roles = RoleAPI.getInstance().listRolesByUserId(user.getId());
+        return new UserRoleDTO(user, roles);
     }
 }

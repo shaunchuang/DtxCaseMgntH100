@@ -8,6 +8,7 @@ public class TodayReviewInfo{
     private Integer abnormalCaseNum = 0;
     private List<CaseAppoEvent> appoEvents;
     private List<TrainingEvent> trainingEvents;
+    private List<HcRecordDTO> hcRecords;
 
     public Integer getWaitCheckinNum() {
         return waitCheckinNum;
@@ -48,6 +49,12 @@ public class TodayReviewInfo{
     public void setTrainingEvents(List<TrainingEvent> trainingEvents) {
         this.trainingEvents = trainingEvents;
     }
-    
+    public List<HcRecordDTO> getHcRecords() {
+        return hcRecords;
+    }
+
+    public void setHcRecords(List<HcRecordDTO> hcRecords) {
+        this.hcRecords = hcRecords;
+    }
 
 }

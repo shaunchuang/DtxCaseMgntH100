@@ -193,7 +193,6 @@ public class ChatRESTfulAPI extends RESTfulAPI {
             for (ChatRoom room : chatRooms) {
                 JSONObject roomObj = GsonUtil.toJsonObject(room);
                 // 標記是否為創建者
-                roomObj.put("isCreator", currentUser.getId().equals(room.getCreatorId()));
                 roomsArray.put(roomObj);
             }
 
@@ -584,8 +583,6 @@ public class ChatRESTfulAPI extends RESTfulAPI {
             JSONObject roomDetails = new JSONObject();
             roomDetails.put("id", chatRoom.getId());
             roomDetails.put("name", chatRoom.getName());
-            roomDetails.put("creatorId", chatRoom.getCreatorId());
-            roomDetails.put("isCreator", currentUser.getId().equals(chatRoom.getCreatorId()));
             roomDetails.put("lastMessage", lastMessage);
             roomDetails.put("lastMessageTime", lastMessageTime);
             roomDetails.put("unreadCount", unreadCount);

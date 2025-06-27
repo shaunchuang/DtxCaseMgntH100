@@ -161,9 +161,7 @@ $(".doctor-card").click(function(e){
 });
 
 function fetchTrainingPlanNew(){
-	console.log('userId: ', ${currentUser.id!""});
 	var response = wg.evalForm.getJson(JSON.stringify({"userId":${currentUser.id!""}}), '/Training/api/listPlan');
-	console.log(response);
 	
 	if(response.success){
 		if(response.trainingPlans){
@@ -172,7 +170,6 @@ function fetchTrainingPlanNew(){
 		
 			if(trainingPlanList.length > 0) {
 				trainingPlanList.forEach(trainingPlan => {
-	                console.log(trainingPlan);
 	
 	                // 計畫資訊
 	            	let startDateStr = formatDate(trainingPlan.startDate);

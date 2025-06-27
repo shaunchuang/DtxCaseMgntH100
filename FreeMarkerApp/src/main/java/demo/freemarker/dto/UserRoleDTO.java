@@ -29,7 +29,6 @@ public class UserRoleDTO {
         this.steamId = user.getSteamId();
         this.status = user.getStatus();
         this.createdTime = user.getCreatedTime();
-
         this.roles = roles;
     }
 

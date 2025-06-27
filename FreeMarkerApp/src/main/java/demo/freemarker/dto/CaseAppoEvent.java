@@ -12,6 +12,9 @@ public class CaseAppoEvent {
 	public String appoTime;
 	public String checkinTime;
 	public Boolean isFirstDiag = true;
+        public String appoDate;
+        public String doctorName;
+        public String doctorAlias;
 
 	public CaseAppoEvent() {
 	}
@@ -122,4 +125,27 @@ public class CaseAppoEvent {
 		this.isFirstDiag = isFirstDiag;
 	}
 
+        public String getAppoDate() {
+            return appoDate;
+        }
+
+        public void setAppoDate(String appoDate) {
+            this.appoDate = appoDate;
+        }
+
+        public String getDoctorName() {
+            return doctorName;
+        }
+
+        public void setDoctorName(String doctorName) {
+            this.doctorName = doctorName;
+        }
+
+        public String getDoctorAlias() {
+            return doctorAlias;
+        }
+
+        public void setDoctorAlias(String doctorAlias) {
+            this.doctorAlias = doctorAlias;
+        }
 }

@@ -1,9 +1,11 @@
 package demo.freemarker.api;
 
-import demo.freemarker.core.CrossPlatformUtil;
 import demo.freemarker.dao.WgTaskDAO;
 import demo.freemarker.dto.CaseAppoEvent;
+import demo.freemarker.dto.UserRoleDTO;
 import demo.freemarker.model.Patient;
+import demo.freemarker.model.Role;
+import demo.freemarker.model.User;
 import demo.freemarker.model.WgAvailableSlots;
 import demo.freemarker.model.WgTask;
 import itri.sstc.framework.core.api.API;
@@ -161,18 +163,29 @@ public class WgTaskAPI implements API {
 
     @APIDefine(description = "轉換任務為 CaseAppoEvent")
     public CaseAppoEvent convertToCaseAppoEvent(WgTask task) {
+        
+        CaseAppoEvent appoEvent = new CaseAppoEvent();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat dateSDF = new SimpleDateFormat("yyyy-MM-dd");
         WgAvailableSlots slot = WgAvailableSlotsAPI.getInstance().getWgAvailableSlot(task.getAvailableSlotId());
         Long formId = task.getCaseNo();
         Patient patient = PatientAPI.getInstance().getPatient(formId);
-        Long serialno = task.getId();
-        String name = patient.getName();
-        String gender = patient.getGender();
-        String age = String.valueOf(patient.getAge());
-        String indication = patient.getDiseaseName();
-        String checkinTime = task.getCheckinTime() != null ? sdf.format(task.getCheckinTime()) : null;
-        Boolean isFirstDiag = checkFirstDiagnosis(formId, slot.getDoctor());
-
+        appoEvent.setSerialno(task.getId());
+        appoEvent.setName(patient.getName());
+        appoEvent.setGender(patient.getGender());
+        appoEvent.setAge(String.valueOf(patient.getAge()));
+        appoEvent.setIndication(patient.getDiseaseName());
+        appoEvent.setCheckinTime(task.getCheckinTime() != null ? sdf.format(task.getCheckinTime()) : null);
+        appoEvent.setIsFirstDiag(checkFirstDiagnosis(formId, slot.getDoctor()));
+        User therapist = UserAPI.getInstance().getUser(slot.getDoctor());
+        List<Role> roles = RoleAPI.getInstance().listRolesByUserId(therapist.getId());
+        UserRoleDTO therapistUser = new UserRoleDTO(therapist, roles);
+        appoEvent.setDoctorAlias(therapistUser.getRoleName());
+        appoEvent.setAppoDate(dateSDF.format(slot.getSlotDate()));
+        appoEvent.setDoctorName(therapist.getUsername());
+        appoEvent.setAppoTime(sdf.format(slot.getSlotBeginTime()));
+        appoEvent.setCaseno(formId);
+        appoEvent.setSlotId(slot.getId());
         Long slotId = null;
         String appoTimeStr = null;
 
@@ -184,7 +197,8 @@ public class WgTaskAPI implements API {
             }
         }
         
-        return new CaseAppoEvent(serialno, patient.getId(), slotId, name, gender, age, indication, appoTimeStr, checkinTime, isFirstDiag);
+//        return new CaseAppoEvent(serialno, patient.getId(), slotId, name, gender, age, indication, appoTimeStr, checkinTime, isFirstDiag);
+        return appoEvent;
     }
 
     @APIDefine(description = "轉換任務清單為 CaseAppoEvent 清單")

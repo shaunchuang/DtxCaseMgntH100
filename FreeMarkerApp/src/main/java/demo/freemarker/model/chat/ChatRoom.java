@@ -106,13 +106,6 @@ public class ChatRoom implements IntIdDataEntity, Serializable {
         this.photoUrl = photoUrl;
     }
 
-    public Long getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -157,8 +150,4 @@ public class ChatRoom implements IntIdDataEntity, Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "ChatRoom[ id=" + id + ", name=" + name + ", creatorId=" + creatorId + " ]";
-    }
 }

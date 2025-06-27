@@ -11,10 +11,13 @@ import demo.freemarker.api.ConfigPropertyAPI;
 import demo.freemarker.api.DiseaseCategoryAPI;
 import demo.freemarker.api.DrugUseStatusCategoryAPI;
 import demo.freemarker.api.MedicationCategoryAPI;
+import demo.freemarker.api.PatientAPI;
+import demo.freemarker.api.healthinsurance.HealthInsuranceRecordAPI;
 import demo.freemarker.api.training.TrainingPlanAPI;
 import demo.freemarker.core.CrossPlatformUtil;
 import demo.freemarker.core.GsonUtil;
 import demo.freemarker.core.SecurityUtils;
+import demo.freemarker.dto.HcRecordDTO;
 import demo.freemarker.dto.SyndromeDTO;
 import demo.freemarker.dto.TodayReviewInfo;
 import demo.freemarker.dto.TrainingPlanDTO;
@@ -22,11 +25,14 @@ import demo.freemarker.dto.UserRoleDTO;
 import demo.freemarker.model.DiseaseCategory;
 import demo.freemarker.model.DrugUseStatusCategory;
 import demo.freemarker.model.MedicationCategory;
+import demo.freemarker.model.Patient;
+import demo.freemarker.model.healthinsurance.HealthInsuranceRecord;
 import demo.freemarker.model.training.TrainingPlan;
 import itri.sstc.framework.core.Config;
 import itri.sstc.freemarker.core.Model;
 import itri.sstc.freemarker.core.RequestData;
 import itri.sstc.freemarker.core.RequestHandler;
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -76,11 +82,19 @@ public class DtxCaseTrainingPage extends RequestHandler {
         }
         String blogname = Config.get("blogname", "測試平台");
         TodayReviewInfo reviewResp = DtxCaseMgntPage.qryTodayReview(currentUser);
+        List<HcRecordDTO> hcRecordDTOs = new ArrayList<HcRecordDTO>();
+        Patient patient = PatientAPI.getInstance().getPatientByUserId(currentUser.getId());
+        List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getDoctorVisitsByPatient(patient.getId());
+
+        List<HcRecordDTO> hcRecordDTO = HealthInsuranceRecordAPI.getInstance().convertToHcRecordDTOList(records, Boolean.FALSE);
+        
+        reviewResp.setHcRecords(hcRecordDTO);
         model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         model.addAttribute("__field", "field");
         model.addAttribute("menuNum", 1);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("blogname", blogname);
+        model.addAttribute("todayReviewInfo", reviewResp);
         model.addAttribute("field_abbrev_ename", "ITRI");
         return "/dashboard";
     }

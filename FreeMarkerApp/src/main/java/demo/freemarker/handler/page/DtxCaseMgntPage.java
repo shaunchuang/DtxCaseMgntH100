@@ -12,6 +12,7 @@ import demo.freemarker.api.MedicationCategoryAPI;
 import demo.freemarker.api.PatientAPI;
 import demo.freemarker.api.RoleAPI;
 import demo.freemarker.api.UserAPI;
+import demo.freemarker.api.WgAvailableSlotsAPI;
 import demo.freemarker.api.WgIcdCodeAPI;
 import demo.freemarker.api.WgTaskAPI;
 import demo.freemarker.api.assessment.AssessmentAPI;
@@ -43,6 +44,7 @@ import demo.freemarker.model.MedicationCategory;
 import demo.freemarker.model.Patient;
 import demo.freemarker.model.Role;
 import demo.freemarker.model.User;
+import demo.freemarker.model.WgAvailableSlots;
 import demo.freemarker.model.WgIcdCode;
 import demo.freemarker.model.WgTask;
 import demo.freemarker.model.assessment.Assessment;
@@ -998,8 +1000,27 @@ public class DtxCaseMgntPage extends RequestHandler {
                         .count();
                 info.setWaitCheckinNum(waitCheckinCount);
             } else if (currentUser.getRoleAlias().equals("CASE")){
-                List<WgTask> caseTasks = WgTaskAPI.getInstance().listWgTaskByCaseNo(currentUser.getId());
-                appoEvents = WgTaskAPI.getInstance().convertToCaseAppoEventList(caseTasks);
+                Patient patient = PatientAPI.getInstance().getPatientByUserId(currentUser.getId());
+                if (patient == null) {
+                    // TODO: 回傳錯誤或直接 return
+                    return info;
+                }
+
+                List<WgTask> patientTasks = WgTaskAPI.getInstance().listWgTaskByCaseNo(patient.getId());
+                LocalDate today = LocalDate.now();         // 只要日期，不含時間
+
+                patientTasks.removeIf(task -> {
+                    WgAvailableSlots slot = WgAvailableSlotsAPI.getInstance()
+                                            .getWgAvailableSlot(task.getAvailableSlotId());
+                    if (slot == null) return true;            // 找不到 slot 也一併移除
+                    LocalDate slotDate = slot.getSlotDate()   // 假設回傳 java.util.Date
+                                            .toInstant()
+                                            .atZone(ZoneId.systemDefault())
+                                            .toLocalDate();
+                    return slotDate.isBefore(today);
+                });
+
+                appoEvents = WgTaskAPI.getInstance().convertToCaseAppoEventList(patientTasks);
                 info.setAppoEvents(appoEvents);
             }
             info.setTrainingEvents(trainingEvents);
