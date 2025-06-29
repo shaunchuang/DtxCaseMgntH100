@@ -5,6 +5,7 @@
 package demo.freemarker.api;
 
 import demo.freemarker.dao.UserDAO;
+import demo.freemarker.dto.DoctorInfo;
 import demo.freemarker.dto.UserRoleDTO;
 import demo.freemarker.model.Role;
 import demo.freemarker.model.User;
@@ -180,5 +181,82 @@ public class UserAPI implements API {
         User user = UserAPI.getInstance().getUser(userId);
         List<Role> roles = RoleAPI.getInstance().listRolesByUserId(user.getId());
         return new UserRoleDTO(user, roles);
+    }
+
+    public List<Role> getRoles(Long userId) {
+        try {
+            List<Role> output = RoleAPI.getInstance().listRolesByUserId(userId);
+            return output;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+    
+    public List<UserRoleDTO> listTherapist() {
+        List<UserRoleDTO> output = new ArrayList<UserRoleDTO>();
+        try {
+            List<User> users = this.listUser(); // 確保 UserDAO 已經初始化
+            for (User user : users) {
+                UserRoleDTO urd = this.getUserRoleDTO(user);
+                if (urd.getRoleAlias() != null && (urd.getRoleAlias().contains("DTX") || urd.getRoleAlias().equals("DOCTOR"))) {
+                    output.add(urd);
+                }
+            }
+            return output;
+
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+
+    public List<DoctorInfo> listDoctorInfo() {
+        List<DoctorInfo> doctorInfoList = new ArrayList<>();
+        try {
+            List<UserRoleDTO> doctors = this.listTherapist();
+            for (UserRoleDTO doctor : doctors) {
+                DoctorInfo info = convertToDoctorInfo(doctor.getUser());
+                doctorInfoList.add(info);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+        return doctorInfoList;
+    }
+
+   public DoctorInfo convertToDoctorInfo(User user) {
+       DoctorInfo info = new DoctorInfo();
+       info.setId(user.getId());
+       info.setName(user.getUsername());
+       info.setTelCell(user.getTelCell());
+       info.setEmail(user.getEmail());
+       info.setGender(user.getGender());
+       info.setRole(UserAPI.getInstance().getRoleName(user.getId()));
+       // 若有 clinic/department 資訊，可以改從 user.getClincName() 或其它欄位帶入
+       info.setDepartment("");
+       return info;
+   }
+
+    public String getRoleName(Long userId) {
+        List<Role> roles = this.getRoles(userId);
+        for(Role role: roles){
+            if(role.getAlias().equals("ADMIN")){
+                continue;
+            } else {
+                return role.getDescription();
+            }
+        }
+        return null;
+    }
+
+    public String getRoleAlias(Long userId) {
+        List<Role> roles = this.getRoles(userId);
+        for(Role role: roles){
+            if(role.getAlias().equals("ADMIN")){
+                continue;
+            } else {
+                return role.getAlias();
+            }
+        }
+        return null;
     }
 }

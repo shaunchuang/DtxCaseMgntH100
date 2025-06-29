@@ -265,7 +265,7 @@ public class HealthInsuranceRecordAPI implements API {
         User doctor = UserAPI.getInstance().getUser(hcForm.getCreator());
         String doctorName = doctor.getUsername();
         String icdCode = hcForm.getMainDiagnosisCode();
-        WgIcdCode codeObj = WgIcdCodeAPI.getInstance().getByPureCode(icdCode);
+        WgIcdCode codeObj = WgIcdCodeAPI.getInstance().getWgIcdCode(Long.parseLong(icdCode));
         String diagnosois = codeObj != null ? StringUtils.join(new String[]{codeObj.getPureCode(), codeObj.getName()}, " ") : "";
         String doctorAlias = "";
         Boolean isFirstDiag = false;
@@ -275,7 +275,7 @@ public class HealthInsuranceRecordAPI implements API {
         if (doctor != null) {
             List<Role> roles = RoleAPI.getInstance().listRolesByUserId(doctor.getId());
             UserRoleDTO userRole = new UserRoleDTO(doctor, roles);
-            isFirstDiag = WgTaskAPI.getInstance().checkFirstDiagnosis(hcForm.getPatientId(), doctor.getId());
+            isFirstDiag = WgTaskAPI.getInstance().checkIsFirstDiag(patientId, doctor.getId());
         }
 
         if (isDetailInfo) {

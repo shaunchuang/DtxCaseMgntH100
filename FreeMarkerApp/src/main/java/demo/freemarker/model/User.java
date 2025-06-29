@@ -58,6 +58,9 @@ public class User implements IntIdDataEntity, Serializable {
     @Column(name = "\"steam_id\"", unique = true, length = 50)
     private String steamId;
 
+    @Column(name = "\"gender\"", length = 10)
+    private String gender;
+
     @Column(name = "\"last_login_date\"")
     @Temporal(TemporalType.DATE)
     private Date lastLoginDate;
@@ -131,6 +134,14 @@ public class User implements IntIdDataEntity, Serializable {
 
     public void setSteamId(String steamId) {
         this.steamId = steamId;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public Date getLastLoginDate() {

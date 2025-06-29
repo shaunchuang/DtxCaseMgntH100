@@ -1,5 +1,6 @@
 package demo.freemarker.dto;
 
+import demo.freemarker.api.UserAPI;
 import demo.freemarker.model.Role;
 import demo.freemarker.model.User;
 import demo.freemarker.model.User.UserStatus;
@@ -14,6 +15,7 @@ public class UserRoleDTO {
     private String email;
     private String telCell;
     private String steamId;
+    private String gender;
     private Date createdTime;
     private UserStatus status;
     private List<Role> roles;
@@ -27,9 +29,14 @@ public class UserRoleDTO {
         this.email = user.getEmail();
         this.telCell = user.getTelCell();
         this.steamId = user.getSteamId();
+        this.gender = user.getGender();
         this.status = user.getStatus();
         this.createdTime = user.getCreatedTime();
         this.roles = roles;
+    }
+
+    public User getUser() {
+        return UserAPI.getInstance().getUser(this.id);
     }
 
     public Long getId() {
@@ -78,6 +85,14 @@ public class UserRoleDTO {
 
     public void setSteamId(String steamId) {
         this.steamId = steamId;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public UserStatus getStatus() {

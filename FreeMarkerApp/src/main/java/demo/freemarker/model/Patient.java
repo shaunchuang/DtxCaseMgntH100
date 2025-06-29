@@ -152,7 +152,9 @@ public class Patient implements IntIdDataEntity, Serializable {
 
     public String getGender() {
         return gender;
-    }    public void setGender(String gender) {
+    }
+    
+    public void setGender(String gender) {
         this.gender = gender;
     }
 

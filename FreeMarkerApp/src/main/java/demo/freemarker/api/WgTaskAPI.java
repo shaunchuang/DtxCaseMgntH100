@@ -130,7 +130,7 @@ public class WgTaskAPI implements API {
     }
 
     @APIDefine(description = "檢查是否為初診")
-    public Boolean checkFirstDiagnosis(Long caseNo, Long creator) {
+    public Boolean checkIsFirstDiag(Long caseNo, Long creator) {
         List<WgTask> tasks = WgTaskDAO.getInstance().checkIsFirstDiag(caseNo, creator);
         if (tasks == null || tasks.isEmpty()) {
             return true; // No previous tasks found, so it's considered first diagnosis
@@ -173,7 +173,7 @@ public class WgTaskAPI implements API {
         appoEvent.setAge(String.valueOf(patient.getAge()));
         appoEvent.setIndication(patient.getDiseaseName());
         appoEvent.setCheckinTime(task.getCheckinTime() != null ? sdf.format(task.getCheckinTime()) : null);
-        appoEvent.setIsFirstDiag(checkFirstDiagnosis(formId, slot.getDoctor()));
+        appoEvent.setIsFirstDiag(this.checkIsFirstDiag(patient.getId(), slot.getDoctor()));
         User therapist = UserAPI.getInstance().getUser(slot.getDoctor());
         List<Role> roles = RoleAPI.getInstance().listRolesByUserId(therapist.getId());
         UserRoleDTO therapistUser = new UserRoleDTO(therapist, roles);

@@ -28,7 +28,7 @@
 					                    		<div class="appo-time">${appoEvent.appoDate} ${appoEvent.appoTime}</div>
 					                    		<div class="appo-target"><#if appoEvent.division??>${appoEvent.division} </#if>${appoEvent.doctorName} ${appoEvent.doctorAlias}</div>
 					                    	</div>
-					                    	<div class="appo-sub col-md-5"><#if appoEvent.isFirstDiag >初診<#else>複診</#if> / 顯示副標題</div>
+					                    	<div class="appo-sub col-md-5"><span class="appo-hint  <#if appoEvent.isFirstDiag >firstDiag</#if>"><#if appoEvent.isFirstDiag >初診<#else>複診</#if></span></div>
 					                    </td>
 					                    <td class="col-md-3 change-appo-blk">
 					                    	<button class="func-btn-custom f-14 mg-right-5" data-keyno="${appoEvent.caseno}" data-slot="${appoEvent.slotId}">更改預約</button>
@@ -65,7 +65,7 @@
 					                    <td class="col-xs-2">${hcRecord.diagDate}</td>
 					                    <td class="col-xs-4-5">${hcRecord.doctorName} ${hcRecord.doctorAlias}</td>
 					                    <td class="col-xs-3-5"><span class="badge badge-tag">${hcRecord.syndrome}</span></td>
-					                    <td class="col-xs-2"><button class="func-btn-custom f-14">檢視紀錄</button></td>
+					                    <td class="col-xs-2"><button data-record="${hcRecord.id}" class="func-btn-custom f-14 view-record">檢視紀錄</button></td>
 					                </tr>
 							    	</#list>
 							    </tbody>
@@ -79,7 +79,7 @@
 			</div>
 		</div>
 	</div>
-</body>
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog " style="width:900px;">
 		<div class="modal-content" >
@@ -117,7 +117,22 @@
 		</div>
 	</div>
 </div>
-
+<div class="modal fade" id="ModalDiag"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog diag-data" style="width: 90%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				診斷報告
+				<button type="button" class="close clean" data-dismiss="modal" aria-label="Close">
+		          	<i class="fa fa-xmark" aria-hidden="true"></i>
+		        </button>
+			</div>
+			<div class="modal-body">
+				<div id="report-container" class="report"></div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
 <script>
 var lessonStoreUrl = '${lessonStoreUrl!""}';
 
@@ -247,9 +262,28 @@ function formatDate(dateStr){
     return formattedDate;
 }
 
+  $(document).on('click', '.view-record', function() {
+    var recordId = $(this).data('record');
+    console.log('檢視紀錄 ID:', recordId);
+    wg.template.updateNewPageContent(
+      'report-container',
+      'report-content',
+      {},
+      '/ftl/imas/diagnosisReport?id=' + recordId
+    );
+    $('#ModalDiag').modal('show');
+  });
+
 </script>
 
 <style>
+
+
+.diag-data {
+	padding: 1rem;
+	border-radius: 1rem;
+	z-index: 1070 !important;
+}
 
 .calendar-card,
 .calendar-card .datepicker-inline,
@@ -317,6 +351,17 @@ function formatDate(dateStr){
 	align-items: flex-start;
 	gap: 4px;
 	font-weight: 600;
+}
+
+.appo-hint {
+	background-color: #FCBDBD;
+	border-radius: 5px;
+	padding: 2px 5px;
+	font-weight: 600;
+}
+
+.appo-hint.firstDiag {
+	background-color: #A1E3F9;
 }
 
 .history-list-blk, .lesson-blk{
@@ -470,6 +515,13 @@ tbody.appointment-events tr {
 .change-appo-blk {
 	display: flex;
 	justify-content: flex-end;
+}
+
+.modal-backdrop {
+    z-index: 100 !important;
+}
+.modal {
+    z-index: 1050 !important;
 }
 
 </style>	

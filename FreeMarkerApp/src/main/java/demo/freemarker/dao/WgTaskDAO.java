@@ -3,9 +3,12 @@ package demo.freemarker.dao;
 import demo.freemarker.model.WgTask;
 import itri.sstc.framework.core.database.IntIdBaseDAO;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import org.apache.commons.lang3.time.DateUtils;
 
 
 public class WgTaskDAO extends IntIdBaseDAO {
@@ -54,7 +57,7 @@ public class WgTaskDAO extends IntIdBaseDAO {
         EntityManager em = getEntityManager();
         try {
             Query q = em.createNamedQuery("WgTask.findByCaseNoAndCreator");
-            q.setParameter("CaseNo", caseNo);
+            q.setParameter("caseNo", caseNo);
             q.setParameter("creator", creator);
             return q.getResultList();
         } catch (Exception ex) {
@@ -130,9 +133,12 @@ public class WgTaskDAO extends IntIdBaseDAO {
             Query q = em.createNamedQuery("WgTask.checkIsFirstDiag");
             q.setParameter("caseNo", caseNo);
             q.setParameter("therapist", therapist);
+            // 傳入今天 00:00:00，確保只比對日期
+            Date today = DateUtils.truncate(new Date(), Calendar.DATE);
+            q.setParameter("today", today);
             return q.getResultList();
         } catch (Exception ex) {
-            return new ArrayList<WgTask>();
+            return new ArrayList<>();
         } finally {
             em.close();
         }

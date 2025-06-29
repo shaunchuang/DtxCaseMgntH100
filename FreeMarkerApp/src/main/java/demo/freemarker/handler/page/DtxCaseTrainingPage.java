@@ -12,11 +12,13 @@ import demo.freemarker.api.DiseaseCategoryAPI;
 import demo.freemarker.api.DrugUseStatusCategoryAPI;
 import demo.freemarker.api.MedicationCategoryAPI;
 import demo.freemarker.api.PatientAPI;
+import demo.freemarker.api.UserAPI;
 import demo.freemarker.api.healthinsurance.HealthInsuranceRecordAPI;
 import demo.freemarker.api.training.TrainingPlanAPI;
 import demo.freemarker.core.CrossPlatformUtil;
 import demo.freemarker.core.GsonUtil;
 import demo.freemarker.core.SecurityUtils;
+import demo.freemarker.dto.DoctorInfo;
 import demo.freemarker.dto.HcRecordDTO;
 import demo.freemarker.dto.SyndromeDTO;
 import demo.freemarker.dto.TodayReviewInfo;
@@ -87,12 +89,13 @@ public class DtxCaseTrainingPage extends RequestHandler {
         List<HealthInsuranceRecord> records = HealthInsuranceRecordAPI.getInstance().getDoctorVisitsByPatient(patient.getId());
 
         List<HcRecordDTO> hcRecordDTO = HealthInsuranceRecordAPI.getInstance().convertToHcRecordDTOList(records, Boolean.FALSE);
-        
+        List<DoctorInfo> doctorInfos = UserAPI.getInstance().listDoctorInfo();
         reviewResp.setHcRecords(hcRecordDTO);
         model.addAttribute("lessonStoreUrl", ConfigPropertyAPI.getInstance().getConfigPropertyByKey("DtxStoreUrl").getGlobalValue());
         model.addAttribute("__field", "field");
         model.addAttribute("menuNum", 1);
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("doctorInfos", doctorInfos);
         model.addAttribute("blogname", blogname);
         model.addAttribute("todayReviewInfo", reviewResp);
         model.addAttribute("field_abbrev_ename", "ITRI");

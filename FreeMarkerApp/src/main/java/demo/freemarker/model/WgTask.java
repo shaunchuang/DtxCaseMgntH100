@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "WgTask.findBySlotId", query = "SELECT task FROM WgTask task WHERE task.availableSlotId = :availableSlotId"),
     @NamedQuery(name = "WgTask.findByUserAndCat", query = "SELECT task FROM WgTask task WHERE task.cat = :cat AND task.creator = :creator"),
     @NamedQuery(name = "WgTask.findByCaseNo", query = "SELECT task FROM WgTask task WHERE task.caseNo = :caseNo"),
-    @NamedQuery(name = "WgTask.checkIsFirstDiag", query = "SELECT task FROM WgTask task JOIN WgAvailableSlots s ON s.id = task.availableSlotId WHERE task.caseNo = :caseNo AND s.doctor = :therapist AND task.checkinTime IS NOT NULL AND s.slotDate < CURRENT_DATE ORDER BY s.slotDate DESC")
+    @NamedQuery(name = "WgTask.checkIsFirstDiag", query = "SELECT task FROM WgTask task JOIN WgAvailableSlots s ON s.id = task.availableSlotId WHERE task.caseNo = :caseNo AND s.doctor = :therapist AND task.checkinTime IS NOT NULL AND s.slotDate < :today ORDER BY s.slotDate DESC")
 })
 public class WgTask implements IntIdDataEntity, Serializable {
     private static final long serialVersionUID = 6895651421520312351L;

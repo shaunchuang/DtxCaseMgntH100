@@ -148,6 +148,7 @@ demo\freemarker\handler\restfulapi\chat\ChatRESTfulAPI.class
 demo\freemarker\model\chat\ChatRoomUser.class
 demo\freemarker\dao\PatientDAO.class
 demo\freemarker\dao\scale\ScaleItemOptionDAO.class
+demo\freemarker\dto\DoctorInfo.class
 demo\freemarker\api\training\TrainingRecordAPI.class
 demo\freemarker\handler\restfulapi\WgIcdCodeRESTfulAPI.class
 demo\freemarker\api\UserAPI.class

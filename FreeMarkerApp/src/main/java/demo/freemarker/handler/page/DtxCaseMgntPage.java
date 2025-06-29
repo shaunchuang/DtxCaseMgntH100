@@ -179,6 +179,7 @@ public class DtxCaseMgntPage extends RequestHandler {
             int maxYear = Year.now().getValue();
             Long patientId = Long.parseLong(getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId"));
             Long slotId = Long.parseLong(getValueOfKeyInQuery(request.exchange.getRequestURI(), "slot"));
+            WgAvailableSlots slot = WgAvailableSlotsAPI.getInstance().getWgAvailableSlot(slotId);
             String blogname = Config.get("blogname", "測試平台");
 
             List<Executor> executors = new ArrayList<Executor>();
@@ -197,7 +198,7 @@ public class DtxCaseMgntPage extends RequestHandler {
             PatientInfo ptInfo = new PatientInfo(patientId, locale);
 
             List<SyndromeDTO> syndromeList = CrossPlatformUtil.getInstance().listSyndrome();
-            Boolean revisit = WgTaskAPI.getInstance().checkFirstDiagnosis(patientId, slotId);
+            Boolean revisit = WgTaskAPI.getInstance().checkIsFirstDiag(patientId, slot.getDoctor());
 
             List<DiseaseCategory> diseases = DiseaseCategoryAPI.getInstance().listLocale(locale);
             List<DrugUseStatusCategory> drugUseStatus = DrugUseStatusCategoryAPI.getInstance().listAll();
@@ -244,7 +245,8 @@ public class DtxCaseMgntPage extends RequestHandler {
 
         Long patientId = Long.parseLong(getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId"));
         Long slotId = Long.parseLong(getValueOfKeyInQuery(request.exchange.getRequestURI(), "slot"));
-        Boolean revisit = WgTaskAPI.getInstance().checkFirstDiagnosis(patientId, slotId);
+        WgAvailableSlots slot = WgAvailableSlotsAPI.getInstance().getWgAvailableSlot(slotId);
+        Boolean revisit = WgTaskAPI.getInstance().checkIsFirstDiag(patientId, slot.getDoctor());
 
         PatientInfo ptInfo = new PatientInfo(patientId, locale);
         List<Executor> executors = new ArrayList<Executor>();
