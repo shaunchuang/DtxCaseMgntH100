@@ -204,6 +204,54 @@ public class PatientRESTfulAPI extends RESTfulAPI {
             return new JSONObject(result).toString();
         }
     }
+
+    @RESTfulAPIDefine(url = "saveByUser", methods = "post", description = "根據當前使用者新增或更新病患資料")
+    private String saveByUser(HttpExchange exchange) throws IOException {
+        JSONObject responseJson = new JSONObject();
+        try {
+            // 讀取並驗證請求資料
+            String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+            if (requestBody == null || requestBody.trim().isEmpty()) {
+                return createErrorResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST, "請求資料不能為空");
+            }
+            JSONObject requestJson = new JSONObject(requestBody);
+
+            // 取得當前使用者
+            User currentUser = SecurityUtils.getCurrentUser(exchange);
+            long userId = currentUser.getId();
+
+            // 檢查是否已有關聯的 Patient
+            Patient patient = PatientAPI.getInstance().getPatientByUserId(userId);
+            if (patient != null) {
+                // 已存在則更新
+                boolean ok = performAtomicUpdate(patient, requestJson);
+                if (!ok) {
+                    return createErrorResponse(exchange, HttpURLConnection.HTTP_INTERNAL_ERROR, "更新病患資料失敗");
+                }
+                responseJson.put("message", "病患資料更新成功");
+                responseJson.put("patientId", patient.getId());
+            } else {
+                // 不存在則建立新 Patient，並關聯到 user
+                patient = new Patient();
+                patient.setUserId(userId);
+                // 更新基本欄位與關聯
+                updatePatientBasicFields(patient, requestJson);
+                updatePatientRelationships(patient, requestJson);
+                // 建立新病患
+                PatientAPI.getInstance().createPatient(patient);
+                responseJson.put("message", "病患資料創建成功");
+                responseJson.put("patientId", patient.getId());
+            }
+
+            responseJson.put("success", true);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+            return responseJson.toString();
+
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "saveByUser 時發生錯誤: " + e.getMessage(), e);
+            return createErrorResponse(exchange, HttpURLConnection.HTTP_INTERNAL_ERROR, "伺服器內部錯誤: " + e.getMessage());
+        }
+    }
         /**
          * 執行原子更新操作
          */

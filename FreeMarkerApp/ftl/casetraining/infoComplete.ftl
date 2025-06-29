@@ -1450,17 +1450,17 @@ label.form-label{
   	</div>	
 	<div class="wrapper">
 		<div class="main-content">
-		    <form data-form-id="">		    		    
+		    <form data-form-id="" class="data-form">		    		    
 				<fieldset>		
 					<div class="card w-60 pd-10">
 						<div class="card-hint">請填寫個人真實且完整資訊，以利後續聯繫與資料建檔。<span class="text-danger">* 為必填欄位</span></div>
 						<div class="form-group form-req">
 							<label class="form-label"><@spring.message "view.label.name"/></label>
-							<input type="text" class="dataForm form-control" data-item="3" value="${currentUser.username!""}" readonly="">
+							<input type="text" class="form-control" id="patientName" value="${currentUser.username!""}" readonly="">
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label"><@spring.message "view.label.gender"/></label>
-							<select class="dataForm form-control" data-item="4">
+							<select class="form-control" id="patientGender">
 								<option value=""><@spring.message "view.option.select.hint"/></option>
 								<option value="M"><@spring.message "view.option.male"/></option>
 								<option value="F"><@spring.message "view.option.female"/></option>
@@ -1468,23 +1468,23 @@ label.form-label{
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label">身份證字號</label>
-							<input type="text" class="dataForm form-control" data-item="2" >
+							<input type="text" class="form-control" id="patientIdno">
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label">出生日期</label>
-							<input type="hidden" class="dataForm form-control birth" data-item="6" data-date-end-date="0d" />
+							<input type="hidden" class="form-control birth" id="patientBirth" data-date-end-date="0d" />
 						</div>						
 						<div class="form-group form-req">
 							<label class="form-label">聯絡電話</label>
-							<input type="text" class="dataForm form-control" data-item="7" value="${currentUser.telCell!""}" readonly="">
+							<input type="text" class="form-control" id="patientPhone" value="${currentUser.telCell!""}" readonly="">
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label">緊急聯絡人</label>
-							<input type="text" class="dataForm form-control" data-item="12" >
+							<input type="text" class="form-control" id="patientEmergencyContact">
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label">緊急聯絡人關係</label>
-							<select class="basicForm form-control" data-item="13">
+							<select class="form-control" id="patientEmergencyRelation">
 								<option value="">選擇關係</option>
 								<option value="GRFTH" ><@spring.message "view.option.grfth"/></option>
 								<option value="GRMTH" ><@spring.message "view.option.grmth"/></option>
@@ -1498,15 +1498,15 @@ label.form-label{
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label">緊急聯絡電話</label>
-							<input type="text" class="dataForm form-control" data-item="14">
+							<input type="text" class="form-control" id="patientEmergencyPhone">
 						</div>								
 						<div class="form-group">
 							<label class="form-label">電子信箱</label>
-							<input type="text" class="dataForm form-control" data-item="8" >
+							<input type="text" class="form-control" id="patientEmail">
 						</div>
 						<div class="form-group">
 							<label class="form-label">婚姻狀態</label>
-							<select class="dataForm form-control" data-item="" >
+							<select class="form-control" id="patientMaritalStatus">
 								<option value="">請選擇</option>
 								<option value="N">未婚</option>
 								<option value="Y">已婚</option>
@@ -1519,11 +1519,11 @@ label.form-label{
 								<div id="twzipcode" class="zipcode inline-cotainer"></div>
 								<#else>
 								<div class="zipcode inline-cotainer">
-									<input type="text" name="country" placeholder="<@spring.message "view.placeholder.country"/>" class="dataForm form-control half" data-item="9">
-									<input type="text" name="city" placeholder="<@spring.message "view.placeholder.capital"/>" class="dataForm form-control half" data-item="10">
+									<input type="text" name="country" placeholder="<@spring.message "view.placeholder.country"/>" class="form-control half" id="patientCity">
+									<input type="text" name="city" placeholder="<@spring.message "view.placeholder.capital"/>" class="form-control half" id="patientDistrict">
 								</div>
 								</#if>
-								<input type="text" class="dataForm form-control" data-item="11" >
+								<input type="text" class="form-control" id="patientAddress">
 							</div>
 						</div>
 					</div>
@@ -1534,7 +1534,7 @@ label.form-label{
 						<div class="form-group form-req">
 							<label class="form-label">您主要有何症狀/問題?(擇一)</label>
 							<div class="symdrome-options single-option">
-								<input type="hidden" class="basicForm form-control" data-item="37" />
+								<input type="hidden" class="form-control" id="patientIndicationId" />
 								<#list indications as indication>
 								<div class="option" data-id="${indication.id}" >${indication.name}</div>
 								</#list>
@@ -1542,7 +1542,7 @@ label.form-label{
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label">請描述您所遇到的困難或問題(個案/家屬)</label>
-							<textarea rows="3" class="form-control" placeholder="請根據您本身的狀況進行描述，將提供醫師/治療師參考"></textarea>							
+							<textarea rows="3" class="form-control" id="patientProblemDescription" placeholder="請根據您本身的狀況進行描述，將提供醫師/治療師參考"></textarea>							
 						</div>					
 					</div>
 				</fieldset>
@@ -1551,25 +1551,30 @@ label.form-label{
 						<div class="card-hint">請提供目前健康相關資訊，您提供的資訊將有助於我們完整評估目前情況，必要時將協助分流安排更合適的服務。<span class="text-danger">* 為必填欄位</span></div>
 						<div class="form-group form-req">
 							<label class="form-label">個人病史</label>
-							<div class="history-options multi-option">
+							<div class="history-options multi-option" id="patientDiseaseHistory">
 								<#list personalDiseaseHistoryItems as pdhItems>
-								<div class="option " data-item="${pdhItems.id}" >${pdhItems.name}</div>
+								<div class="option" data-id="${pdhItems.id}" >${pdhItems.name}</div>
 								</#list>				                 	
 		                    </div>
-		                    <textarea rows="3" class="form-control" placeholder="請填寫其他個人病史"></textarea>
+		                    <textarea rows="3" class="form-control" id="patientOtherHistoryDisease" placeholder="請填寫其他個人病史"></textarea>
 						</div>
 						<div class="form-group form-req">
 							<label class="form-label">藥物過敏史</label>
-							<div class="allergy-history-options multi-option">
+							<div class="allergy-history-options multi-option" id="patientMedicalHistory">
 								<#list drugAllergyHistoryItems as dahItems>
-								<div class="option" data-item="${dahItems.id}" >${dahItems.name}</div>
+								<div class="option" data-id="${dahItems.id}" >${dahItems.name}</div>
 								</#list>
 							</div>
-							<textarea rows="3" class="form-control" placeholder="請填寫其他藥物過敏史"></textarea>
+							<textarea rows="3" class="form-control" id="patientOtherMedicalHistory" placeholder="請填寫其他藥物過敏史"></textarea>
 						</div>
 						<div class="form-group">
 							<label class="form-label">藥物使用狀況</label>
-							<textarea rows="3" class="form-control" placeholder="請填寫其他藥物使用狀況"></textarea>
+							<div class="drug-use-options multi-option" id="patientDrugUseStatus">
+								<#list drugUseStatus as dus>
+								<div class="option" data-id="${dus.id}" >${dus.name}</div>
+								</#list>
+							</div>
+							<textarea rows="3" class="form-control" id="patientOtherDrugUseStatus" placeholder="請填寫其他藥物使用狀況"></textarea>
 						</div>
 					</div>
 				</fieldset>								
@@ -1656,8 +1661,7 @@ label.form-label{
 		wg.template.updateNewPageContent('evaluation-container', 'evaluation-content', {}, '/ftl/imas/admin/taskMgnt/evaluation/message?msg=emptyMessage');
 
 	});
-	
-	/*相關選項點選變色*/
+		/*相關選項點選變色*/
 	$(".option").click(function() {
 	    var $parent = $(this).parent("div");
 
@@ -1665,11 +1669,14 @@ label.form-label{
         	// 單選處理
 	        $parent.find(".option").removeClass("selected");
 	        $(this).addClass("selected");
-	        $parent.find("input[type='hidden']").val($(this).attr("data-id"));
+	        // 更新對應的隱藏欄位
+	        if($parent.parent().find("#patientIndicationId").length > 0) {
+	        	$("#patientIndicationId").val($(this).attr("data-id"));
+	        }
 	    }else{
 	        var $options = $parent.find(".option");
 	        var isFirst = $(this).is($options.first());
-	
+
 	        // 點擊第一個 option
 	        if (isFirst) {
 	            if ($(this).hasClass("selected")) {
@@ -1699,7 +1706,7 @@ label.form-label{
 		$("#wg-Container").empty();
 		
 		var doctorId = $(this).attr("data-doctor");
-		wg.template.updateNewPageContent('wg-Container', 'therapist-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment/msg/chooseMessage?clinician=therapist&doctorId=' + doctorId);
+		wg.template.updateNewPageContent('wg-Container', 'therapist-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment/msg/chooseMessage?clinician=doctor&doctorId=' + doctorId);
 
 	});
 
@@ -1709,35 +1716,19 @@ label.form-label{
 
 		current_fs = $("form").find("fieldset:visible");
    		next_fs = current_fs.next("fieldset");
-	    var api = current_fs.attr("data-api");
 	    var stepPass = true;
 	    var formId = $("form").attr("data-form-id") || null;
 		var index = $('fieldset').index(current_fs);
-		var itemNumArr, itemArray, queryData, result;
 
 	    if (validateRequiredFields(current_fs) && next_fs.length) {
 
-	    	if(index == 0){
-	    		/*itemNumArr = getItemNumArray("default-table", "basicForm");
-				itemArray = getItemValue("basicForm", itemNumArr);
-	    		queryData = {"source": "case", "formName": "基本資料V2", "evalDate": getEditTime(), "app": "", "items": itemArray};		
-				result = wg.evalForm.getJson({"data":JSON.stringify(queryData)}, api);
-			    if(result.success){
-			    	$("form").attr("data-form-id", result.id);
-			    	stepPass = updateUserInfo(itemArray);
-			    }*/
-	    	}else{
-	    		/*itemNumArr = getItemNumArray("default-table", "basicForm, multi-option .option");
-				itemArray = getItemValue("basicForm, multi-option .option", itemNumArr);   		
-	    		queryData = {"userFormKeyNo": formId, "items": itemArray};
-	    		result = wg.evalForm.getJson({"data":JSON.stringify(queryData)}, api);
-	    		if(result.success){
-	    			stepPass = true;
-	    			triggerAssessmentList();
-	    		}*/
+	    	if(index == 0 || index == 1 || index == 2){
+	    		// 基本資料、困擾描述、健康狀態步驟都需要保存病患資料
+	    		stepPass = savePatientInfo();
 	    	}
 	    	
-	    	if(index == 2){
+	    	if(index == 2 && stepPass){
+	    		// 健康狀態填寫完畢後觸發評估量表列表
 	    		triggerAssessmentList();
 	    	}   	
 	    	
@@ -1826,11 +1817,103 @@ label.form-label{
 	    }
 	});
 	
+	function savePatientInfo(){
+		// 收集基本資料
+		var patientData = {
+			idno: $("#patientIdno").val(),
+			gender: $("#patientGender").val(),
+			maritalStatus: $("#patientMaritalStatus").val(),
+			birth: $("#patientBirth").val(),
+			city: $("select[name='county']").val(),
+			district: $("select[name='district']").val(),
+			address: $("#patientAddress").val(),
+			emergencyContact: $("#patientEmergencyContact").val(),
+			emergencyPhone: $("#patientEmergencyPhone").val(),
+			emergencyRelation: $("#patientEmergencyRelation").val()
+		};
+		
+		// 收集疾病史選項
+		var diseaseCategories = [];
+		$("#patientDiseaseHistory .option.selected").each(function(){
+			diseaseCategories.push(parseInt($(this).data('id')));
+		});
+		if(diseaseCategories.length > 0) {
+			patientData.diseaseCategoryIds = diseaseCategories;
+		}
+		
+		// 收集藥物過敏史選項
+		var medicalCategories = [];
+		$("#patientMedicalHistory .option.selected").each(function(){
+			medicalCategories.push(parseInt($(this).data('id')));
+		});
+		if(medicalCategories.length > 0) {
+			patientData.medicalCategoryIds = medicalCategories;
+		}
+		
+		// 收集藥物使用狀況選項
+		var drugUseStatusCategories = [];
+		$("#patientDrugUseStatus .option.selected").each(function(){
+			drugUseStatusCategories.push(parseInt($(this).data('id')));
+		});
+		if(drugUseStatusCategories.length > 0) {
+			patientData.drugUseStatusCategoryIds = drugUseStatusCategories;
+		}
+		
+		// 收集其他文字描述
+		var otherHistoryDisease = $("#patientOtherHistoryDisease").val();
+		if(otherHistoryDisease) {
+			patientData.otherHistoryDisease = otherHistoryDisease;
+		}
+		
+		var otherMedicalHistory = $("#patientOtherMedicalHistory").val();
+		if(otherMedicalHistory) {
+			patientData.otherMedicalHistory = otherMedicalHistory;
+		}
+		
+		var otherDrugUseStatus = $("#patientOtherDrugUseStatus").val();
+		if(otherDrugUseStatus) {
+			patientData.otherDrugUseStatus = otherDrugUseStatus;
+		}
+		
+		// 收集症狀/問題描述
+		var indicationId = $("#patientIndicationId").val();
+		if(indicationId) {
+			patientData.diseaseId = parseInt(indicationId);
+		}
+		
+		var problemDescription = $("#patientProblemDescription").val();
+		if(problemDescription) {
+			// 問題描述對應到 OtherPatientInfo 的 difficultyDesc 欄位
+			if(!patientData.otherPatientInfo) patientData.otherPatientInfo = {};
+			patientData.otherPatientInfo.difficultyDesc = problemDescription;
+		}
+		
+		// 過濾空值
+		Object.keys(patientData).forEach(key => {
+			if (patientData[key] === "" || patientData[key] === null || patientData[key] === undefined) {
+				delete patientData[key];
+			}
+		});
+		
+		console.log("Sending patient data:", patientData);
+		
+		// 呼叫後端 API
+		var result = wg.evalForm.getJson(JSON.stringify(patientData), "/Patient/api/saveByUser");
+		if(result.success) {
+			// 更新表單的 data-form-id 屬性為返回的 patientId
+			if(result.patientId) {
+				$("form").attr("data-form-id", result.patientId);
+			}
+			return true;
+		} else {
+			swal("儲存失敗", result.message || "無法儲存病患資料", "error");
+			return false;
+		}
+	}
+	
 	function updateUserInfo(itemArray){
-		var postData = {"userId": ${currentUser.id!""}, "items" : itemArray};
-		var result = wg.evalForm.getJson({"data":JSON.stringify(postData)}, "${base}/division/api/syncUserInfo");
-		if(result.success) return true;
-		return false;
+		// 保留舊函數以維持兼容性，但改為呼叫新的 savePatientInfo
+		return savePatientInfo();
 	}
 	
 	function triggerAssessmentList(){
@@ -1838,7 +1921,7 @@ label.form-label{
 		var symdromeId = $('.symdrome-options .option.selected').data('id');
 		
 		var postData = {"patientId": formId, "syndromeId": symdromeId, "isFromPatient": true};
-	    var result = wg.evalForm.getJson({"data":JSON.stringify(postData)}, "${base}/division/api/getCaseAssessmentList");
+	    var result = wg.evalForm.getJson(JSON.stringify(postData), "/Assessment/api/getCaseAssessmentList");
 	    if(result.success){
 	    	showAssessmentList(result.data);
 	    }

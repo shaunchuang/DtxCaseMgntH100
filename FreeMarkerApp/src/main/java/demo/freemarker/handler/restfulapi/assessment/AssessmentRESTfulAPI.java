@@ -123,7 +123,6 @@ public class AssessmentRESTfulAPI extends RESTfulAPI {
 
     @RESTfulAPIDefine(url = "getCaseAssessmentList", methods = "post", description = "取得所有 Assessment 資料")
     private String getCaseAssessmentList(HttpExchange exchange) throws IOException {
-
         try {
             String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             JSONObject responsebody = new JSONObject();

@@ -62,7 +62,6 @@ public class DtxCaseTrainingPage extends RequestHandler {
         List<MedicationCategory> medicationCategories = MedicationCategoryAPI.getInstance().listLocale(locale);
         
         int maxYear = Year.now().getValue();
-
         String blogname = Config.get("blogname", "測試平台");
         model.addAttribute("__field", "field");
         model.addAttribute("currentUser", currentUser);
