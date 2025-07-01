@@ -28,6 +28,7 @@ import demo.freemarker.dto.Achievement;
 import demo.freemarker.dto.StatsData;
 import demo.freemarker.dto.TrainingData;
 import demo.freemarker.dto.TrainingPlanDTO;
+import demo.freemarker.dto.TrainingTrack;
 import demo.freemarker.model.Patient;
 import demo.freemarker.model.healthinsurance.HealthInsuranceRecord;
 import demo.freemarker.model.training.AchievementGoal;
@@ -403,6 +404,38 @@ public class TrainingRESTfulAPI extends RESTfulAPI {
             e.printStackTrace();
             JSONObject responseJson = new JSONObject();
             responseJson.put("success", Boolean.FALSE);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+            return responseJson.toString();
+        }
+    }
+    
+    @RESTfulAPIDefine(url = "listTrack", methods = "post", description = "訓練追蹤清單")
+    private String trainingTrack(HttpExchange exchange) throws IOException{
+        try {
+            JSONObject responseJson = new JSONObject();
+            String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+            System.out.println("Request Body: " + requestBody);
+            String planId = new JSONObject(requestBody).getString("planId");
+            System.out.println("planId: " + planId);
+            TrainingPlan trainingPlan = TrainingPlanAPI.getInstance().getTrainingPlan(Long.parseLong(planId));
+            if (trainingPlan != null) {
+                List<TrainingTrack> tracks = TrainingPlanAPI.getInstance().convertToTrack(trainingPlan);
+                responseJson.put("tracks", tracks);
+                responseJson.put("success", Boolean.TRUE);
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                return responseJson.toString();
+            } else {
+                JSONObject errorJson = new JSONObject();
+                errorJson.put("success", Boolean.FALSE);
+                errorJson.put("message", "Training plan not found");
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                return errorJson.toString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONObject responseJson = new JSONObject();
+            responseJson.put("success", Boolean.FALSE);
+            responseJson.put("message", e.getMessage());
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             return responseJson.toString();
         }

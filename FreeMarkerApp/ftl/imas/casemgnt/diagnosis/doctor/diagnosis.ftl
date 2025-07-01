@@ -715,13 +715,11 @@ $(document).ready(function(){
 	wg.template.updateNewPageContent('wg-Container', 'therapist-booking-content', {}, '/ftl/imas/admin/taskMgnt/appointment/msg/chooseMessage?clinician=therapist');
 
 	<#if revisit> 
-	wg.template.updateNewPageContent('caseResult-container', 'caseResult', {"formId": ${formId!""}}, '${base}/${__lang}/division/web/${formId!""}/trainingResult');
-	
-	wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=pt');
+		wg.template.updateNewPageContent('caseResult-container', 'caseResult', {"formId": ${formId!""}}, '${base}/${__lang}/division/web/${formId!""}/trainingResult');
+		wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=pt');
 	<#else>
-	//wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=doctor');
-	wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=pt');
-	
+		//wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=doctor');
+		wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=pt');
 	</#if>
 });
 

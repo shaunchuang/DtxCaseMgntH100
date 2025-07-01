@@ -15,6 +15,7 @@ demo\freemarker\dto\TodayReviewInfo.class
 demo\freemarker\handler\restfulapi\assessment\AssessmentSectionResultRESTfulAPI.class
 demo\freemarker\api\RoleAPI.class
 demo\freemarker\model\SpeechDevIssueCategory.class
+demo\freemarker\dto\TrainingTrack.class
 demo\freemarker\api\training\TrainingAchievementAPI.class
 demo\freemarker\dto\Executor.class
 demo\freemarker\dto\TodayReviewResp.class

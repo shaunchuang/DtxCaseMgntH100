@@ -117,7 +117,7 @@
 						    <tbody class="track-events">
 						    	<#if todayReviewInfo?? && todayReviewInfo.trainingEvents?? && (todayReviewInfo.trainingEvents?size > 0 ) >
 						    	<#list todayReviewInfo.trainingEvents as trainingEvent>
-						    	<tr>
+						    	<tr data-plan-id="${trainingEvent.planId!""}">
 						    		<td class="col-xs-0-5">${trainingEvent.serialno!""}</td>
 						    		<td class="col-xs-1-5">${trainingEvent.name!""}</td>
 						    		<td class="col-xs-1-5"><#if trainingEvent.gender == "M">男<#else>女</#if> / ${trainingEvent.age!""}</td>
@@ -150,7 +150,7 @@
 						    <tbody class="track-events">
 						    	<#if todayReviewInfo?? && todayReviewInfo.trainingEvents?? && (todayReviewInfo.trainingEvents?size > 0 ) >
 						    	<#list todayReviewInfo.trainingEvents as trainingEvent>
-						    	<tr>
+						    	<tr data-plan-id="${trainingEvent.planId!""}">
 						    		<td class="col-xs-1-5">${trainingEvent.name!""}</td>
 				                    <td class="col-xs-1-5"><#if trainingEvent.gender == "M">男<#else>女</#if> / ${trainingEvent.age!""}</td>
 				                    <td class="col-xs-2"><span class="badge badge-tag">${trainingEvent.indication!""}</span></td>
@@ -236,19 +236,42 @@ $(document).ready(function(){
 	activTrack();
 });
 
-/*$(".track-events tr").click(function(){
-	$(".track-events tr").removeClass("selected");
-	$(this).toggleClass("selected");
-	
-	$('.arrow, .history-blk').fadeIn(1000); // 1秒淡入
-});*/
+
 $(".track-events tr").click(function(){
-    // 移除所有 tr 的 selected class
     $(".track-events tr").removeClass("selected");
-    // 為當前點擊的 tr 添加 selected class
     $(this).toggleClass("selected");
+
+	let planId = $(".track-events tr.selected").data("planId");
+	
+	// 確保 planId 存在才發送請求
+	if(planId) {
+		$.ajax({
+			url: "/Training/api/listTrack",
+			type: "POST",
+			data: JSON.stringify({ planId: planId.toString() }),
+			contentType: "application/json",
+			success: function(response) {
+				console.log("Training track response:", response);
+				if(response.success && response.tracks) {
+					updateTrainingTimeline(response.tracks);
+				} else {
+					console.error("Failed to load training tracks:", response.message || "Unknown error");
+					// 顯示無資料的狀態
+					updateTrainingTimeline([]);
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error("Error loading training tracks:", error);
+				// 顯示錯誤狀態
+				updateTrainingTimeline([]);
+			}
+		});
+	} else {
+		console.warn("No planId found for selected row");
+		updateTrainingTimeline([]);
+	}
+
     <#if roleAlias == "ADMIN" || roleAlias == "DOCTOR">
-    // 取得被點擊的 tr 中第二個 td（姓名欄位）的文字
     var name = $(this).find("td:eq(1)").text();
     <#else>
     if($(this).find("td:eq(0)").hasClass('col-xs-12')){
@@ -257,12 +280,29 @@ $(".track-events tr").click(function(){
     	var name = $(this).find("td:eq(0)").text();
     }
     </#if>
-    // 更新 history-blk 的標題
     $(".history-blk .title p").text(name);
     
-    // 顯示 history-blk
     $('.arrow, .history-blk').fadeIn(1000);
 });
+
+function updateTrainingTimeline(tracks) {
+    var timelineHtml = "";
+    
+    tracks.forEach(function(track) {
+        var statusClass = track.status === "異常" ? "abnormal" : "";
+        
+        timelineHtml += '<li class="' + statusClass + '">' +
+                            '<a>' + track.trainingDate + '</a>' +
+                            '<p>' + track.description + '</p>' +
+                        '</li>';
+    });
+    
+    if(timelineHtml === "") {
+        timelineHtml = '<li><a>無訓練紀錄</a><p>尚未開始訓練</p></li>';
+    }
+    
+    $(".history-blk .timeline").html(timelineHtml);
+}
 
 
 $(".appointment-events button").click(function(){

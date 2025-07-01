@@ -1,7 +1,7 @@
 package demo.freemarker.dto;
 
 public class TrainingEvent{
-
+    public Long planId;
     public int serialno;
     public String name;
     public String gender;
@@ -19,10 +19,11 @@ public class TrainingEvent{
     public TrainingEvent() {
 
     }
-    
-    public TrainingEvent(int serialno, String name, String gender, String age, String indication,
+
+    public TrainingEvent(Long planId, int serialno, String name, String gender, String age, String indication,
             String therapCat, String therapist, String lesson, String frequency, String times,
             String beginDate, String duration, Boolean isAbnormal){
+        this.planId = planId;
         this.serialno = serialno;
         this.name = name;
         this.gender = gender;
@@ -38,6 +39,14 @@ public class TrainingEvent{
         this.isAbnormal = isAbnormal;
     }
 
+    public Long getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(Long planId) {
+        this.planId = planId;
+    }
+    
     public int getSerialno() {
         return serialno;
     }

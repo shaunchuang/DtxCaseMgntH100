@@ -66,3 +66,12 @@
 
 	</style>
 </div>
+<script>
+<#if patientInfo??>
+var patientInfo = ${patientInfo!""};
+</#if>
+	console.log('patientInfo:', patientInfo);
+	if(patientInfo) {
+		fillPatientInfo();
+	}
+</script>

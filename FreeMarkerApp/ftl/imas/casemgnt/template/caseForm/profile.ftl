@@ -107,7 +107,8 @@
 					<div class="drug-use-status-options multi-option">
 						<#list drugUseStatus as dus>
 							<div class="option<#if ptInfo.drugUsageHistory?seq_contains(dus.id?string)> selected</#if>" data-item="${dus.id}" >${dus.name}</div>
-						</#list>					</div>
+						</#list>
+					</div>
 				<textarea id="otherDrugUsageHistory" rows="2" class="form-control" placeholder="請填寫其他藥物使用狀況"></textarea>
 			</div>
 		</div>					

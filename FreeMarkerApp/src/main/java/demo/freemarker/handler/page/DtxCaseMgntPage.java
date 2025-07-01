@@ -720,7 +720,14 @@ public class DtxCaseMgntPage extends RequestHandler {
             return "redirect:/ftl/imas/login";
         }
         String blogname = Config.get("blogname", "測試平台");
+        Locale locale = SecurityUtils.getLocale(request);
+        String patientId = getValueOfKeyInQuery(request.exchange.getRequestURI(), "patientId");
         String viewer = getValueOfKeyInQuery(request.exchange.getRequestURI(), "viewer");
+        if(!StringUtils.isEmpty(patientId)) {
+            System.out.println("patientId: " + patientId);
+            PatientInfo ptInfo = PatientInfo.getPatientInfo(Long.parseLong(patientId), locale);
+            model.addAttribute("patientInfo", GsonUtil.toJsonObject(ptInfo));
+        }
         return "/casemgnt/template/dataForm/" + viewer;
     }
 
@@ -827,6 +834,7 @@ public class DtxCaseMgntPage extends RequestHandler {
         model.addAttribute("field_abbrev_ename", "ITRI");
         model.addAttribute("formId", patientId);
         model.addAttribute("ptInfo", ptInfo);
+        model.addAttribute("patientInfo", GsonUtil.toJsonObject(ptInfo));
         model.addAttribute("menuNum", 2);
         return "/casemgnt/template/caseForm/notes";
     }
@@ -1087,6 +1095,7 @@ public class DtxCaseMgntPage extends RequestHandler {
                         } else {
                             TrainingPlan firstPlan = trainingPlans.get(0);
                             User therapist = UserAPI.getInstance().getUser(firstPlan.getTherapist());
+                            trainingEvent.setPlanId(firstPlan.getId());
                             trainingEvent.setSerialno(firstPlan.getId().intValue());
                             trainingEvent.setName(patient.getName());
                             trainingEvent.setGender(patient.getGender());
@@ -1142,6 +1151,7 @@ public class DtxCaseMgntPage extends RequestHandler {
                     startTimeStr = zdtStart.toLocalDate().toString();
                     endTimeStr = zdtEnd.toLocalDate().toString();
                     Long patientId = patient.getId();
+                    trainingEvent.setPlanId(tp.getId());
                     trainingEvent.setName(patient.getName());
 
                     trainingEvent.setGender(patient.getGender());

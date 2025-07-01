@@ -10,10 +10,15 @@
 	<div id="data-container" class="card pd-10"></div>
 	
 	<script>
-	
+	<#if patientInfo??>
+	var patientInfo = ${patientInfo!""};
+	</#if>
 	$(document).ready(function(){
-		
-		wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=ps');
+		wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=ps&patientId=${formId!""}');
+		console.log('patientInfo:', patientInfo);
+		if(patientInfo) {
+			fillPatientInfo();
+		}
 	});
 	
 	//選擇治療類別觸發行為
@@ -22,9 +27,12 @@
 		$(this).toggleClass("selected");
 		
 		var alias = $(this).data("alias");
-		
-		wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=' + alias);
 
+		wg.template.updateNewPageContent('data-container', 'data-content', {}, '/ftl/imas/admin/dataForm?viewer=' + alias + '&patientId=${formId!""}');
+		console.log('patientInfo:', patientInfo);
+		if(patientInfo) {
+			fillPatientInfo();
+		}
 	});
 	
 	</script>
