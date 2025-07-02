@@ -94,7 +94,7 @@
 	    			<div class="doctor-list">
 	    				<#if doctorInfos?? && (doctorInfos?size>0)>
 						<#list doctorInfos as doctorInfo>
-						<div class="doctor-card" data-doctor="${doctorInfo.id}">
+						<div class="doctor-card" data-doctor-id="${doctorInfo.id}">
 							<#if doctorInfo.gender == "M">
                             <img src="${base}/images/imas/role/doctor.png" class="card-img-top" alt="${doctorInfo.name}">
                             <#else>
@@ -165,15 +165,22 @@ $(".appointment-card .title button").click(function(){
 	$('#myModal').modal('show');
 });
 
-//醫師選擇點擊
-$(".doctor-card").click(function(e){
-	e.preventDefault();
-	$(this).parent().find(".doctor-card").removeClass("selected");
-	$(this).toggleClass("selected");
-	
-	var doctorId = $(this).attr("data-doctor");
-	wg.template.updateNewPageContent('appointment-container', 'doctor-booking-content', {"doctorId": doctorId}, '/ftl/imas/admin/taskMgnt/appointment?clinician=doctor&doctorId=${currentUser.id!""}');
-});
+  // 醫師卡片點擊
+  $(".doctor-card").click(function(e){
+    e.preventDefault();
+    $(this).siblings(".doctor-card").removeClass("selected");
+    $(this).toggleClass("selected");
+
+    var doctorId = $(this).data("doctorId");
+    console.log("Selected doctor ID:", doctorId);
+
+    wg.template.updateNewPageContent(
+      'appointment-container',
+      'doctor-booking-content',
+      { doctorId: doctorId },
+      '/ftl/imas/admin/taskMgnt/appointment?clinician=doctor&doctorId=' + doctorId
+    );
+  });
 
 function fetchTrainingPlanNew(){
 	var response = wg.evalForm.getJson(JSON.stringify({"userId":${currentUser.id!""}}), '/Training/api/listPlan');
@@ -274,6 +281,21 @@ function formatDate(dateStr){
     $('#ModalDiag').modal('show');
   });
 
+
+function reserve() {
+	let doctorId = $(".doctor-card.selected").data("doctorId");
+	let slotId = $(".myc-available-time.selected").attr("data-unique");
+	let postData = {"creator": doctorId, "availableSlotId": slotId, "cat": 2, "caseNo": "${currentUser.id!""}"}
+	console.log("預約資料: ", postData);
+	let result = wg.evalForm.getJson(JSON.stringify(postData), "/WgTask/api/createNewAppo");
+
+	if (result.success) {
+		swal("預約成功", "請至預約回診查看", "success");
+		$("#myModal").modal('hide');
+	} else {
+		swal("預約失敗", result.message, "error");
+	}
+}
 </script>
 
 <style>

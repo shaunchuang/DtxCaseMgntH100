@@ -56,6 +56,7 @@
 	
 	function triggerAppointment(objId, reserveId){
 		var queryData = {"beginDate": "${toDate!""}", "doctor": <#if doctorId??>${doctorId}</#if>};
+		console.log("queryData: " + JSON.stringify(queryData));
 		var result = wg.evalForm.getJson(JSON.stringify(queryData), "/WgAvailableSlots/api/qry");
 
 		if(result.success){
